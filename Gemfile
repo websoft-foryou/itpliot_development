@@ -29,7 +29,7 @@ gem 'client_side_validations'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
-gem 'bootstrap-sass', '~> 3.1.1'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem 'font-awesome-rails'
 
 gem 'globalize', '~> 5.1.0', git: 'https://github.com/globalize/globalize'
