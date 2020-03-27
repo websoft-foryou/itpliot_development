@@ -1,0 +1,14 @@
+<div class="list-group-item actions_on_hover" id="theme_id_<%=theme.id%>">
+  <div class="row">
+    <div class="col-md-4">
+      <%=link_to theme.name, edit_theme_path(theme) %>
+    </div>
+    <div class="col-md-6">
+      <%= render(partial: "/shared/service_label", collection: theme.services.order(:code), as: :service) || ''%>
+    </div>
+    <div class="col-md-2 text-right actions">
+      <%=link_to t('commons.edit'), edit_theme_path(theme), class: 'btn btn-default btn-xs' %>
+      <%= link_to t('commons.delete'), theme_path(theme), method: :delete, remote: true, class: 'btn btn-default btn-xs', data: { confirm: t('commons.are_you_sure') } %>
+    </div>
+  </div>
+</div>

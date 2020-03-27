@@ -1,0 +1,24 @@
+<div class="form-group">
+  <%= f.label :work_process_id, t('processes.process'),class: "control-label col-xs-2" %>
+
+  <div class="col-xs-4">
+    <%= f.select :work_process_id, @work_options, {}, class: "single_select2 width_100" %>
+  </div>
+  
+  <div class="col-xs-4">
+    <%= f.select :evaluation_process_results, options_for_select( @evaluation.evaluation_results.includes(:service).map{|s| ["#{s.service.code} #{s.service.name}", s.id] }, f.object.evaluation_process_results.pluck(:evaluation_result_id) ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-xs-4 col-xs-offset-2">
+    <% if !f.object.new_record? %>
+      <%= link_to t('commons.delete'), customer_evaluation_evaluation_process_path(@evaluation.customer,@evaluation,f.object.id), method: :delete, class: "btn btn-default", data: { confirm: t('commons.are_you_sure') } %>
+    <% end %>
+  </div>
+  <div class="col-xs-4 text-right">
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+    <%= link_to t('commons.cancel'), customer_evaluation_evaluation_processes_path(@evaluation.customer,@evaluation), class: "btn btn-default" %>
+  </div>
+  
+</div>

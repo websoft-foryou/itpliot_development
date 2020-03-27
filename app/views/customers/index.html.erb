@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group pull-right m-b-sm">
+            <%= link_to new_customer_path(company_id: params[:company_id]), class: "btn btn-info" do %>
+                <i class="fa fa-plus"></i> <%= t('customers.add_new_customer') %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<% if current_user.is_admin? || current_company.is_jvp? %>
+    <%= breadcrumb(links: [{key: 'customers', name: t('customers.customers')}]) %>
+<% end %>
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-9 text-right m-b-sm">
+        <%= form_tag customers_path, remote: true, method: :get, id: "search_form", class: "form-horizontal" do%>
+            <div class="pos-rlt">
+                <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_customers", class: "observe form-control", placeholder: "#{t("commons.search")}..."  %>
+                <%= hidden_field_tag :company_id , params[:company_id] if current_user.is_admin? || current_company.is_jvp? %>
+                <div class="search_input_icon"><i class="fa fa-search"></i></div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="list-group">
+        <div class="list-group-item">
+            <div class="row header-list-group">
+                <div class="col-md-4"><%= t('customers.name') %></div>
+                <div class="col-md-2"><%= t('customers.membership') %></div>
+                <div class="col-md-2">
+                    <% if current_user.is_admin? || current_company.is_jvp? %>
+                        <%= t('commons.belongs_to') %>
+                    <% end %>
+                </div>
+                <div class="col-md-2"><%= t('evaluations.service_sets') %></div>
+                <div class="col-md-1"><%= t('customers.locations') %></div>
+                <div class="col-md-1"><%= t('users.users') %></div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group" id="list_customers">
+        <%= render partial: "/customers/customer", collection: @customers %>
+    </div>
+    <div id="pagination"><%= will_paginate @customers %></div>
+</div>
+
+
+

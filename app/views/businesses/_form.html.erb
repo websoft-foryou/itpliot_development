@@ -1,0 +1,37 @@
+<% if @business.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@business.errors.count, "error") %> prohibited this service from being saved:</h2>
+
+    <ul>
+      <% @business.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% I18n.available_locales.each do |locale| %>
+  <%= f.globalize_fields_for locale do |ff| %>
+    <div class="form-group">
+      <%= f.label :name, t('businesses.company_name') + ' '+ t('locales.'+locale.to_s), class: "control-label col-md-3 col-sm-12" %>
+      <div class="col-md-7 col-sm-12">
+        <%= ff.text_field :name, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="form-group">
+  <div class="col-sm-3 col-xs-12"></div>
+  <div class="col-sm-2 col-xs-3">
+    <% if @business.persisted? %>
+      <%= link_to business_path(@business), method: :delete, remote: false, class: 'btn btn-default', data: { confirm: t('commons.are_you_sure') } do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-sm-5 col-xs-9 text-right">
+    <%= link_to t('commons.cancel'), businesses_path, class: "btn btn-default"%>
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+  </div>
+</div>

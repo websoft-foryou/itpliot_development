@@ -1,0 +1,6 @@
+<% if @erf.any? %>
+	$("<%= j render(partial: '/evaluation_result_files/evaluation_result_file', collection: @erf, as: :evaluation_result_file) %>").hide().insertBefore( $("#image_gallery .new_photo") ).fadeIn("slow");
+<% end %>
+<% if @documents.any? %>
+  $("#documents_list").html("<%= j render(partial: '/evaluation_result_files/documents_container', collection: @documents, as: :document || '' , locals: {with_delete: true}) %>");
+<% end %>

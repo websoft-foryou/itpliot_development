@@ -1,0 +1,53 @@
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr class="captbl">
+          <td colspan="2"><%= t('full_report.service') %></td><!--number/name/cost-->
+          <td></td><!--cloud-->
+          <td></td><!--vendor-->
+          <td></td><!--distributor-->
+          <td colspan="2">
+            <%= t('full_report.cost_per_month') %> <%= t('full_report.in_eur_html') %>
+          </td><!--capex/opex-->
+
+          <td colspan="2">
+            <%= t('full_report.support_mountly_hours') %>
+          </td><!--hours extern/intern-->
+        </tr>
+
+        <tr class="captbl sort">
+          <td>ID</td><!--number-->
+          <td style="min-width:300px;"><%= t('full_report.name') %></td><!--name-->
+          <td><!--cloud current-->
+            <%= t('full_report.cloud_service') %>
+          </td>
+          <td><!--vendor current-->
+            <%= t('full_report.supplier') %>
+          </td>
+          <td><!--distributor current-->
+            <%= t('full_report.distributor') %>
+          </td>
+          <td><!--capex current-->
+              Capex
+          </td>
+          <td><!--opex current-->
+              Opex
+          </td>
+          <td><!--external current-->
+              <%= t('full_report.internal') %>
+          </td>
+          <td><!--internal current-->
+              <%= t('full_report.external')%>
+          </td>
+        </tr>
+
+        <%= render partial: '/evaluation_results/evaluation_result_full_min', collection: evaluation.active_evaluation_results.includes(:service).order('services.code,evaluation_results.cloned_index'), as: :evaluation_result %>
+        
+      </tbody>
+    </table>
+    <br/><br/>
+
+
+  </div>
+</section>

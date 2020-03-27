@@ -1,0 +1,47 @@
+
+
+<div class="row">
+    <div class="col-md-10">
+        <h3 class="page-header">
+            <i class="fa fa-user"></i>
+            <%= t('.page_title') %>
+        </h3>
+    </div>
+    <div class="col-md-2">
+        <div class="btn-group pull-right">
+            <%= link_to new_static_page_path, class: "btn btn-info" do %>
+                <i class="fa fa-plus"></i> <%= t('.add_page_btn') %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+
+
+<ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-file-o"></i><%= t('static_pages.title') %></li>
+</ol>
+
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-9 text-right m-b-med">
+        <%= form_tag static_pages_path, remote: true, method: :get, id: "search_form", class: "form-horizontal" do%>
+            <div class="pos-rlt">
+                <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_static_pages", class: "observe form-control", placeholder: "#{t("commons.search")}..."  %>
+                <div class="search_input_icon"><i class="fa fa-search"></i></div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+
+
+<div class="panel panel-default">
+    <div class="list-group" id="static_pages_list">
+        <% @static_pages.group_by(&:uid).each do |uid, static_pages| %>
+            <%= render partial: "/static_pages/static_page", object: static_pages.first, locals: {locales: static_pages.map(&:locale)} %>
+        <% end %>
+    </div>
+    <div id="pagination"><%= will_paginate @static_pages %></div>
+</div>

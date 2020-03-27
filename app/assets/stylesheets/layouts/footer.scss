@@ -1,0 +1,16 @@
+#footer{
+  height:40px;
+  padding: 10px 30px;
+  width: 100%;
+  display: inline-block;
+  background-color: #EFEFEF;
+  border-top: 1px solid #CCC;
+  color: #6e7e8e;
+
+  a{
+    color: #6e7e8e;
+    &:hover{
+      text-decoration:underline;
+    }
+  }
+}

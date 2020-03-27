@@ -1,0 +1,3 @@
+<% if @business.destroyed? %>
+	$("#business_list").find("#business_id_<%=@business.id%>").remove();
+<% end %>

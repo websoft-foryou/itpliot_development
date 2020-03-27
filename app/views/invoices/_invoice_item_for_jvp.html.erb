@@ -1,0 +1,18 @@
+<% plan = invoice.plan %>
+<% company = invoice.company %>
+
+<tr>
+  <td><%= "#{invoice.issued_date.year}#{invoice.issued_date.month}-#{company.id}-#{invoice.id}" %></td>
+  <td>
+    <%= link_to company.name, company.is_partner? ? company_reseller_path(current_company, company) : customer_path(company) %>
+  </td>
+  <td><%= company.company_type_name %></td>
+  <td>
+    <%= plan ? plan.employees_from > Plan::CUSTOMER_MAX_EMPLOYEES ? "> #{plan.employees_from-1}" : "#{plan.employees_from}-#{plan.employees_to} #{t('employees.employees')}" : '' %>
+  </td>
+  <td><%= l(invoice.issued_date, format: :long) %></td>
+  <td><%= l(invoice.due_date, format: :long) %></td>
+  <td>€<%= plan ? plan.price : 0 %></td>
+  <td><input name="invoice[internal_no]" value="<%= invoice.internal_no %>" class="form-control" data-invoice_id="<%= invoice.id %>" /> </td>
+  <td><%= invoice.status_name %></td>
+</tr>

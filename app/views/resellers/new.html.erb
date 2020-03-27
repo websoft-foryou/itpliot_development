@@ -1,0 +1,13 @@
+
+<%= breadcrumb(links: [{key: 'resellers', name: t('partners.partners'), url: company_resellers_path(current_company.id)},{key: '', name: t('partners.adding_new_partner')}]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-10 col-md-offset-2 m-t m-b">
+      <%= form_for(@reseller, url: company_resellers_path(current_company), validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f}  %>
+      <% end %>
+    </div>
+  </div>
+</div>
+

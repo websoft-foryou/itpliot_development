@@ -1,0 +1,58 @@
+<% activity = employee_activity(evaluation,employee_id) %>
+<% if activity && activity.any? %>
+  <table style="width:100%;">
+    <tr class="full-view employee_<%= employee_id %>" style="display:none">
+      <% activity.each do |k,v| %>
+        <td><%= k.upcase %></td>
+      <% end %>
+    </tr>
+    <tr class="full-view employee_<%= employee_id %>" style="display:none">
+      <% activity.each do |k,v| %>
+        <td style="min-width:38px;">
+          <%= v %>
+        </td>
+      <% end %>
+    </tr>
+    <tr>
+      <td colspan="12" class="text-right">
+        <%= activity.values.sum %>
+      </td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+    </tr>
+    <tr>
+      <td colspan="12" style="background:white;">
+        <%= resource_activity_legend(activity) %>
+        <canvas id="employee_activity_graph_<%=employee_id%>"
+          class="resource_activity_graph"
+          style="max-width:200px;margin:0 auto;"
+          data-graphdataset="<%= activity.values %>"
+          data-labels="<%= activity.keys.map(&:upcase) %>"
+          data-customer-id="<%= current_customer.id %>"
+          data-evaluation-id="<%= evaluation.id %>"
+          data-employee-id="<%= employee_id %>"
+        />
+      </td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+      <td style="display:none;"></td>
+    </tr>
+  </table>
+<% end %>

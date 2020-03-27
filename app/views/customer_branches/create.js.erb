@@ -1,0 +1,6 @@
+<% if @company_branch.errors.any? %>
+	alert("<%=j @company_branch.errors.full_messages.join(', ').html_safe%>")
+<% else %>
+	$("#company_branches_list").append("<%=j render(partial: 'company_branches/company_branch', object: @company_branch, as: :company_branch) %>")
+	window.flash_notice("Company Location created")
+<% end %>

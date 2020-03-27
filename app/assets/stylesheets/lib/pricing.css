@@ -1,0 +1,79 @@
+/*Pricing*/
+.pricing-box {
+  position: relative;
+  text-align: center;
+  margin-top: 30px;
+}
+.featured-plan {
+  margin-top: 0px;
+}
+.featured-plan .pricing-body {
+  padding: 60px 0;
+  background: #f7fafc;
+  border: 1px solid #ddd;
+}
+.featured-plan .price-table-content .price-row {
+  border-top: 1px solid rgba(120, 130, 140, 0.13);
+}
+.pricing-body {
+  border-radius: 0px;
+  border-top: 1px solid rgba(120, 130, 140, 0.13);
+  border-bottom: 5px solid rgba(120, 130, 140, 0.13);
+  vertical-align: middle;
+  padding: 30px 0;
+  position: relative;
+}
+.pricing-body h2 {
+  position: relative;
+  font-size: 56px;
+  margin: 20px 0 10px;
+  font-weight: 500;
+}
+.pricing-body h2 span {
+  position: absolute;
+  font-size: 15px;
+  top: -10px;
+  margin-left: -10px;
+}
+.price-table-content .price-row {
+  padding: 20px 0;
+  border-top: 1px solid rgba(120, 130, 140, 0.13);
+}
+.price-table-content .price-row.price-row-red {
+  text-align: center;
+  color: #FF0000;
+}
+.price-row-red-inner{
+  display: inline-block;
+  text-align: left;
+}
+.price-table-content .price-row.price-row-red ul {
+  margin-left: 22px;
+  /* text-align: left; */
+}
+.pricing-plan {
+  padding: 0 15px;
+}
+.pricing-plan .no-padding {
+  padding: 0px;
+}
+.price-lable {
+  position: absolute;
+  top: -10px;
+  padding: 5px 10px;
+  margin: 0 auto;
+  display: inline-block;
+  width: 150px;
+  left: 0px;
+  right: 0px;
+}
+.b-l {
+  border-left: 1px solid rgba(120, 130, 140, 0.13);
+}
+.confirm-new-plan{
+  width: 60%;
+  margin-top: 20px;
+  background: #ffff00;
+  color: #000;
+  border: 1px solid #394a59;
+}

@@ -1,0 +1,56 @@
+<div class="pos-rlt" style="min-height: 30px;">
+  <% unless current_company.is_customer? %>
+    <ol class="breadcrumb">
+      <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+      <% if @reseller %>
+        <li><i class="fa fa-users"></i><%= link_to t('partners.partners'), company_resellers_path(current_company.id) %></li>
+        <li><i class="fa fa-building"></i><%= link_to @reseller.name, company_reseller_path(current_company, @reseller) %></li>
+        <li><i class="fa fa-building-o"></i><%= link_to @customer.name, company_reseller_customer_path(current_company, @reseller, @customer) %> </li>
+      <% else %>
+        <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+        <li><i class="fa fa-building-o"></i><%= link_to @customer.name, customer_path(@customer) %> </li>
+      <% end %>
+    </ol>
+  <% end %>
+  <div class="pos-abt" style="right:2px;top:3px;">
+    <div class="btn-group" style="min-width:300px;">
+      <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span style="display:inline-block;min-width:280px;text-align:left;"><%= @evaluation.name %></span>
+      </button>
+      <ul class="dropdown-menu">
+        <% @customer.customer_evaluations.order("created_at desc").each do |evaluation| %>
+          <% next if evaluation.id == @evaluation.id%>
+          <li><%=link_to evaluation.name, customer_evaluation_path(@customer, evaluation), class: "dropdown-item", style:"min-width:320px;"%></li>
+        <% end %>
+      </ul>
+      <% if current_user.is_admin? %>
+        <% if @evaluation.is_sample? %>
+          <span class="label label-info">Sample service set</span>
+        <% else %>
+          <%= link_to set_as_sample_customer_evaluation_path(@customer, @evaluation), method: :post, data: { confirm: t('evaluations.set_sample_service_set_confirm') } do %>
+            <button class="btn btn-primary btn-sm"><%= t('evaluations.set_as_sample_service_set') %></button>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-offset-3 col-xs-offset-1 col-md-6 col-xs-10 text-center">
+      <% if !@customer.has_current_evaluation?%>
+        <%= link_to new_customer_evaluation_path(@customer), class: "btn btn-primary" do %>
+          <%= t('evaluations.add_service_set') %>
+        <% end %>
+      <% end %>
+      <% if @evaluation.is_sandbox? %>
+        <%=link_to t('evaluations.recreate_sample_service_set'), recreate_sample_service_set_customer_evaluation_path(@evaluation.customer, @evaluation), method: 'post', class: "btn btn-danger", title: t('evaluations.set_as_normal_service_set') %>
+      <% else %>
+        <% if Evaluation.sample_evaluation && !@customer.has_sandbox_evaluation? %>
+          <%= link_to t('evaluations.test_sample_service_set'), new_customer_evaluation_path(@customer, :testing => true), class: "btn btn-danger", style:"margin-left: 20px;", title: t('evaluations.add_service_set') %>
+          <i class="fa fa-info-circle" title="<%= t("evaluations.sample_service_set_tooltip")%>" data-toggle="tooltip"></i>
+        <% end %>
+      <% end %>
+  </div>
+</div>

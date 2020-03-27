@@ -1,0 +1,35 @@
+<% if @work_process.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@work_process.errors.count, "error") %> <%= t('commons.prohibited_error') %>:</h2>
+    <ul>
+      <% @work_process.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% I18n.available_locales.each do |locale| %>
+  <%= f.globalize_fields_for locale do |ff| %>
+    <div class="form-group">
+      <%= f.label :name, t('processes.form.process_name') + ' ' + t('locales.'+locale.to_s), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_field :name, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="form-group">
+  <div class="col-xs-2 col-xs-offset-2">
+    <% if @work_process.persisted? %>
+      <%= link_to work_process_path(@work_process), method: :delete, remote: false, class: 'btn btn-default', data: { confirm: t('commons.are_you_sure') } do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-xs-6 text-right">
+    <%= link_to t('commons.cancel'), work_processes_path, class: "btn btn-default"%>
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+  </div>
+</div>

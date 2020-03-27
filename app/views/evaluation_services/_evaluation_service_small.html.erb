@@ -1,0 +1,23 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-md-1">
+      <% unless @evaluation.is_published?%>
+        <%= check_box_tag "selected_evaluation", evaluation_service.id, false, class: "check_evaluation_service" %>
+      <% end %>
+    </div>
+    <div class="col-md-4">
+      <%= evaluation_service.service.code %><%= evaluation_service.cloned_index %>
+      <strong><%= highlight(evaluation_service.service.name, @left_filters[:search]) %></strong>
+    </div>
+    <div class="col-md-3">
+      <strong><%= evaluation_service.service.themes.map(&:name).join(", ")%></strong>
+    </div>
+    <div class="col-md-4">
+      <% if evaluation_service.status_name == :deactivated %>
+        <span class="badge service_status deactivated">
+          <%= t("evaluation_services.statuses.deactivated")%>
+        </span>
+      <% end %>
+    </div>
+  </div>
+</div>

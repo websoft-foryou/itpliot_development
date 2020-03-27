@@ -1,0 +1,18 @@
+<div class="list-group-item" id="cuu_id_<%=company_user.user.id%>">
+
+	<div class="row">
+		<div class="col-md-3"><%= company_user.user.name %></div>
+		<div class="col-md-3"></div>
+		<div class="col-md-3"></div>
+		<div class="col-md-3">
+			<div class="btn-group">
+				<%= link_to [company_user.company, company_user], method: :delete, remote: true, confirm: "Are you sure?", class: "btn btn-default btn-sm" do %>
+					Delete
+				<% end %>
+			</div>
+			
+		</div>
+	</div>
+
+	
+</div>

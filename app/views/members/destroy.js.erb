@@ -1,0 +1,3 @@
+<% if @user.destroyed? %>
+	$("#company_users_list").find("#user_id_<%=@user.id%>").remove();
+<% end %>

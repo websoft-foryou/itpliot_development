@@ -1,0 +1,15 @@
+<div class="list-group-item" id="business_id_<%=business.id%>">
+  <div class="row actions_on_hover">
+    <div class="col-md-10 m-b-small">
+      <%=link_to business.name, edit_business_path(business) %>
+    </div>
+    <div class="col-md-2 text-right actions">
+      <%=link_to edit_business_path(business), class: 'btn btn-default btn-xs' do %>
+        <i class="fa fa-pencil"></i> <%= t('commons.edit') %>
+      <% end %>
+      <%= link_to business_path(business), method: :delete, remote: true, class: 'btn btn-default btn-xs', data: { confirm: t('commons.are_you_sure') } do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    </div>
+  </div>
+</div>

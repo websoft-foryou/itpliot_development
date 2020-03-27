@@ -1,0 +1,42 @@
+$('#list_services_view').html("<%=j render(partial: 'evaluations/services_table', object: @evaluation, as: :evaluation)%>");
+
+<% 
+  reports = ['gb_used','servers_count','opex','capex','hours_intern','hours_extern','result_dependant_services_count','result_depending_services_count']
+  c = {}
+  reports.each do |column|
+    c[column] = @evaluation.active_evaluation_results.where("evaluation_results.#{column} is not null and evaluation_results.#{column} > 0 ").order("evaluation_results.#{column} desc").limit(20).includes(:service)
+  end
+%>
+<% nothing = "<li class='list-group-item'> N/A </li>" %>
+
+$('#report_top_gb_used').html("<%=j c['gb_used'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['gb_used'], as: :evaluation_result, locals: {current_customer: @customer, report: 'gb_used'} ) : nothing.html_safe %>");
+$('#report_top_servers_count').html("<%=j c['servers_count'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['servers_count'], as: :evaluation_result, locals: {current_customer: @customer, report: 'servers_count'} ) : nothing.html_safe %>");
+$('#report_top_opex').html("<%=j c['opex'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['opex'], as: :evaluation_result, locals: {current_customer: @customer, report: 'opex'} ) : nothing.html_safe %>");
+$('#report_top_capex').html("<%=j c['capex'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['capex'], as: :evaluation_result, locals: {current_customer: @customer, report: 'capex'} ) : nothing.html_safe %>");
+$('#report_top_hours_intern').html("<%=j c['hours_intern'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['hours_intern'], as: :evaluation_result, locals: {current_customer: @customer, report: 'hours_intern'} ) : nothing.html_safe %>");
+$('#report_top_hours_extern').html("<%=j c['hours_extern'].any? ? render(partial: 'evaluation_results/evaluation_result_report', collection: c['hours_extern'], as: :evaluation_result, locals: {current_customer: @customer, report: 'hours_extern'} ) : nothing.html_safe %>");
+
+$('#link_rt').html("<%=j link_to(t('evaluations.full_report'),full_report_customer_evaluation_path(@evaluation.customer, @evaluation)) %>");
+
+<%
+    @active_evaluation_results = @evaluation.active_evaluation_results.
+        joins("LEFT JOIN services ON evaluation_results.service_id = services.id").
+        joins("LEFT JOIN theme_services ON theme_services.service_id = services.id").
+        joins("LEFT JOIN theme_translations ON theme_services.theme_id=theme_translations.theme_id AND theme_translations.locale='" + I18n.locale.to_s + "'").
+        joins("LEFT JOIN themes ON theme_services.theme_id=themes.id")
+%>
+
+$('#services_assessment_report123').html("<%=j render(partial: 'evaluations/services_assessment_table', collection: @evaluation.active_evaluation_results.includes(:service).order('services.code,evaluation_results.cloned_index'), as: :evaluation_result, locals: {current_customer: @customer})%>");
+$('#services_assessment_report').html("<%=j render(partial: 'evaluations/services_assessment_table', collection: @active_evaluation_results.order('services.code,evaluation_results.cloned_index'), as: :evaluation_result, locals: {current_customer: @customer})%>");
+$('#services_assessment_link').html("<%=j link_to(t('evaluations.full_report'),full_assessment_report_customer_evaluation_path(@evaluation.customer, @evaluation)) %>");
+
+$('#expenses_report_link').html("<%=j link_to(t('evaluations.full_report'),expenses_customer_evaluation_path(@evaluation.customer, @evaluation)) %>")
+$('#expenses_report').html("<%=j render(partial: 'evaluations/expenses_main_table', object: @evaluation, as: :evaluation) %>");
+
+$('#dependencies_report_link').html("<%=j link_to(t('evaluations.full_report'),dependences_customer_evaluation_path(@evaluation.customer, @evaluation)) %>")
+$('#dependencies_report').html("<%=j render(partial: 'evaluations/dependencies_table', object: @evaluation, as: :evaluation) %>");
+
+<% reports.each do |column|%>
+  <% next if !c[column].any? %>
+  $("#link_<%=column%>").html("<%=j link_to(t('evaluations.full_report'),full_report_customer_evaluation_path(@evaluation.customer, @evaluation, report: column)) %>");
+<% end %>

@@ -1,0 +1,363 @@
+<%= breadcrumb(links: [
+              ({key: 'customers', name: t('customers.customers'), url: company_customers_path(current_company)} unless current_company.is_customer?),
+              {key: 'customer', name: current_customer.name, url: customer_path(current_customer)},
+              {key: 'evaluation', name: @evaluation.name, url: customer_evaluation_path(current_customer, @evaluation)},
+              {key: '', name: @evaluation_result.service.code},
+              ]) %>
+
+
+<div class="row">
+  <div class="col-md-12 text-right m-b-med">
+    <% unless @evaluation.is_published? %>
+      <%= link_to t('commons.edit'), edit_customer_evaluation_evaluation_result_path(current_customer, @evaluation, @evaluation_result), class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col-md-9">
+      <h3 class="m-t-none"><%= @evaluation_result.service.code %><%= @evaluation_result.cloned_index %> <%= @evaluation_result.service.name %></h3>
+      <div id="evaluation_service_<%= @evaluation_result.id %>_service_status_note"><small><%= t("services.service_is_#{@evaluation_result.status_name}_html") %></small></div>
+    </div>
+    <div class="col-md-3 text-right">
+      <div class="btn-group" role="group" id="evaluation_result_service_<%= @evaluation_result.id %>">
+        <%= render partial: '/evaluation_results/service_status_buttons', object: @evaluation_result, as: :evaluation_result, locals: {show_disabled: true} %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="panel panel-default m-t-small">
+    <header class="panel-heading"><%= t('branches.customer_branch') %></header>
+    <div class="table-responsive">
+      <table class="table table-simple">
+        <tbody>
+          <tr><td class="higlight" style="width:200px;"><%= t('customers.customer') %></td><td><%= current_customer.name %></td></tr>
+          <tr><td class="higlight" style="width:200px;"><%= t('evaluation_results.home_of_service') %></td><td><%= @evaluation_result.company_branch.name %> <%= branch_inline_info(@evaluation_result.company_branch) %></td></tr>
+          <tr><td class="higlight" style="width:200px;"><%= t('evaluation_results.support_of_location') %></td><td><%=raw @evaluation_result.evaluation_result_company_branches.includes(:company_branch).map{|a| a.company_branch.name + branch_inline_info(a.company_branch)}.join(', ') %></td></tr>
+        </tbody>
+      </table>
+    </div>
+</section>
+
+
+<section class="panel panel-default">
+  <header class="panel-heading"><%= t('evaluations.service') %></header>
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr><td class="higlight" style="width:200px;"><%= t('evaluation_results.number') %></td><td colspan="3"><%= @evaluation_result.service.code if @evaluation_result.service %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.name') %></td><td colspan="3"><%= @evaluation_result.service.name if @evaluation_result.service %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.purpose') %></td><td colspan="3"><%= @evaluation_result.service.purpose if @evaluation_result.service %></td></tr>
+        <tr><td class="higlight"><%= t('services.product_examples') %></td><td colspan="3"><%= @evaluation_result.service.product_examples if @evaluation_result.service %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.form.labels.supplier') %></td><td><%= @evaluation_result.supplier %></td><td style="width:150px;" class="higlight"><%= t('evaluation_results.cloud_service') %></td><td style="width:150px;"><%= yes_no_value(@evaluation_result.cloud_service) %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.form.labels.supplier_planned') %></td><td><%= @evaluation_result.planned_supplier %></td><td style="width:150px;" class="higlight"><%= t('evaluation_results.cloud_service') %> (<%= t('full_report.planned') %>)</td><td style="width:150px;"><%= yes_no_value @evaluation_result.planned_cloud_service %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.form.labels.distributor') %></td><td colspan="3"><%= @evaluation_result.distributor %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.form.labels.distributor_planned') %></td><td colspan="3"><%= @evaluation_result.planned_distributor %></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.service_usage') %> </header>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-simple">
+      <tbody><tr><td>
+      <div style="min-height:90px;"><%= @evaluation_result.overview %></div>
+      </td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.sla_significancy') %> </header>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.service_must_be_up_after') %></td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.recovery_time) %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_max') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.guaranteed_recovery_time') %></td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.guaranteed_recovery_time) %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_max') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.direct_impact_relationship') %></td>
+              <td class="w_value text-right"><%= t("evaluation_results.impact_types.type_#{@evaluation_result.impact_name}") %></td>
+              <td class="w_units"><%= t('evaluation_results.level') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.direct_impact_revenue') %></td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.failure_impact_per_day) %></td>
+              <td class="w_units"><%= t('evaluation_results.eur_max') %> <%= t('evaluation_results.per_day') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.efforts') %> </header>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.support_hours_internal') %></td>
+              <td class="w_value text-right"><%= format_num @evaluation_result.hours_intern %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_per_month') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.support_hours_internal') %> (<%= t('full_report.planned') %>)</td>
+              <td class="w_value text-right"><%= format_num @evaluation_result.planned_hours_intern %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_per_month') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.support_hours_external') %></td>
+              <td class="w_value text-right"><%= format_num @evaluation_result.hours_extern %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_per_month') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.support_hours_external') %> (<%= t('full_report.planned') %>)</td>
+              <td class="w_value text-right"><%= format_num @evaluation_result.planned_hours_extern %></td>
+              <td class="w_units"><%= t('evaluation_results.hours_per_month') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.capex_per_month') %></td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.capex) %></td>
+              <td class="w_units"><%= t('evaluation_results.eur_per_month') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.capex_per_month') %> (<%= t('full_report.planned') %>)</td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.planned_capex) %></td>
+              <td class="w_units"><%= t('evaluation_results.eur_per_month') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.opex_per_month') %></td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.opex) %></td>
+              <td class="w_units"><%= t('evaluation_results.eur_per_month') %></td>
+            </tr>
+            <tr>
+              <td class="higlight"><%= t('evaluation_results.opex_per_month') %> (<%= t('full_report.planned') %>)</td>
+              <td class="w_value text-right"><%= format_num(@evaluation_result.planned_opex) %></td>
+              <td class="w_units"><%= t('evaluation_results.eur_per_month') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.strategy') %> </header>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-simple">
+        <tr><td class="higlight" style="width:350px;"><%= t('evaluation_results.planned_enhancements') %></td><td><%= @evaluation_result.enhancements %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.future_strategy') %></td><td><%= @evaluation_result.future_strategy %></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel-default">
+  <header class="panel-heading"><%= t('evaluation_results.form.group_titles.technical_attributes') %></header>
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr><td class="higlight"><%= t('evaluation_results.number_of_servers') %></td><td class="higlight"><%= t('evaluation_results.number_of_servers') %> (<%= t('full_report.planned') %>)</td><td class="higlight"><%= t('evaluation_results.gb_reserved') %></td><td class="higlight"><%= t('evaluation_results.gb_used') %></td></tr>
+        <tr><td><%= @evaluation_result.servers_count %></td><td><%= @evaluation_result.planned_servers_count %></td><td><%= format_num(@evaluation_result.gb_reserved) %></td><td><%= format_num(@evaluation_result.gb_used) %></td></tr>
+        <tr>
+          <td class="higlight"><%= t('evaluation_results.number_of_appliances') %></td>
+          <td class="higlight"><%= t('evaluation_results.number_of_appliances') %> (<%= t('full_report.planned') %>)</td>
+          <td class="higlight" colspan="2"><%= t('evaluation_results.other_technical_attributes') %></td>
+        </tr>
+        <tr><td><%= @evaluation_result.appliances_count %></td><td><%= @evaluation_result.planned_appliances_count %></td><td colspan="2" rowspan="3"><%= @evaluation_result.service_attributes_info %></td></tr>
+        <tr><td class="higlight"><%= t('evaluation_results.number_of_users') %></td><td class="higlight"><%= t('evaluation_results.number_of_users') %> (<%= t('full_report.planned') %>)</td></tr>
+        <tr><td><%= @evaluation_result.users_count %></td><td><%= @evaluation_result.planned_users_count %></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section class="panel panel-default">
+  <header class="panel-heading"><%= t('evaluation_results.form.group_titles.list_of_servers_appliances') %></header>
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr>
+          <td class="higlight" style="width:300px;"><%= t('evaluation_results.form.servers.name') %></td>
+          <td class="higlight"><%= t('evaluation_results.form.servers.os') %></td>
+          <td class="higlight" style="width:150px;"><%= t('evaluation_results.gb_reserved') %></td>
+          <td class="higlight" style="width:150px;"><%= t('evaluation_results.gb_used') %></td>
+          <td class="higlight"><%= t('evaluation_results.form.servers.additional_information') %></td>
+        </tr>
+        <% @evaluation_result.evaluation_result_servers.each do |s| %>
+          <tr>
+            <td><%= s.name %></td>
+            <td><%= s.os %></td>
+            <td><%= format_num(s.gb_reserved) %></td>
+            <td><%= format_num(s.gb_used) %></td>
+            <td><%= s.details %></td>
+          </tr>
+        <% end %>
+        <tr><td colspan="5"></td></tr>
+        <tr>
+          <td class="higlight"><%=t('evaluation_results.form.appliances.name')%></td>
+          <td class="higlight" colspan="3"><%=t('evaluation_results.form.appliances.technical_system')%></td>
+          <td class="higlight"><%= t('evaluation_results.form.appliances.additional_information') %></td>
+        </tr>
+        <% @evaluation_result.evaluation_result_appliances.each do |appliance| %>
+          <tr><td><%=appliance.name%></td><td colspan="3"><%=appliance.tech_system%></td><td><%=appliance.info_details%></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+ </div>
+</section>
+
+<div>
+  <section class="panel panel-default">
+    <header class="panel-heading"><%= t('evaluation_results.form.group_titles.dependencies') %></header>
+    <div class="panel-body">
+      <div class="row m-b-small">
+        <div class="col-md-2 col-sm-12 text-right text-sm-left">
+          <strong class='lbl'><%= t('evaluation_results.dependant_services') %>:</strong>
+        </div>
+        <div class="col-md-8 col-sm-10 col-xs-12">
+          <%= render(partial: "/shared/service_label", collection: @evaluation_result.result_dependant_services, as: :service) || "" %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2 col-sm-12 text-right text-sm-left">
+          <strong class='lbl'><%= t('evaluation_results.depending_services') %>:</strong>
+        </div>
+        <div class="col-md-8 col-sm-10 col-xs-12">
+          <%= render(partial: "/shared/service_label", collection: @evaluation_result.result_depending_services, as: :service) || "" %>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.evaluation_summary') %></header>
+  <div class="panel-body">
+    <div class="row m-b-small">
+      <div class="col-md-2 col-sm-12 text-right text-sm-left"><strong class='lbl'><%= t('evaluation_results.form.labels.assessment_description') %>:</strong></div>
+      <div class="col-md-8 col-sm-10 col-xs-10"><%= @evaluation_result.assessment_description %></div>
+      <div class="col-md-2 col-sm-2 col-xs-2">
+        <%= result_status_info(@evaluation_result, true) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-sm-12 text-right text-sm-left"><strong class='lbl'><%= t('evaluation_results.form.labels.recommended_measures') %>:</strong></div>
+      <div class="col-md-10 col-sm-12"><%= @evaluation_result.recommended_measures %></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.attachments') %></header>
+  <div class="panel-body">
+  <div class="row">
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <header class="panel-heading"> <%= t('evaluation_results.form.labels.documents') %></header>
+        <div class="panel-body">
+          <ul id="documents_list">
+            <%= render partial: '/evaluation_result_files/documents_container', collection: @evaluation_result.evaluation_result_files.documents.order(:id), as: :document || '' %>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <header class="panel-heading"><%= t('evaluation_results.photos') %></header>
+        <div class="table-responsive">
+          <table class="table table-simple">
+            <tbody>
+              <tr><td>
+                <ul class="image_gallery portlet list-inline" id="image_gallery">
+                  <% @evaluation_result.evaluation_result_files.assets.each do |asset|%>
+                    <%= render partial: '/evaluation_result_files/evaluation_result_file', object: asset, as: :evaluation_result_file%>
+                  <% end %>
+                </ul>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <%= render partial: "/evaluation_result_files/gallery_container"%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <header class="panel-heading"> <%= t('evaluation_results.form.labels.remarks') %></header>
+        <div class="panel-body">
+          <%= @evaluation_result.remarks %>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <header class="panel-heading"> <%= t('evaluation_results.form.labels.links') %></header>
+        <div class="panel-body">
+          <ul class="link_list_box">
+            <% @evaluation_result.links.each do |lnk| %>
+              <li><%=link_to lnk, lnk, target: '_blank'%></li>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+  </div>
+</section>
+
+

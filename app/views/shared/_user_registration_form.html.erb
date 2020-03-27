@@ -1,0 +1,40 @@
+<div class="form-group">
+  <%= f.label :first_name,t('users.first_name')+' *', class: "control-label col-md-3 col-xs-12" %>
+  <div class="col-md-7 col-xs-12"><%= f.text_field :first_name, :autofocus => true, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :last_name,t('users.last_name')+' *', class: "control-label col-md-3 col-xs-12" %>
+  <div class="col-md-7 col-xs-12"><%= f.text_field :last_name, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :email, class: "control-label col-md-3 col-xs-12" %>
+  <div class="col-md-7 col-xs-12"><%= f.email_field :email, class: "form-control", disabled: f.object.new_record? ? false : true %></div>
+</div>
+<div class="form-group">
+    <%= f.label :locale, t('commons.language'), class: "col-md-3 col-xs-12 control-label"%>
+    <div class="col-md-3 col-xs-12">
+      <%= f.select :locale, I18n.available_locales.map{|a| [t('locales.'+a.downcase.to_s, default: a.upcase.to_s), a.to_s] }, {}, class: "form-control", validate: true%>
+    </div>
+</div>
+<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+  <p class="help-block">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+<% end %>
+<div class="form-group">
+  <%= f.label :password, t('users.password'), class: "control-label col-md-3 col-xs-12" %>
+  <div class="col-md-7 col-xs-12">
+    <%= f.password_field :password, :autocomplete => "off", class: "form-control"  %>
+    <p class="help-block"><span class="text-muted">(<%= t('users.leave_empty') %>)</span></p>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :password_confirmation, t('users.password_confirmation'),class: "control-label col-md-3 col-xs-12" %>
+  <div class="col-md-7 col-xs-12"><%= f.password_field :password_confirmation, class: "form-control"  %></div>
+</div>
+<div class="form-group">
+  <div class="col-md-7 col-md-offset-3 col-xs-12">
+    <%= f.check_box :accept_terms, {}, true, false %> &nbsp;
+    <%= f.label :accept_terms, t('users.form.confirm_agree'), class: "control-label" %>
+    <%= link_to t('users.form.terms_and_conditions'), dynamic_page_path('v2nfe7b8'), target: :_blank %>
+    <span style="font-weight:300;"><%= t('users.form.terms_after_html') %></span>
+  </div>
+</div>

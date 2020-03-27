@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-pencil"></i> <%= t('evaluations.new_service_set') %></h3></div>
+</div>
+
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company) %></li>
+    <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  </ol>
+<% end %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="thumb-xlarge pull-left">
+              
+            </div>
+      </div>
+      <div class="col-md-8">
+        <%= form_for(@evaluation, url: customer_evaluations_path(current_customer, @evaluation), validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+          <%= render partial: 'form', locals: {f: f} %>
+        <% end %>
+        
+      </div>
+    </div>
+  </div>
+</div>

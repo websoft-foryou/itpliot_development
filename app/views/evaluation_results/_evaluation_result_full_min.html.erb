@@ -1,0 +1,19 @@
+<tr>
+  <td><span><%= evaluation_result.service.code%></span></td>
+  <td>
+    <%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name%>
+    <%= service_not_active_label(evaluation_result) %>
+  </td>
+  
+  <td class="text-center"><span><%= yes_no_value evaluation_result.cloud_service %></span></td>
+  <td><span><%= evaluation_result.supplier %></span></td>
+  <td><span><%= evaluation_result.distributor %></span></td>
+  <!--capex/opex-->
+  <td class="text-center"><span><%= format_num(evaluation_result.capex,'€') %></span></td>
+  <td class="text-center"><span><%= format_num(evaluation_result.opex,'€') %></span></td>
+
+  <!--hours extern/intern-->
+  <td class="text-center"><span><%= format_num evaluation_result.hours_intern %></span></td>
+  <td class="text-center"><span><%= format_num evaluation_result.hours_extern %></span></td>
+
+</tr>

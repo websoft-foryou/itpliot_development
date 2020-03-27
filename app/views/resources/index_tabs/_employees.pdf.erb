@@ -1,0 +1,45 @@
+<div class="row m-b">
+  <div class="col-xs-1">itpilot</div>
+  <div class="col-xs-10 text-center"><h3><%= @evaluation.customer.name %> - <%= @evaluation.name %> - <%= t("resources.tabs.employees_#{@evaluation.status_name}") %></h3></div>
+  <div class="col-xs-1"><%= l(Date.today, format: :long) %></div>
+</div>
+
+<section>
+  <div class="table-responsive">
+    <table class="table table-simple wauto">
+      <tbody>
+      <tr class="captbl">
+        <td colspan="2"></td>
+        <% @ordered_employees.each do |employee| %>
+          <td class="vtop">
+            <div id="editable-wrapper_<%= employee.id%>" class="editable-wrapper">
+
+              <div class="manage_employee_info" id="manage_employee_info_<%= employee.id %>">
+                <div class="name <%= 'not_editable' if @evaluation.is_published? %>"><%= employee.current_first_name %> <%= employee.current_last_name %></div>
+                <span class="text-muted">
+                    <%= t("full_report.#{employee.current_work_type_name}") %><br/>
+                    <small><%= employee.current_monthly_hours %></small> <%= t('employees.hours') %>
+                  </span>
+              </div>
+
+            </div>
+          </td>
+        <% end %>
+      </tr>
+
+      <% @domains.each do |d| %>
+        <tr>
+          <td class="text-center" style="width:50px;"><%= d.code %></td>
+          <td class="minimal-name-column"><%= t("employees.domains.#{d.code.downcase}", default: d.name) %></td>
+          <% @ordered_employees.each do |employee| %>
+            <td class="text-center">
+              <%= employee.employee_domains.map(&:domain_id).include?(d.id) ? 'Y' : 'N' %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+</section>

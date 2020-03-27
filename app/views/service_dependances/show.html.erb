@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Service:</b>
+  <%= @service_dependance.service_id %>
+</p>
+
+<p>
+  <b>Depending:</b>
+  <%= @service_dependance.depending_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_service_dependance_path(@service_dependance) %> |
+<%= link_to 'Back', service_dependances_path %>

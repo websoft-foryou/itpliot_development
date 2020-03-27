@@ -1,0 +1,13 @@
+
+<%= breadcrumb(links: [{key: 'companies', name: t('tenants.tenants'), url: companies_path},{key: '', name: t('tenants.add_new_tenant')}]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-10 col-md-offset-2 m-t m-b">
+      <%= form_for(@company, validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+      <% end %>
+    </div>
+  </div>
+</div>
+

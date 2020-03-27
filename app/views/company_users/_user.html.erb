@@ -1,0 +1,25 @@
+<div class="list-group-item" id="cuu_id_<%=company_user.id%>">
+
+	<div class="row">
+		<div class="col-md-5">
+			<%= company_user.user.last_name %>, <%= company_user.user.first_name %>
+			<% if current_user.is_admin? && company_user.user.invited_to_sign_up?%>
+				<div class="text-danger"><small><%= t("users.status_pending")%></small></div>
+				<div class="text-info"><small><u><%= accept_invitation_url(company_user.user, :invitation_token => company_user.user.invitation_token)%></u></small></div>
+			<% end%>
+		</div>
+		<div class="col-md-4"><%= company_user.user.email %></div>
+		<div class="col-md-3 text-right">
+			<% if current_user.is_admin? %>
+				<div class="btn-group">
+					<%= link_to [company_user.company, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+						<i class="fa fa-trash"></i>
+						Delete
+					<% end %>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+
+</div>

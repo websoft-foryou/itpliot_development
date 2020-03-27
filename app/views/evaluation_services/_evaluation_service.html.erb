@@ -1,0 +1,21 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-md-1 text-center">
+      <%= evaluation_service.position %>
+    </div>
+    <div class="col-md-1">
+      <%= evaluation_service.service.code %>
+    </div>
+    <div class="col-md-3">
+      <strong><%= link_to highlight(evaluation_service.service.name, @filters[:search]), new_customer_evaluation_evaluation_result_path(current_customer, @evaluation, service_id: evaluation_service.service_id) %></strong>
+    </div>
+    <div class="col-md-2">
+      <strong><%= evaluation_service.service.themes.map(&:name).join(", ")%></strong>
+    </div>
+    <div class="col-md-3">
+      <div class="btn-group" role="group" id="evaluation_service_<%= evaluation_service.id %>">
+        <%= render partial: '/evaluation_services/evaluation_service_buttons', object: evaluation_service, as: :evaluation_service %>
+      </div>
+    </div>
+  </div>
+</div>

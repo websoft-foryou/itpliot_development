@@ -1,0 +1,5 @@
+<% if @company_user.errors.any? %>
+	alert("<%=j @company_user.errors.full_messages.join(', ').html_safe%>")
+<% else %>
+	$("#company_users_list").append("<%=j render(partial: 'company_users/user', object: @company_user, as: :company_user) %>")
+<% end %>

@@ -1,0 +1,20 @@
+<%= render partial: "/evaluations/shared/service_set_selector" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render partial: "/evaluations/shared/status_menu", object: @evaluation, as: :evaluation %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4"><h4><%= t('processes.add_process') %></h4></div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= form_for(@evaluation_process, url: customer_evaluation_evaluation_processes_path(current_customer, @evaluation), validate: true, html: {class: "form-horizontal"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f} %>
+    <% end %>
+  </div>
+
+</div>

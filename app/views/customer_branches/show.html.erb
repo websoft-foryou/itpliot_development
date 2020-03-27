@@ -1,0 +1,46 @@
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(@customer_branch.company) %></li>
+    <li><i class="fa fa-building-o"></i><%= link_to @customer_branch.company.name, customer_path(@customer_branch.company) %></li>
+    <li><i class="fa fa-bullseye"></i><%= link_to @customer_branch.name, customer_customer_branch_path(@customer_branch.company.id, @customer_branch) %> - editing</li>
+  </ol>
+<% end %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        <div class="form-horizontal viewstyle">
+          <div class="form-group m-b-none">
+            <label class="control-label col-sm-2"><%= t('branches.form.name') %></label>
+            <div class="col-sm-8 control-input">
+              <strong><%= @customer_branch.name %></strong>
+            </div>
+            <div class="col-sm-2 text-right m-t-small">
+              <%= link_to t('commons.edit'), edit_customer_customer_branch_path(@customer_branch.company.id, @customer_branch.id), class: 'btn btn-primary' %>
+            </div>
+          </div>
+          <div class="form-group m-b-none">
+            <label class="control-label col-sm-2"><%= t('companies.description') %></label>
+            <div class="col-sm-8 control-input">
+              <%= @customer_branch.description %>
+            </div>
+          </div>
+          <%= render partial: '/locations/location', locals: {location: @customer_branch.location} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="list-group" id="company_users_list">
+    <%= render partial: "/company_users/company_user", collection: @customer_branch.company_users.includes(:user), as: :company_user, locals: {company: @customer_branch.company}%>
+  </div>
+</div>
+
+
+
+
+

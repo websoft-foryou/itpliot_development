@@ -1,0 +1,100 @@
+<div class="panel">
+  <div class="panel-body">
+    <div class="text-center">
+      <p class="m-b"><%= t('evaluations.no_dataset_yet') %></p>
+        <%= link_to t('evaluations.create_first_service_set'), new_customer_evaluation_path(@customer), class: "btn btn-info", title: t('evaluations.add_service_set') %>
+        <% if Evaluation.sample_evaluation %>
+          <%= link_to t('evaluations.test_sample_service_set'), new_customer_evaluation_path(@customer, :testing => true), class: "btn btn-danger ", title: t('evaluations.add_service_set') %>
+          <i class="fa fa-info-circle" title="<%= t("evaluations.sample_service_set_tooltip")%>" data-toggle="tooltip"></i>
+        <% end %>
+    </div>
+  </div>
+</div>
+
+<div id="no_evaluation_container">
+  <div class="overlay">
+    <div class="alert alert-success" role="alert"><%= t('evaluations.report_will_be_available_html') %></div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel">
+        <header class="panel-heading"><%= t('reports.expenses_and_operating_costs')%> <div class="pull-right" id="expenses_report_link"></div></header>
+        <div class="panel-body">
+          <ul id="expenses_report"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel">
+        <header class="panel-heading"><%= t('reports.dependencies_between_it_services')%> <div class="pull-right" id="dependencies_report_link"></div></header>
+        <div class="panel-body">
+          <ul id="dependencies_report"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel">
+        <header class="panel-heading"><%= t('evaluations.services')%> <div class="pull-right" id="link_rt"></div></header>
+        <div class="panel-body">
+          <ul id="list_services_view"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel">
+        <header class="panel-heading"><%= t('evaluations.top_20_reports') %></header>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.gb_used') %></strong>  <div class="pull-right" id="link_gb_used"></div></div>
+              <ul id="report_top_gb_used" class="m-b"></ul>
+            </div>
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.servers_count') %></strong>  <div class="pull-right" id="link_servers_count"></div></div>
+              <ul id="report_top_servers_count" class="m-b"></ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.opex') %></strong>  <div class="pull-right" id="link_opex"></div></div>
+              <ul id="report_top_opex" class="m-b"></ul>
+            </div>
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.capex') %></strong>  <div class="pull-right" id="link_capex"></div></div>
+              <ul id="report_top_capex" class="m-b"></ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.hours_intern') %></strong>  <div class="pull-right" id="link_hours_intern"></div></div>
+              <ul id="report_top_hours_intern" class="m-b"></ul>
+            </div>
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.hours_extern') %></strong>  <div class="pull-right" id="link_hours_extern"></div></div>
+              <ul id="report_top_hours_extern" class="m-b"></ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.result_dependant_services_count') %></strong>  <div class="pull-right" id="link_result_dependant_services_count"></div></div>
+              <ul id="report_top_result_dependant_services_count" class="m-b"></ul>
+            </div>
+            <div class="col-md-6">
+              <div><strong><%= t('evaluations.top_20_by.result_depending_services_count') %></strong>  <div class="pull-right" id="link_result_depending_services_count"></div></div>
+              <ul id="report_top_result_depending_services_count" class="m-b"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3 class="front-pannel m-t"><%= t('evaluations.service_sets') %></h3>
+
+    <% if @evaluations.any? %>
+      <div class="panel">
+        <div class="panel-body">
+          <div class="list-group">
+            <%= render partial: "/evaluations/evaluation", collection: @evaluations %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <%= render partial: '/evaluations/shared/no_evaluation' %>
+    <% end%>
+  </div>
+  <div class="col-md-4">
+      <%= render partial: "/customers/dependencies/customer_profile" %>
+  </div>
+</div>

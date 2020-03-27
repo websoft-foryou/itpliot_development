@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-10">
+    <h3 class="page-header">
+      <i class="fa fa-money"></i>
+      <%= t('licenses.title') %>
+    </h3>
+  </div>
+  <div class="col-md-2">
+    <div class="btn-group pull-right">
+      <%= link_to new_license_path, class: "btn btn-info" do %>
+        <i class="fa fa-plus"></i> <%= t('licenses.add_license_btn') %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-file-o"></i><%= t('licenses.title') %></li>
+</ol>
+
+
+<div class="panel panel-default">
+  <div class="list-group">
+    <div class="list-group-item">
+      <div class="row">
+        <div class="col-md-3"><%= t('commons.name') %></div>
+        <div class="col-md-1"><%= t('licenses.days') %></div>
+        <div class="col-md-2"><%= t('licenses.price') %></div>
+        <div class="col-md-1"><%= t('licenses.incl_partner') %></div>
+        <div class="col-md-1"><%= t('licenses.incl_freemium') %></div>
+        <div class="col-md-1"><%= t('licenses.incl_premium') %></div>
+        <div class="col-md-1"><%= t('licenses.booked') %></div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="portlet list-group" id="licenses_list">
+    <%= render partial: "/licenses/license", collection: @licenses %>
+  </div>
+</div>

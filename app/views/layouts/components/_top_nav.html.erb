@@ -1,0 +1,112 @@
+<header class="header dark-bg">
+  <% if user_signed_in? and current_company.present?%>
+    <div class="top-nav company-row">
+      <ul class="nav pull-left top-menu">
+        <% if current_user.is_admin? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <span>
+                <%= image_tag current_company.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%>
+              </span>
+              <span class="username">
+                <div><%= current_company.full_name%></div>
+                <div class="description"><%= current_company.company_type_name %></div>
+              </span>
+            </a>
+            <ul class="dropdown-menu">
+              <% Company.jvp.where("id != ?", current_company.id).each do |c| %>
+                <li class="eborder-top">
+                  <%= link_to switch_company_path(c.id) do %>
+                    <span><%= image_tag c.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%></span>
+                    <span class="username"><%= c.full_name%></span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% else %>
+          <% if current_user.companies.count == 1 %>
+            <li>
+              <div class="m-t-small">
+                <span>
+                  <%= image_tag current_company.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%>
+                </span>
+                <span class="username">
+                  <div><%= current_company.full_name%></div>
+                  <div class="description"><%= current_company.company_type_name %></div>
+                </span>
+              </div>
+            </li>
+          <% else %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span>
+                  <%= image_tag current_company.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%>
+                </span>
+                <span class="username">
+                  <div><%= current_company.full_name%></div>
+                  <div class="description"><%= current_company.company_type_name %></div>
+                </span>
+              </a>
+              <ul class="dropdown-menu">
+                <% current_user.companies.each do |c| %>
+                  <% if c.id.present? %>
+                    <li class="eborder-top">
+                      <%= link_to switch_company_path(c.id) do %>
+                        <span><%= image_tag c.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%></span>
+                        <span class="username"><%= c.full_name%></span>
+                      <% end %>
+                    </li>
+                  <% end %>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="top-nav notification-row">
+    <% if user_signed_in? %>
+    <ul class="nav pull-right top-menu">
+      <% if current_company.present? && current_company.persisted? && current_company.is_customer? && !current_company.premium? %>
+        <li><p class="m-t-small"><%= t("top_nav.upgrade_text")%></p></li>
+        <li><%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(current_company), class: "btn btn-info"%></li>
+      <% end %>
+      <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+          <span class="current_user_avatar">
+            <%= image_tag current_user.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", width: 30%>
+          </span>
+          <span class="username">
+            <div><%= current_user.name%></div>
+            <div class="description"><%= 'admin' if current_user.is_admin?%></div>
+          </span>
+        </a>
+        <ul class="dropdown-menu extended logout">
+          <div class="log-arrow-up"></div>
+          <li class="eborder-top">
+            <%= link_to edit_user_registration_path do %>
+              <i class="icon_profile"></i> <%= t('users.my_profile') %>
+            <% end %>
+          </li>
+          <% if current_user.is_admin? %>
+            <li class="eborder-top">
+              <%= link_to export_data_path do %>
+                <i class="icon_download"></i> <%= t('commons.export_data') %>
+              <% end %>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to destroy_user_session_path, method: :delete, data: {no_turbolink: true} do %>
+              <i class="icon_key_alt"></i> <%= t('users.log_out') %>
+            <% end %>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <% end %>
+  </div>
+  <a href="/" class="logo">itpilot</a>
+</header>

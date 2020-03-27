@@ -1,0 +1,83 @@
+<div class="panel">
+  <div class="panel-body" id="form_container">
+    <h2 class="text-center m-b-40"><%= t('widgets.v1.title_html') %></h2>
+    <%= form_for(@user, url: widgets_v1_registrations_path, remote: true, validate: true, html: {autocomplete: 'off', class: "floating-labels"}) do |f| %>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%= f.text_field :first_name, class: "form-control", autocomplete: 'off', required: true %>
+            <span class="highlight"></span> <span class="bar"></span>
+            <%= f.label :first_name, t('users.first_name')%>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%= f.text_field :last_name, class: "form-control", autocomplete: 'off', required: true %>
+            <span class="highlight"></span> <span class="bar"></span>
+            <%= f.label :last_name, t('users.last_name'),class: "control-label"%>
+          </div>
+        </div>
+      </div>
+      <div class="row m-b-20">
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%= f.email_field :email, class: "form-control", autocomplete: 'off', required: true %>
+            <span class="highlight"></span> <span class="bar"></span>
+            <%= f.label :email, t('users.email'), class: "control-label"%>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%= f.text_field :company, class: "form-control", autocomplete: 'off', required: true %>
+            <span class="highlight"></span> <span class="bar"></span>
+            <%= f.label :company, t('users.company'), class: "control-label"%>
+          </div>
+        </div>
+      </div>
+
+      <%= f.hidden_field :role_type, value: params[:role] %>
+      <%= hidden_field_tag :lang, params[:lang] %>
+      <%= hidden_field_tag :invitation_parent_company_id, params[:belong] %>
+      <%= hidden_field_tag :token, params[:token] %>
+      <!--<div class="row m-b-20">
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%#= f.label :role_type, t('users.role_type'), class: "control-label", style: "position: unset;"%>
+            <%#= f.select :role_type, [['-', nil], [t('users.role_types.partner'), User::ROLE_TYPES.index(:partner)], [t('users.role_types.customer'), User::ROLE_TYPES.index(:customer)]], {}, class: "form-control" %>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group m-b-40">
+            <%#= f.label :invitation_parent_company_id, t('users.parent_company'), class: "control-label", style: "position: unset;"%>
+            <%#= select_tag :invitation_parent_company_id, [], {class: "form-control", disabled: true} %>
+          </div>
+        </div>
+      </div>-->
+
+      <div class="row m-b-40">
+        <div class="col-xs-12">
+          <div class="checkbox" id="">
+            <%= check_box_tag :accept_terms, true, false, data: {error_message: "You cannot continue unless you agree with our Data Privacy and Terms and Conditions"} %> &nbsp;
+            <%= label_tag :accept_terms, class: "not_floating" do %>
+              <%= t('widgets.v1.confirm_agree') %>
+              <%= link_to t('widgets.v1.confirm_link'), dynamic_page_path('v2nfe7b8'), target: :_blank %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group text-center" id="recaptcha_container">
+            <div class="col-xs-4 col-xs-offset-3">
+              <%= recaptcha_tags callback: 'onCaptchaSucces' %>
+            </div>
+          </div>
+          <div class="form-group text-center hidden" id="submit_container">
+            <%= f.submit t('widgets.v1.submit_btn'), class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

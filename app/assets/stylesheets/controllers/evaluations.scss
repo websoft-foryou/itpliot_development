@@ -1,0 +1,133 @@
+.theme-pill{
+  margin-bottom:5px;
+}
+#status_pannel{
+  .status-box{
+    min-height:120px;
+    background:#DDD;
+    padding:10px;
+    position: relative;
+    max-width:350px;
+    margin:0 auto 10px;
+    h4{
+      color: #333333;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      font-weight: bold;
+    }
+    &.active{
+      background:#FFF;
+      h4{
+        color: #000000;
+      }
+    }
+    .status{
+      color: #797979;
+      position:absolute;
+      bottom:10px;
+      left:10px;
+      line-height: 1em;
+    }
+  }
+}
+.history_button{
+  .dropdown-menu{
+    width:250px;
+    left: -230px;
+  }
+  .fa{
+    font-size:30px;
+    position:relative;
+    right:15px;top:-5px;
+  }
+}
+
+.status_row{
+  .count{
+  font-size:18px;
+  color:#333;
+  font-weight:bold;}
+}
+
+//secondary buttons
+.btn-secondary {
+  color: #292b2c;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.btn-secondary:hover {
+  color: #292b2c;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.btn-secondary:focus, .btn-secondary.focus {
+  -webkit-box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
+  box-shadow: 0 0 0 2px rgba(204, 204, 204, 0.5);
+}
+.btn-secondary.disabled, .btn-secondary:disabled {
+  background-color: #fff;
+  border-color: #ccc;
+}
+.btn-secondary:active, .btn-secondary.active,
+.show > .btn-secondary.dropdown-toggle {
+  color: #292b2c;
+  background-color: #e6e6e6;
+  background-image: none;
+  border-color: #adadad;
+}
+.dropdown-toggle::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: .3em;
+    vertical-align: middle;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-left: .3em solid transparent;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 3px 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #292b2c;
+    text-align: inherit;
+    white-space: nowrap;
+    background: 0 0;
+    border: 0;
+}
+
+#no_evaluation_container{
+  position:relative;
+  .overlay{
+    position:absolute;
+    top:0;right:0;bottom:0;left:0;
+    width:100%;
+    padding:10px;
+    background:rgba(255,255,255,0.6);
+    z-index:100;
+    text-align:center;
+    .alert{
+      max-width:400px;
+      margin: 70px auto 0 auto;
+    }
+  }
+}
+
+
+.dataTables_wrapper .dataTable{
+  margin-bottom: 0px;
+  td {
+    background: #fff;
+  }
+  tfoot td {
+    background: #def;
+  }
+}
+
+#fteReports_wrapper .DTFC_ScrollWrapper {
+  /*height:auto !important;*/
+}
+

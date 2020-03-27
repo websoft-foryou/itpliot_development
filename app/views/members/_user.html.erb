@@ -1,0 +1,94 @@
+<div class="list-group-item actions_on_hover" id="user_id_<%=user.id%>">
+  <div class="row">
+    <div class="col-md-5 media">
+      <div class="pull-left">
+        <%= link_to (current_user.id == user.id ? edit_user_registration_path : edit_member_path(user)), class: 'ablock' do %>
+          <%= image_tag user.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", class: "img-thumbnail mini"%>
+        <% end %>
+      </div>
+      <div class="media-body">
+        <%= link_to (current_user.id == user.id ? edit_user_registration_path : edit_member_path(user)), class: 'ablock' do %>
+          <p>
+            <% if @filters && @filters[:search] %>
+              <strong><%= highlight(user.name, @filters[:search]) %></strong>
+            <% else %>
+              <strong><%= user.name%></strong>
+            <% end %>
+            <%= label_danger( '!') if user.is_banned? %> <br/>
+            <% if @filters && @filters[:search] %>
+              <%= highlight(user.email, @filters[:search]) %>
+            <% else %>
+              <%= user.email%>
+            <% end %>
+          </p>
+        <% end %>
+
+        <% if user.invited_to_sign_up? %>
+          <p><small><%= t('users.invitation_sent_on', date: user.invitation_created_at) if user.sent_email %></small></p>
+          <p class="text-danger"><small><%= t("users.status_pending")%></small></p>
+          <p class="text-info"><small><u><%= accept_invitation_url(user, :invitation_token => user.short_token)%></u></small></p>
+        <% end%>
+      </div>
+
+    </div>
+    <div class="col-md-5">
+      <% if !user.is_admin? && user.companies.any? %>
+        <% user.company_users.each do |cu| %>
+          <br/>
+          <label class="control-label">
+            <% if cu.company.parent && cu.company.parent.parent %>
+              <%= cu.company.parent.parent.name %> <%= label_danger( 'blocked') if cu.company.parent.parent.is_blocked? %> &raquo;
+            <% end %>
+            <% if cu.company.parent %>
+              <%= cu.company.parent.name %> <%= label_danger( 'blocked') if cu.company.parent.is_blocked? %> &raquo;
+            <% end %>
+            <strong><%= cu.company.name %> <%= label_danger( 'blocked') if cu.company.is_blocked? %></strong>
+            <%=raw ' (' + cu.company_branch.name + ')' if cu.company_branch %>
+          </label>
+        <% end %>
+          <% end %>
+    </div>
+    <div class="col-md-2 text-right">
+      <div class="actions m-t-small">
+        <% if current_user.id == user.id %>
+          <%= link_to edit_user_registration_path, class: 'btn btn-default btn-sm' do %>
+            <i class="fa fa-pencil"></i> <%= t('users.my_profile') %>
+          <% end %>
+        <% else%>
+          <%= link_to edit_member_path(user), class: 'btn btn-default btn-sm' do %>
+            <i class="fa fa-pencil"></i> <%= t('commons.edit') %>
+          <% end %>
+        <% end %>
+        <% unless current_user.id == user.id %>
+          <% if @customer.present? %>
+            <% company_user = @customer.all_company_users.where(user_id: user.id).first %>
+            <% if company_user.present? %>
+              <%= link_to [@customer, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+                <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+              <% end %>
+            <% end %>
+          <% elsif @partner.present? %>
+            <% company_user = @partner.all_company_users.where(user_id: user.id).first %>
+            <% if company_user.present? %>
+              <%= link_to [@partner, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+                <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+              <% end %>
+            <% end %>
+          <% elsif @jvp.present? %>
+            <% company_user = @jvp.all_company_users.where(user_id: user.id).first %>
+            <% if company_user.present? %>
+              <%= link_to [@jvp, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+                <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+              <% end %>
+            <% end %>
+          <% else %>
+              <%= link_to member_path(user), method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+                <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+              <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

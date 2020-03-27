@@ -1,0 +1,30 @@
+<%= breadcrumb(links: [
+              ({key: 'customers', name: t('customers.customers'), url: company_customers_path(current_company)} unless current_company.is_customer?),
+              {key: 'customer', name: current_customer.name, url: customer_path(current_customer)},
+              {key: 'evaluation', name: @evaluation.name, url: customer_evaluation_path(current_customer, @evaluation)},
+              {key: '', name: @evaluation_result.service.code, url: customer_evaluation_evaluation_result_path(current_customer,@evaluation,@evaluation_result)},
+              {key: '', name: t('commons.editing')}
+              ]) %>
+
+<%= form_for(@evaluation_result, url: customer_evaluation_evaluation_result_path(current_customer, @evaluation, @evaluation_result), validate: true, html: {multipart: true, class: "basic_file_upload form-horizontal submit_with_loading", data: {type: "jpeg|jpg|png|gif|bmp|docx|doc|pdf|xls|xlsx|csv"}}) do |f| %>
+  <%= render partial: 'form', locals: {f: f} %>
+
+  <div class="form-group">
+    <div class="col-xs-6 text-left">
+      <%#= link_to customer_evaluation_evaluation_result_path(current_customer, @evaluation, @evaluation_result), method: :delete, remote: false, confirm: t('commons.are_you_sure'), class: "btn btn-default" do %>
+        <!-- <i class="fa fa-trash"></i> -->
+        <%#= t('commons.delete') %>
+      <%# end %>
+      <%= link_to t('commons.cancel_editing'), :back, class: "btn btn-default m-l" %>
+    </div>
+      <div class="col-xs-6 text-right">
+        <%= hidden_field_tag 'next_action', 'service_set' %>
+        <%= f.button t('evaluation_results.form.buttons.save_and_go_to_next'), {class: "btn btn-default", id:"save_and_go_to_next", data: {'disable-with'=>t("evaluation_results.form.buttons.save_and_go_to_next")} } %>
+        <%= f.submit t('evaluation_results.form.buttons.save_and_go_to_service_set'), {class: "btn btn-primary", data: {'disable-with'=>t("evaluation_results.form.buttons.save_and_go_to_service_set")} } %>
+      </div>
+  </div>
+
+<% end %>
+
+
+

@@ -1,0 +1,17 @@
+<div class="row status_row text-right m-t-small">
+  <div class="col-sm-3 text-center col-xs-offset-2">
+    <%= link_to '#', data: {toggle: "button"}, aria_pressed: "false", id: "toggle_active", class: "toggle_result_status btn btn-default #{'active' if @right_filters[:status].blank? || @right_filters[:status] == 'active'}" do %>
+      <span class="count"><%= @evaluation.evaluation_results.active.count %></span><br/>
+      <%= t('commons.active') %>
+    <% end %>
+  </div>
+
+  <div class="col-sm-3 text-center">
+    <%= link_to '#', data: {toggle: "button"}, aria_pressed: "false", id: "toggle_ignored", class: "toggle_result_status btn btn-default #{'active' if @right_filters[:status] && @right_filters[:status] == 'ignored'}" do %>
+      <span class="count"><%= @evaluation.evaluation_results.ignored.count %></span><br/>
+      <%= t('commons.ignored') %>
+    <% end %>
+  </div>
+</div>
+
+

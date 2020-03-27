@@ -1,0 +1,13 @@
+<div class="row">
+  <%= dashboard_box(companies_path,t('left_menu.joint_venture_partners'),'fa-globe') %>
+  <%= dashboard_box(company_resellers_path(current_company), t('left_menu.partners'), 'fa-users') if current_company.present? %>
+  <%= dashboard_box(company_customers_path(current_company), t('customers.customers'), 'fa-building') if current_company.present? %>
+  <%= dashboard_box(members_path, t('commons.users'), 'fa-user') %>
+  <%= dashboard_box(services_path, t('commons.services'), 'fa-share-alt') %>
+  <%= dashboard_box(work_processes_path, t('commons.processes'), 'fa-puzzle-piece') %>
+  <%= dashboard_box(themes_path, t('commons.themes'), 'fa-cube') %>
+  <%= dashboard_box(industries_path, t('commons.industry_fields'), 'fa-industry') %>
+  <%= dashboard_box(businesses_path, t('commons.company_industry'), 'fa-briefcase') %>
+  <%= dashboard_box(static_pages_path, t('static_pages.title'), 'fa-file-o') %>
+  <%= dashboard_box(dynamic_page_path("_xgm7knl"), t('commons.admin_knowledge_base'), 'fa-question-circle') %>
+</div>

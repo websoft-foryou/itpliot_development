@@ -1,0 +1,119 @@
+<section>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-4 text-right">
+      <% if current_customer.premium? %>
+        <%= link_to customer_evaluation_resources_path(current_customer, @evaluation, format: :pdf, type: :fte), class: 'btn btn-default m-t-small', target: '_blank' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+        <%= link_to customer_evaluation_resources_path(current_customer, @evaluation, format: :csv, type: :fte), class: 'btn btn-default m-t-small' do %>
+          <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+        <% end %>
+      <% else %>
+        <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+        <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+          <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+        <% end %>
+        <p class="help-block">
+          <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-simple wauto">
+        <tr>
+          <td style="width:430px; min-width: 430px;" class="text-right"></td>
+          <td style="width: 130px; min-width: 130px;" class="text-center"><%= t('full_report.internal') %></td>
+          <td style="width: 130px; min-width: 130px;" class="text-center"><%= t('full_report.external') %></td>
+        </tr>
+        <tr>
+          <td style="width:430px; min-width: 430px;" class="text-right"><span class="highlight"><%= t('resources.fte.sum') %></span></td>
+          <td style="width: 130px; min-width: 130px;" class="text-center"><span class="highlight"><%= format_num(@evaluation.sum_hours_intern) %></span></td>
+          <td style="width: 130px; min-width: 130px;" class="text-center"><span class="highlight"><%= format_num(@evaluation.sum_hours_extern) %></span></td>
+        </tr>
+
+        <tr>
+          <td class="text-right"><span class="highlight"><%= t('resources.fte.average_per_service') %></span></td>
+          <td class="text-center"><span class="highlight"><%= format_num(@evaluation.average_intern_per_service) %></span></td>
+          <td class="text-center"><span class="highlight"><%= format_num(@evaluation.average_extern_per_service) %></span></td>
+        </tr>
+
+        <tr>
+          <td class="text-right"><span class="highlight"><%= t('resources.fte.sum_fte_per_month') %></span></td>
+          <td class="text-center"><span class="highlight"><%= format_num(@evaluation.fte_resources_intern) %></span></td>
+          <td class="text-center"><span class="highlight"><%= format_num(@evaluation.fte_resources_extern) %></span></td>
+        </tr>
+    </table>
+  </div>
+
+
+  <div class="table-responsive" style="/*max-height: calc(100vh - 288px);*/">
+    <table id="fteReports" class="table table-simple wauto">
+      <thead>
+        <tr class="captbl" style="border-top: 1px solid #DDD;">
+          <td colspan="2" style="min-height: 47px;"><%= t('full_report.service') %></td><!--number/name/cost-->
+                   
+          <td></td><!--cloud-->
+          <td colspan="2"><%= t('resources.aggregated.support_time') %></td><!--hours extern/intern-->
+         
+          <% @ordered_employee_evaluations.each do |ee| %>
+            <td colspan="2"><%= ee.employee_first_name %> <%= ee.employee_last_name %></td>
+
+          <% end %>
+        </tr>
+        <tr class="captbl">
+          <td style="width: 49px;">ID</td><!--number/name/cost-->
+          <td class="minimal-name-column1" style="width: 300px;min-width: 300px"><%= t('full_report.name') %></td>
+          <td style="width: 74px;"><%= t('full_report.cloud_service') %></td><!--cloud-->
+          <td style="width: 76px;"><%= t('full_report.internal') %></td><!--hours extern/intern-->
+          <td style="width: 79px;"><%= t('full_report.external') %></td>
+          <% @ordered_employee_evaluations.each do |ee| %>
+            <td><%= t('full_report.internal') %></td>
+            <td><%= t('full_report.external') %></td>
+
+         <% end %>
+        </tr>
+        <tr>
+          <td></td><td></td><td></td><td></td><td></td>
+          <% @ordered_employee_evaluations.each do |ee| %>
+            <td class="text-center"><%= "#{ee.employee_monthly_hours} #{t('resources.abbr_hours')}" if ee.was_internal? %></td>
+            <td class="text-center"><%= "#{ee.employee_monthly_hours} #{t('resources.abbr_hours')}" if ee.was_external? %></td>         
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @evaluation.active_evaluation_results.includes(:service).order(:id).each do |evaluation_result| %>
+          <tr>
+            <td  style="width: 50px;"><%= evaluation_result.service.code%></td>
+            <td>
+              <%= evaluation_result.cloned_index[1..-1] %>
+              <%= evaluation_result.service.name %>
+              <% if evaluation_result.is_ignored? %>
+                <br/><span class="label label-info lisible"><%= t('services.ignored')%></span>
+              <% end %>
+              <% if evaluation_result.is_deactivated? %>
+                <br/><span class="label label-danger lisible"><%= t('services.deactivated')%></span>
+              <% end %>
+            </td>
+            
+            <td class="text-center" style="width: 76px;"><%= yes_no_value evaluation_result.cloud_service %></td>
+            <td class="text-center" style="width: 79px;"><%= evaluation_result.hours_intern %></td>
+            <td class="text-center" style="width: 82px;"><%= evaluation_result.hours_extern %></td>
+            <% @ordered_employee_evaluations.each do |ee| %>
+              <td colspan="2"  class="text-center">
+                <% eer = evaluation_result.employee_evaluation_results.where(employee_id: ee.employee_id).first %>
+                <%= yes_no_check((eer && eer.sum_activity > 0), false, false) %>
+              </td>
+              <td style="display: none;"></td>              
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+
+</section>

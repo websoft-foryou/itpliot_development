@@ -1,0 +1,118 @@
+<h3 class="page-header"><i class="fa fa-road"></i> <%= t('upgrade.title') %></h3>
+
+<div class="col-md-12" id="price_plan_container">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="white-box">
+                <div class="row pricing-plan">
+                    <div class="col-md-6 col-xs-12 col-sm-6 no-padding">
+                        <div class="pricing-box b-l">
+                            <div class="pricing-body b-l">
+                                <div class="pricing-header">
+                                    <h4 class="text-center">
+                                      <% if !@customer.premium? %><span class="membership-tag"><%= t('upgrade.your_membership') %>:</span><% end %>
+                                      <%= t('upgrade.freemium') %>
+                                    </h4>
+                                    <% if !@customer.premium? && @customer.parent.is_partner? && !@customer.parent.is_dsp? %><p><%= t('upgrade.using_freemium_plan_uner_partner') %></p><% end %>
+                                    <h2 class="text-center"><span class="price-sign">€</span>0</h2>
+                                </div>
+                                <div class="price-table-content">
+                                    <div class="price-row"><%= t('upgrade.one_assesment_open') %></div>
+                                    <div class="price-row"><%= t('upgrade.freemium_feature1') %></div>
+                                    <div class="price-row"><%= t('upgrade.freemium_feature2') %></div>
+                                    <div class="price-row"><%= t('upgrade.freemium_feature3') %></div>
+                                    <div class="price-row"><%= t('upgrade.freemium_feature4') %></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 col-sm-6 no-padding">
+                        <%= form_tag !@customer.premium? ? upgrade_plan_request_customer_path(@customer) : cancel_plan_request_customer_path(@customer), {id: "reseller_plan"} do %>
+                        <div class="pricing-box featured-plan">
+                            <div class="pricing-body">
+                                <div class="pricing-header">
+                                    <h4 class="price-lable text-white bg-warning"><%= t('upgrade.recommended') %></h4>
+                                    <h4 class="text-center">
+                                      <% if @customer.premium? %><span class="membership-tag"><%= t('upgrade.your_membership') %>:</span><% end %>
+                                      <%= t('upgrade.premium') %>
+                                    </h4>
+                                    <% if @customer.premium? && !@customer.is_direct_customer? %><p><%= t('upgrade.using_premium_plan_under_partner') %></p><% end %>
+                                    <h2 class="text-center">
+                                      <span class="price-sign">€</span>
+                                      <price id="price_value">
+                                        <% if @customer.premium? && !@customer.is_direct_customer? %>
+                                          0
+                                        <% else %>
+                                          <%= format_num(@customer.plan_id ? @plans.find(@customer.plan_id).price : @plans.first.price, '', false) %>
+                                        <% end %>
+                                      </price>
+                                    </h2>
+                                    <p class="uppercase">
+                                      <%= t('upgrade.per_month') %>
+                                      <% if @customer.premium? && !@customer.is_direct_customer? %>&nbsp;<i class="fa fa-info-circle vertical-top" title="<%= t("upgrade.premium_partner_feature")%>" data-toggle="tooltip"></i><% end %>
+                                    </p>
+                                </div>
+                                <div class="price-table-content">
+                                    <% unless @customer.premium? && !@customer.is_direct_customer? %>
+                                      <div class="price-row">
+                                        <%
+                                          data = {}
+                                          @plans.each{|a| data[a.id] = format_num(a.price, '', false)}
+                                        %>
+                                        <%= select_tag :plan_id,
+                                                       options_for_select(@plans.map{|a| [a.employees_from <= Plan::CUSTOMER_MAX_EMPLOYEES ? "#{a.employees_from}-#{a.employees_to}" : "> #{a.employees_from - 1}", a.id] }, @customer.plan_id),
+                                                       class: "form-control",
+                                                       style: "display:inline-block;width:auto;",
+                                                       id: "plan_id",
+                                                       data: data
+                                        %>
+                                        <%= t('upgrade.employees_in_own_company') %>
+                                      </div>
+                                    <% end %>
+                                    <div class="price-row"><strong><%= t('upgrade.premium_customer_features') %>:</strong></div>
+                                    <div class="price-row"><%= t('upgrade.premium_feature1') %></div>
+                                    <div class="price-row"><%= t('upgrade.premium_feature2') %></div>
+                                    <div class="price-row"><%= t('upgrade.premium_feature3') %></div>
+                                    <div class="price-row"><%= t('upgrade.premium_feature4') %></div>
+                                    <div class="price-row">
+                                        <% if !@customer.premium? %>
+                                          <button class="btn btn-lg btn-info waves-effect waves-light m-t-20"><%= t('top_nav.upgrade_btn') %></button>
+                                          <i class="fa fa-info-circle vertical-top" title="<%= t("upgrade.#{@customer.is_direct_customer? ? 'upgrade_btn_description_for_direct_customer' : 'upgrade_btn_description_for_normal_customer'}")%>" data-toggle="tooltip"></i>
+                                        <% else %>
+                                          <% if @customer.plan_id %>
+                                            <button class="btn btn-lg btn-danger waves-effect waves-light m-t-20  confirm-cancel-plan" data-url="<%= cancel_plan_request_customer_path(@customer)%>"><%= t('upgrade.cancel_subscription') %></button>
+                                            <% if @customer.is_direct_customer? %>
+                                              <i class="fa fa-info-circle vertical-top" title="<%= t('upgrade.cancel_subscription_description_for_direct_customer') %>" data-html="true" data-toggle="tooltip"></i>
+                                              <br/>
+                                              <button class="btn btn-lg btn-info waves-effect waves-light m-t-20 confirm-cancel-plan confirm-new-plan"  data-url="<%= upgrade_plan_request_customer_path(@customer)%>" style="display:none;">
+                                                <%= t('upgrade.confirm_new_plan') %>
+                                              </button>
+                                            <% end %>
+                                          <% end %>
+                                        <% end %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% end %>
+                    </div>
+                </div>
+                <% if @customer.is_direct_customer?%>
+                  <div class="m-t-med">
+                    <table class="table table-simple">
+                      <tr class="captbl">
+                        <th><%= t('invoice.invoice_no') %></th>
+                        <th><%= t('invoice.license_name') %></th>
+                        <th><%= t('invoice.invoiced_date') %></th>
+                        <th><%= t('invoice.due_date') %></th>
+                        <th><%= t('invoice.amount') %></th>
+                        <th><%= t('invoice.status') %></th>
+                      </tr>
+                      <%= render partial: '/invoices/shared/invoice_item', collection: @invoices, as: :invoice %>
+                    </table>
+                  </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+      <div class="row status_row">
+        <div class="col-md-3 col-xs-12 text-center">
+          <span class="count"><%= evaluation.evaluation_processes.count %></span><br/>
+          <%= t('processes.processes') %>
+        </div>
+        <div class="col-md-3 col-xs-12 text-center">
+          <span class="count"><%= evaluation.evaluation_process_results.count %></span><br/>
+          <%= t('processes.processes_services') %>
+        </div>
+        <div class="col-md-3 col-xs-12 text-center">
+        </div>
+        <div class="col-md-3 col-xs-12 text-right">
+          <% unless evaluation.is_published? %>
+            <%= link_to t('processes.add_process'), new_customer_evaluation_evaluation_process_path(@evaluation.customer, @evaluation), class: "btn btn-info" %>
+          <% end %>
+        </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.select2-container .select2-choice{height: 30px;line-height: 28px;border: 1px solid #ccc;border-radius: 0px}
+.select2-container .select2-choice div{background-color: transparent;background-image: none;border-left: none;}
+.select2-container .select2-choice div b{background:none;position: relative;background-image: none !important; }
+.select2-container .select2-choice div b:after{content: "\f0d7"; font-family: FontAwesome;color: #aaa;}
+.select2-dropdown-open .select2-choice div b:after{content: "\f0d8"}
+.select2-search input{background: #fff;
+  &.select2-active { background: url("/assets/select2/select2-spinner.gif") no-repeat right 25px center #fff; }
+}
+.select2-search{position: relative;}
+.select2-search:after{position:absolute;content: "\f002"; font-family: FontAwesome;color: #aaa;right: 5px;top:4px;width: 18px}
+.select2-drop.select2-drop-above .select2-search:after{top:8px;}
+.select2-container .select2-choice abbr{background: transparent;}
+.select2-container .select2-choice abbr:after{content: "\f00d"; font-family: FontAwesome;position: absolute;top: -7px;font-size: 11px;color: #aaa}
+.select2-results .select2-highlighted{background-color: #cb0f01}
+.select2-container-multi .select2-choices{border: 1px solid #ccc;border-radius: 0px;padding-top: 2px}
+.select2-container-multi .select2-choices .select2-search-choice{border: 1px solid #ccc}
+.select2-search-choice-close{background: transparent;}
+.select2-search-choice-close:after{content: "\f00d"; font-family: FontAwesome;font-size: 11px;color: #aaa;position: absolute;left: 2px;top: -1px}
+.select2-dropdown-open.select2-drop-above .select2-choice{ border: 1px solid #ccc; }
+

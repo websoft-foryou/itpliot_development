@@ -1,0 +1,65 @@
+<%= breadcrumb(links: [
+                {key: 'companies', name: t('tenants.tenants'), url: companies_path},
+                {key: 'company', name: @company.name}
+                ]) %>
+
+<div class="panel">
+	<div class="panel-body">
+	<div class="pos-rlt"><div class="pos-abt" style="right:0;z-index:1000;"><%= link_to t('commons.edit'), edit_company_path(@company), class: 'btn btn-primary' %></div></div>
+	<div class="row">
+		<div class="col-md-2">
+			<div class="thumb-xlarge">
+				<div class="pos-rlt img-thumbnail" id="avatar-photo-container">
+					<%= image_tag( @company.avatar.url(:list) + "?timestamp=#{Time.now.to_i}") %>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-10">
+		<%= render partial: "/shared/company_info", object: @company, as: :company %>
+		</div>
+	</div>
+	</div>
+</div>
+
+<h4><%= t('tenants.users_that_belong_to') %> <%= @company.name%></h4>
+
+<div class="panel panel-default">
+
+	<div class="list-group">
+		<div class="list-group-item">
+			<div class="row header-list-group">
+				<div class="col-md-1"></div>
+				<div class="col-md-5"><%= t('users.last_name') %>, <%= t('users.first_name') %></div>
+				<div class="col-md-3">Email</div>
+				<div class="col-md-3"></div>
+			</div>
+		</div>
+	</div>
+	<div class="list-group" id="company_users_list">
+		<%= render partial: "/company_users/company_user", collection: @company.company_users.includes(:user), locals: {company: @company}%>
+	</div>
+	
+
+	<div class="panel-footer">
+		<%= form_for [@company, @company.company_users.build], html: {class: "form-horizontal"} do |f|%>
+			<div class="form-group">
+				<%= f.label :user_id, t('users.add_existing_user'), class: "control-label col-xs-3" %>
+				<div class="col-xs-5">
+					<%= f.hidden_field :user_id, 
+					class: "single_select2 width_100",
+					data: { 
+						url: select_members_path(company_id: @company.id),
+						init_value: f.object.user.to_json(only: [:id, :name]),
+						no_results: t('commons.no_results_found'),
+						min_length_required: t('commons.enter_at_least_2_chars'),
+						searching: t('commons.searching')
+					}%>
+				</div>
+				<div class="col-xs-2">
+				  <%= f.submit t('commons.add'), class: "btn btn-primary"%>
+				</div>
+			</div>
+		<% end %>
+	</div>
+
+</div>

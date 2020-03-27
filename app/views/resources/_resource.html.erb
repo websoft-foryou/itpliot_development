@@ -1,0 +1,39 @@
+<tr>
+  <td><%= evaluation_result.service.code%></td>
+  <td>
+    <%= evaluation_result.cloned_index[1..-1] %>
+    <%= evaluation_result.service.name %>
+    <% if evaluation_result.is_ignored? %>
+      <br/><span class="label label-info lisible"><%= t('services.ignored')%></span>
+    <% end %>
+    <% if evaluation_result.is_deactivated? %>
+      <br/><span class="label label-danger lisible"><%= t('services.deactivated')%></span>
+    <% end %>
+  </td>
+  <td class="text-center"><%= yes_no_value evaluation_result.cloud_service %></td>
+  <td><%= evaluation_result.hours_intern %></td>
+  <td><%= evaluation_result.hours_extern %></td>
+  <% @ordered_employee_evaluations.each_with_index do |ee, employee_index| %>
+    <% has_selected = false %>
+    <% eer = evaluation_result.employee_evaluation_results.where(employee_id: ee.employee_id).first %>
+    <% EmployeeEvaluationResult::ACTIVITY_TYPES.each do |key,value|%>
+      <% has_selected = true if eer && eer.has_attribute?("#{value}") && eer.send("#{value}")%>
+      <td style="display:none" class="full-view employee_<%= ee.employee_id %> <%= 'active' if (employee_index.even? == 0) %>">
+        <% if evaluation_result.evaluation.is_published? %>
+          <%= yes_no_check(eer && eer.has_attribute?("#{value}") && eer.send("#{value}")) %>
+        <% else %>
+          <%= link_to  toggle_employee_customer_evaluation_evaluation_result_path(evaluation_result.evaluation.customer.id, evaluation_result.evaluation.id, evaluation_result.id, employee_id: ee.employee_id, activity: key), remote: true, class: 'ablock', id: "#{key}_#{ee.employee_id}_#{evaluation_result.id}" do %>
+            <%= yes_no_check(eer && eer.has_attribute?("#{value}") && eer.send("#{value}")) %>
+          <% end %>
+        <% end %>
+      </td>
+    <% end %>
+    <td id="overview_<%= ee.employee_id %>_<%= evaluation_result.id %>" class="small-view text-center employee_<%= ee.employee_id %>" colspan="12">
+    <% if has_selected%>
+      <i class="fa fa-check text-success"></i>
+    <% else%>
+      <i class="fa fa-minus text-muted"></i>
+    <% end %>
+  </td>
+  <% end %>
+</tr>

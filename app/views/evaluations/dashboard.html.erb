@@ -1,0 +1,132 @@
+<%= render partial: "/evaluations/shared/service_set_selector" %>
+
+<div class="row">
+  <div class="col-md-12 m-b-small">
+    <%= render partial: "/evaluations/shared/status_menu", object: @evaluation, as: :evaluation %>
+  </div>
+</div>
+
+<div id="evaluation_reports_list" data-reports-url="<%= customer_evaluation_rshow_path(customer_id: @customer.id, id: @evaluation) %>">
+  <div class="row">
+
+    <div class="col-md-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target1"><%= t('reports.it_services_assessment')%> <div class="pull-right go_full_link" id="services_assessment_link"></div></header>
+        <div class="panel-body collapse" id="target1">
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-4"><%= t('traffic_report.it_service') %></div>
+              <div class="col-sm-1"></div>
+              <div class="col-sm-3 text-center"><%= t('traffic_report.recovery_time_in_hours') %></div>
+              <div class="col-sm-1"></div>
+              <div class="col-sm-3"></div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-1">ID</div>
+              <div class="col-sm-2"><%= t('traffic_report.name') %></div>
+              <div class="col-sm-2"><%= t('full_report.theme') %></div>
+              <div class="col-sm-1"><%= t('traffic_report.cloud_service') %></div>
+              <div class="col-sm-1 text-center"><%= t('traffic_report.required') %></div>
+              <div class="col-sm-2 text-center"><%= t('traffic_report.guaranteed') %></div>
+              <div class="col-sm-1"><%= t('traffic_report.assessment') %></div>
+              <div class="col-sm-3"><%= t('traffic_report.recommended_measures') %></div>
+            </div>
+          </div>
+          <ul id="services_assessment_report"></ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target2"><%= t('reports.expenses_and_operating_costs')%> <div class="pull-right go_full_link" id="expenses_report_link"></div></header>
+        <div class="panel-body collapse" id="target2">
+          <ul id="expenses_report"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target3"><%= t('reports.dependencies_between_it_services')%> <div class="pull-right go_full_link" id="dependencies_report_link"></div></header>
+        <div class="panel-body collapse" id="target3">
+          <ul id="dependencies_report"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target4"><%= t('evaluations.services')%> <div class="pull-right go_full_link" id="link_rt"></div></header>
+        <div class="panel-body collapse" id="target4">
+          <ul id="list_services_view"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target11"><%= t('evaluations.top_20_by.gb_used') %><div class="pull-right go_full_link" id="link_gb_used"></div></header>
+        <div class="panel-body collapse" id="target11">
+          <ul id="report_top_gb_used"></ul>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target12"><%= t('evaluations.top_20_by.servers_count') %> <div class="pull-right go_full_link" id="link_servers_count"></div></header>
+        <div class="panel-body collapse" id="target12">
+          <ul id="report_top_servers_count"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target21"><%= t('evaluations.top_20_by.opex') %> <div class="pull-right go_full_link" id="link_opex"></div></header>
+        <div class="panel-body collapse" id="target21">
+          <ul id="report_top_opex"></ul>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target22"><%= t('evaluations.top_20_by.capex') %> <div class="pull-right go_full_link" id="link_capex"></div></header>
+        <div class="panel-body collapse" id="target22">
+          <ul id="report_top_capex"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target31"><%= t('evaluations.top_20_by.hours_intern') %> <div class="pull-right go_full_link" id="link_hours_intern"></div></header>
+        <div class="panel-body collapse" id="target31">
+          <ul id="report_top_hours_intern"></ul>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <section class="panel m-b-small panel-default">
+        <header class="panel-heading" data-toggle="collapse" data-target="#target32"><%= t('evaluations.top_20_by.hours_extern') %> <div class="pull-right go_full_link" id="link_hours_extern"></div></header>
+        <div class="panel-body collapse" id="target32">
+          <ul id="report_top_hours_extern"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+

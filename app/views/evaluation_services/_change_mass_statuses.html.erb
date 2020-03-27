@@ -1,0 +1,34 @@
+<% if @left_filters %>
+  <% @left_filters.each do |key, value|%>
+    <%= hidden_field_tag "left_filters[#{key}]", value %>
+  <% end %>
+<% end %>
+
+<% if @right_filters %>
+  <% @right_filters.each do |key, value|%>
+    <%= hidden_field_tag "right_filters[#{key}]", value %>
+  <% end %>
+<% end %>
+
+<div class="btn-group" role="group" id="evaluation_service_mass_assign">
+  <%= button_tag name: 'status', value: 'deactivated', class: "btn btn-sm btn-default", data: {toggle: "tooltip"}, title: t("evaluation_services.bulk_actions.deactivate_all_tooltip"), method: :post  do %>
+    <i class="fa fa-close" aria-hidden="true"></i>
+  <% end %>
+  <%= button_tag name: 'status', value: 'ignored', class: "btn btn-sm btn-default", data: {toggle: "tooltip"}, title: t("evaluation_services.bulk_actions.ingore_all_tooltip"), method: :post  do %>
+    <i class="fa fa-minus" aria-hidden="true"></i>
+  <% end %>
+  <%= button_tag name: 'status', value: 'active', class: "btn btn-sm btn-default", method: :post do %>
+    <i class="fa fa-check" aria-hidden="true"></i>
+    <%= t("evaluation_services.bulk_actions.active_all")%>
+  <% end %>
+</div>
+
+<% if false %>
+  <li><%= link_to t('commons.export_pdf'), customer_evaluation_path(current_customer, @evaluation, format: :pdf, params: @right_filters), target: '_blank' %></li>
+  <li>
+    <p class="m-l-large">
+       <%= t('commons.export_pdf') %><br/>
+       <small class="text-muted"><%= t("upgrade.feature_unavailable")%></small>
+    </p>
+  </li>
+<% end %>

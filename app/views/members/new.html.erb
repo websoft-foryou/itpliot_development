@@ -1,0 +1,17 @@
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-building"></i><%= link_to t('users.users'), members_path %></li>
+  <li><i class="fa fa-building-o"></i> <%= t('users.add_new_user') %></li>
+</ol>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@user, url: invite_new_member_path, validate: true, html: {class: "form-horizontal"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f}  %>
+    <% end %>
+  </div>
+</div>
+
+
+
+

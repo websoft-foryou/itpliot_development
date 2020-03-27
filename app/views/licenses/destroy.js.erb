@@ -1,0 +1,3 @@
+<% if @license.destroyed? %>
+	$("#licenses_list").find("#license_id_<%=@license.id%>").remove();
+<% end %>

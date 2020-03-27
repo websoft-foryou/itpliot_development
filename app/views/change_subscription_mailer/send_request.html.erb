@@ -1,0 +1,10 @@
+<h3><%= @company.name%>  requested a subscription change</h3>
+<p>
+  Company name: <%= link_to @company.name, @company.is_customer? ? customer_url(@company) : company_reseller_url(@company.parent_id, @company)%>
+</p>
+<p>
+  Company employees range: <%= @plan.employees_from %> ~ <%= @plan.employees_to %>
+</p>
+<p>
+  Person who requested: <%= @user.first_name%> <%= @user.last_name%>
+</p>

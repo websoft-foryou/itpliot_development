@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-10"><h3><%= t('devise.invitations.hello') %> <%= current_user.first_name %> <%= current_user.last_name %></h3></div>
+  <div class="col-md-2 text-right"><h4><%= t('users.form.step_n_in_t',n: 1, t: 3) %></h4></div>
+</div>
+
+<div class="panel panel-default">
+    <div class="media panel-body">
+      <div class="thumb-xlarge pull-left hidden-sm hidden-xs">
+        <div class="pos-rlt img-thumbnail" id="avatar-photo-container">
+          <%= form_for resource, :as => resource_name, url: registration_path(resource_name), multipart: true, html: {id: "user_avatar_form", class: "basic_file_upload m-b-none", :method => :put} do |f| %>
+              <%= f.file_field :avatar, class: "styled_file_input" %>
+              <%= f.label :avatar do %>
+                <%= image_tag( f.object.avatar.url(:list) + "?timestamp=#{Time.now.to_i}", title: 'Avatar') %>
+              <% end %>
+          <% end %>
+        </div>
+        <p class="help-block"><small class="text-justify"><%= t('users.form.click_to_change_profile_image_html') %></small></p>
+      </div>
+
+      <div class="media-body">
+        <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, class: "form-horizontal" }) do |f| %>
+          <% devise_error_messages! %>
+
+          <%= render partial: "/shared/user_registration_form", object: current_user, as: :resource, locals: {f: f} %>
+
+          <% if current_company && current_company.is_jvp? %>
+            <div class="form-group">
+              <div class="col-md-4 col-xs-6 text-right">
+                <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-md-7 col-md-offset-3 col-xs-12 text-center">
+              <%= f.submit t('users.form.save_and_go_to_step',count: 2), class: "btn btn-primary" %>
+            </div>
+          <% end %>
+
+        <% end %>
+      </div>
+    </div>
+</div>

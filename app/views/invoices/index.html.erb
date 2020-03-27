@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-10">
+    <h3 class="page-header">
+      <i class="fa fa-money"></i>
+      <%= t('invoice.title') %>
+    </h3>
+  </div>
+  <div class="col-md-2">
+    <div class="btn-group pull-right">
+    </div>
+  </div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-file-o"></i><%= t('invoice.title') %></li>
+</ol>
+
+
+<div class="panel panel-default">
+  <div class="list-group">
+    <table class="table table-simple">
+      <tr class="captbl">
+        <th><%= t('invoice.invoice_no') %></th>
+        <th><%= t('companies.company') %></th>
+        <th><%= t('companies.type') %></th>
+        <th><%= t('invoice.license_name') %></th>
+        <th><%= t('invoice.invoiced_date') %></th>
+        <th><%= t('invoice.due_date') %></th>
+        <th><%= t('invoice.amount') %></th>
+        <th><%= t('invoice.internal_invoice_no') %></th>
+        <th><%= t('invoice.status') %></th>
+      </tr>
+      <%= render partial: '/invoices/invoice_item_for_jvp', collection: @invoices, as: :invoice %>
+    </table>
+  </div>
+</div>

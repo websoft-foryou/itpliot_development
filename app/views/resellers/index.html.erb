@@ -1,0 +1,50 @@
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group pull-right m-b-small">
+            <%= link_to new_company_reseller_path(current_company), class: "btn btn-info" do %>
+                <i class="fa fa-plus"></i>
+                <%= t('partners.add_partner') %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-users"></i><%= t('partners.partners') %></li>
+</ol>
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-9 text-right m-b-sm">
+        <%= form_tag company_resellers_path(current_company), remote: true, method: :get, id: "search_form", class: "form-horizontal" do%>
+            <div class="pos-rlt">
+                <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_customers", class: "observe form-control", placeholder: "#{t("commons.search")}..."  %>
+                <div class="search_input_icon"><i class="fa fa-search"></i></div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="list-group">
+        <div class="list-group-item">
+            <div class="row header-list-group">
+                <div class="col-md-5"><%= t('partners.partner') %></div>
+                <div class="col-md-3"><%= t('customers.membership') %></div>
+                <div class="col-md-2"><%= t('customers.customers') %></div>
+                <div class="col-md-2"><%= t('users.users') %></div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group" id="list_resellers">
+        <%= render partial: "/resellers/reseller", collection: @resellers, as: :reseller %>
+
+    </div>
+    <div id="pagination"><%= will_paginate @resellers %></div>
+</div>
+
+
+
+

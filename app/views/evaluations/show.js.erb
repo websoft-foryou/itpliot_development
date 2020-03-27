@@ -1,0 +1,48 @@
+<% if params[:attribute].present? && params[:attribute] == "evaluation_results" %>
+  <% if @evaluation_results.any? %>
+    $('#it_services_list').html('<%=j render partial: "/evaluation_results/evaluation_result_small", collection: @evaluation_results, as: :evaluation_result %>');
+  <% else %>
+    $('#it_services_list').html('<div class="list-group-item"><h4 class="text-center"><%=j t("evaluation_services.no_services_to_choose") %></h4></div>');
+  <% end %>
+  $('#change_mass_status_container_evaluation_results').html("<%=j render partial: '/evaluation_services/change_mass_statuses'%>");
+
+  <% if @right_filters[:status].present?%>
+    <% if @right_filters[:status] == 'ignored' %>
+      $("#toggle_active").removeClass('active')
+      $("#toggle_cloned").removeClass('active')
+      $("#toggle_ignored").addClass('active')
+    <% elsif @right_filters[:status] == 'active'%>
+      $("#toggle_cloned").removeClass('active')
+      $("#toggle_ignored").removeClass('active')
+      $("#toggle_active").addClass('active')
+    <% elsif @right_filters[:status] == 'cloned'%>
+      $("#toggle_active").removeClass('active')
+      $("#toggle_ignored").removeClass('active')
+      $("#toggle_cloned").addClass('active')
+    <% end %>
+  <% end %>
+  window.refreshEvaluationResults()
+<% elsif params[:attribute].present? && params[:attribute] == "evaluation_services" %>
+  $('#change_mass_status_container_evaluation_services').html("<%=j render partial: '/evaluation_services/change_mass_statuses'%>");
+  <% if @not_selected_evaluation_services.any? %>
+    $('#sortable_list').html('<%=j render partial: "/evaluation_services/evaluation_service_small", collection: @not_selected_evaluation_services, as: :evaluation_service %>');
+  <% else %>
+    $("#sortable_list").html('<div class="list-group-item"><h4 class="text-center"><%=j t("evaluation_services.no_services_to_choose") %></h4></div>')
+  <% end %>
+
+  <% if @left_filters[:theme].present? %>
+    $("#sortable_list input.check_evaluation_service").prop("checked", true)
+  <% end %>
+
+  <% if @left_filters[:status].present?%>
+    <% if @left_filters[:status].present? && @left_filters[:status] == 'deactivated'%>
+      $('#services_status').val('deactivated')
+      $("#toggle_deactivated").addClass('active')
+    <% else %>
+      $('#services_status').val('draft')
+      $("#toggle_deactivated").removeClass('active')
+    <% end %>
+  <% else %>
+  <% end %>
+  window.refreshEvaluationServices()
+<% end %>

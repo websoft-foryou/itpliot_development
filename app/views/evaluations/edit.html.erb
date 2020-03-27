@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-pencil"></i> <%= t('commons.edit') %> <%= t('evaluations.service_set') %> <%= @evaluation.name%></h3></div>
+</div>
+
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+    <li><i class="fa fa-table"></i><%=link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %></li>
+    <li><%= t('commons.editing') %></li>
+  </ol>
+<% end %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <%= form_for(@evaluation, url: customer_evaluation_path(current_customer, @evaluation), validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+          <%= render partial: 'form', locals: {f: f} %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+

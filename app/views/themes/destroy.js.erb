@@ -1,0 +1,3 @@
+<% if @theme.destroyed? %>
+	$("#theme_list").find("#theme_id_<%=@theme.id%>").remove();
+<% end %>

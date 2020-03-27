@@ -1,0 +1,112 @@
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('evaluations.status_menu.dashboard'), dashboard_customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><i class="fa fa-table"></i><%= link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %> </li>
+</ol>
+
+<div class="row">
+  <div class="col-md-4"><h3><%= t('reports.expenses_and_operating_costs') %></h3></div>
+  <div class="col-md-4 text-center">
+    <%= link_to "#", class: 'btn btn-default m-t-small', id: "view_chart_btn" do %>
+      <%= t('commons.view_chart') %>
+    <% end %>
+  </div>
+  <div class="col-md-4 text-right">
+    <% if !@customer.is_customer? || @customer.premium? %>
+      <%= link_to expenses_customer_evaluation_path(current_customer, @evaluation, format: :pdf, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small', target: '_blank' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to expenses_customer_evaluation_path(current_customer, @evaluation, format: :csv, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+    <% else %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+      <p class="help-block">
+         <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+      </p>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+<section class="panel">
+  <%= render(partial: 'evaluations/expenses_table', object: @evaluation, as: :evaluation) %>
+  <br/><br/>
+</section>
+
+
+<section class="panel">
+  <div class="panel-body">
+    <div class="row">
+    <div style="width:100%;">
+      <canvas id="canvas" style="padding:30px;"></canvas>
+    </div>
+    </div>
+  </div>
+</section>
+
+
+<%= content_for :scripts do %>
+  <script>
+
+  var rcolor = '';
+  var item = {};
+  var dataset = [];
+  <% @evaluation_results.each_with_index do |evaluation_result,idx| %>
+    rcolor = "#"+(Math.random()*0xFFFFFF<<0).toString(16);
+    item = {
+      label: "<%=evaluation_result.cloned_index[1..-1] %> <%=evaluation_result.service.code %> <%= truncate(evaluation_result.service.name, length: 25) %> ", hoverRadius: 10,
+      data: [{
+        x: <%=evaluation_result.opex.to_i%>,
+        y: <%=evaluation_result.hours_extern.to_f + evaluation_result.hours_intern.to_f%>,
+        r: <%=evaluation_result.sla*100 %>}],
+        backgroundColor: rcolor
+      };
+    dataset.push(item);
+  <% end %>
+
+  var options = {
+    responsive: true,
+    title:{ display: true, text: "<%= t('reports.expenses_related_to_it_services') %>", fontSize: 18, padding: 30},
+    layout: { padding: {left:30, right: 50, top: 10, bottom: 30} },
+    scales: {
+      xAxes: [{
+        scaleLabel: {display: true, labelString: "<%= t('reports.operational_costs_per_month') %>", fontColor: '#000000', fontSize: 16},
+        ticks: {
+          callback: function(value, index, values) {
+            value = Math.round(value * 100) / 100
+            value = value.toLocaleString('<%= current_user.current_locale %>');
+            return value + ' €';
+          }
+        }
+      }],
+      yAxes: [{
+        scaleLabel: {display: true, labelString: "<%= t('reports.total_hours_per_month') %>", fontColor: '#000000', fontSize: 16}
+      }]
+    },
+    tooltips: { callbacks: {
+      afterLabel: function(tooltipItem, data) {
+        var rLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].r;
+        return [" <%= t('reports.labels.hours', default: 'Hours') %>: " + tooltipItem.yLabel.toLocaleString('<%=current_user.locale%>'), ' Opex: ' + tooltipItem.xLabel, " <%= t('reports.labels.significance') %>: " + rLabel/100];
+      },
+      label: function (tooltipItem, data){
+        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+        return ' ' + [datasetLabel]
+      }
+    } }
+  }
+
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var myBubbleChart = new Chart(ctx,{type: 'bubble', data: {datasets: dataset}, options: options });
+
+
+  </script>
+<% end %>

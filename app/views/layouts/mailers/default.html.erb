@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style type="text/css">
+      #outlook a{padding:0;}
+      .ReadMsgBody{width:100%;} .ExternalClass{width:100%;}
+      .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
+      body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;}
+      table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+      img{-ms-interpolation-mode:bicubic;}
+      body{margin:0; padding:0;}
+      img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
+      table{border-collapse:collapse !important;}
+      body, #bodyTable, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;}
+      #bodyCell{padding:20px;}
+      #templateContainer{width:600px;}
+      body, #bodyTable{background-color:#DEE0E2;}
+      #templateContainer{border:1px solid #BBBBBB;}
+      h2{color:#404040 !important;display:block;font-family:Helvetica;font-size:20px;font-style:normal;font-weight:bold;
+        line-height:100%;letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;
+      }
+      h4{color:#606060 !important;display:block;font-family:Helvetica;font-size:14px;font-style:normal;font-weight:bold;
+        line-height:100%;letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;text-align:left;
+      }
+      #templateHeader{background-color:#F4F4F4;border-top:1px solid #FFFFFF;border-bottom:1px solid #CCCCCC;}
+      #headerImage{height:auto;max-width:260px;}
+      #templateBody{background-color:#F4F4F4;border-top:1px solid #FFFFFF;border-bottom:1px solid #CCCCCC;}
+      .bodyContent{color:#505050;font-family:Helvetica;font-size:15px;line-height:150%;
+        padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px;text-align:left;
+      }
+      .bodyContent p{font-size:15px;}
+      .bodyContent a:link, .bodyContent a:visited,.bodyContent a .yshortcuts{
+        color:#007aff;font-weight:normal;text-decoration:underline;
+      }
+      .buttonContent {color: #FFFFFF;font-family: Helvetica;font-size: 18px;font-weight: bold;line-height: 100%;padding: 15px;text-align: center;}
+      .emailButton{background-color:#F08F34; border-collapse:separate; border-radius:10px;width:260px;margin:0 auto;}
+      .buttonContent a:link, .buttonContent a:visited, .buttonContent a .yshortcuts {color: #FFFFFF;display: block;text-decoration: none;}
+
+      .bodyContent p{font-size:15px;}
+      #button_content_link{color:#FFFFFE !important;text-decoration:none !important;}
+      .templateColumnContainer{width:260px;}
+      #templateColumns{background-color:#F4F4F4;border-top:1px solid #FFFFFF;border-bottom:1px solid #CCCCCC;}
+      .leftColumnContent{color:#505050;font-family:Helvetica;font-size:14px;line-height:150%;
+        padding-top:0;padding-right:20px;padding-bottom:20px;padding-left:20px;text-align:left;
+      }
+      .rightColumnContent{color:#505050;font-family:Helvetica;font-size:14px;line-height:150%;
+        padding-top:0;padding-right:20px;padding-bottom:20px;padding-left:20px;text-align:right;
+      }
+      #footerLogo{height:auto;max-width:170px;}
+
+      @media only screen and (max-width: 480px){
+        body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:none !important;}
+        body{width:100% !important; min-width:100% !important;}
+        #bodyCell{padding:10px !important;}
+        #templateContainer{max-width:600px !important;width:100% !important;}
+        h2{font-size:20px !important;line-height:100% !important;}
+        h4{font-size:16px !important;line-height:100% !important;}
+        #headerImage{height:auto !important;max-width:200px !important;width:100% !important;}
+        .headerContent{font-size:20px !important;line-height:125% !important;}
+        .bodyContent{font-size:17px !important;line-height:125% !important;}
+        .templateColumnContainer{display:block !important; width:100% !important;}
+        .leftColumnContent{display:none;visibility: hidden;font-size:16px !important;line-height:125% !important;}
+        .rightColumnContent{font-size:16px !important;line-height:125% !important;text-align: center;}
+      }
+    </style>
+  </head>
+
+  <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+    <center>
+      <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+        <tr>
+          <td align="center" valign="top" id="bodyCell">
+            <!-- BEGIN TEMPLATE // -->
+            <table border="0" cellpadding="0" cellspacing="0" id="templateContainer">
+              <tr>
+                <td align="center" valign="top">
+                  <!-- BEGIN HEADER // -->
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader">
+                    <tr>
+                      <td valign="top" class="headerContent">
+                        <%= image_tag 'itpilot_logo.png', style: "max-width:260px;", id: "headerImage" %>
+                      </td>
+                    </tr>
+                  </table>
+                  <!-- // END HEADER -->
+                  </td>
+                </tr>
+              <tr>
+                <td align="center" valign="top">
+                  <!-- BEGIN BODY // -->
+                  <%= yield%>
+                  <!-- // END BODY -->
+                </td>
+                </tr>
+              <tr>
+                  <td align="center" valign="top">
+                    <!-- BEGIN COLUMNS // -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateColumns">
+                      <tr mc:repeatable>
+                        <td colspan="2" align="left" valign="top" class="templateColumnContainer" style="padding-top:10px;padding-left:20px;">
+                          <%= t('devise.invitations.do_not_reply') %>
+                        </td>
+                      </tr>
+                      <tr mc:repeatable>
+                        <td colspan="2" align="left" valign="top" class="templateColumnContainer" style="padding-top:10px;padding-left:20px;">
+                          <%= t('devise.invitations.subscribe') %>
+                        </td>
+                      </tr>
+                      <tr mc:repeatable>
+                        <td align="center" valign="top" class="templateColumnContainer" style="padding-top:20px;">
+                          <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                            <tr>
+                              <td valign="top" class="leftColumnContent" mc:edit="left_column_content">
+                                <%= image_tag 'itpilot_logo.png', style: "max-width:170px;", id: "footerLogo" %>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td align="center" valign="top" class="templateColumnContainer" style="padding-top:20px;">
+                          <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                            <tr>
+                              <% if @resource.present? && @resource.invited_by.present? && !@resource.invited_by.is_admin? && @resource.invited_by.current_company %>
+                                <%= render partial: '/layouts/mailers/company_contact_details', locals: {company: @resource.invited_by.current_company} %>
+                              <% else %>
+                                <%= render partial: '/layouts/mailers/default_contact_details' %>
+                              <% end %>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- // END COLUMNS -->
+                  </td>
+              </tr>
+            </table>
+            <!-- // END TEMPLATE -->
+          </td>
+        </tr>
+      </table>
+    </center>
+  </body>
+</html>

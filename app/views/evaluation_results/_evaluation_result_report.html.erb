@@ -1,0 +1,25 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-sm-10">
+      <% if evaluation_result.evaluation.is_published? %>
+        <%= evaluation_result.service.code%><%= evaluation_result.cloned_index %> <%= evaluation_result.service.name %>
+      <% else %>
+        <%= link_to customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result) do %>
+          <%= evaluation_result.service.code%><%= evaluation_result.cloned_index %> <%= evaluation_result.service.name %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="col-sm-2 text-center">
+      <% if local_assigns[:report].present? %>
+        <% if report.in? ['hours_intern', 'hours_extern'] %>
+          <%= format_num(evaluation_result.send(report)) %>
+        <% elsif report.in? ['capex', 'opex', 'planned_capex', 'planned_opex', 'failure_impact_per_day'] %>
+          <%= format_num(evaluation_result.send(report), '€') %>
+        <% else %>
+          <%= evaluation_result.send(report) %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

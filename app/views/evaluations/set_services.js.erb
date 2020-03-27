@@ -1,0 +1,5 @@
+<% if @evaluation_service.destroyed? %>
+  $('#evaluation_service_<%=@service.id%>').html("<%=j render partial: 'evaluations/services_status_item_buttons', locals: {service_id: @service.id, evaluation_service_status: nil, evaluation: @evaluation} %>")
+<% else %>
+  $('#evaluation_service_<%=@service.id%>').html("<%=j render partial: 'evaluations/services_status_item_buttons', locals: {service_id: @service.id, evaluation_service_status: @evaluation_service.status, evaluation: @evaluation} %>")
+<% end %>

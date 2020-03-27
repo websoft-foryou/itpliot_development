@@ -1,0 +1,3 @@
+<% if @user.previous_changes.include?("avatar_file_name")%>
+	$("#avatar-photo-container img").attr("src", "<%= @user.avatar.url(:list)%>?<%= Time.now.to_i %>")
+<% end %>

@@ -1,0 +1,23 @@
+<%= breadcrumb(links: [
+                {key: 'themes', name: t('themes.themes'), url: themes_path}, 
+                {key: '', name: @theme.name}
+                ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+      <div class="pos-rlt"><div class="pos-abt" style="right:0;z-index:1000;"><%= link_to t('commons.edit'), edit_theme_path(@theme), class: 'btn btn-primary' %></div></div>
+      <div class="col-md-10 col-md-offset-2 m-t m-b">
+        <div class="form-horizontal m-t-small viewstyle">
+          <div class="form-group m-b-none">
+            <div class="col-sm-2 text-sm-left text-muted"><%= "#{t('themes.form.theme_name')} #{t('locales.en')}" %></div><div class="col-sm-10"><%= @theme.name('en') %></div>
+          </div>
+          <div class="form-group m-b-none">
+            <div class="col-sm-2 text-sm-left text-muted"><%= "#{t('themes.form.theme_name')} #{t('locales.de')}" %></div><div class="col-sm-10"><%= @theme.name('de') %></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10 col-md-offset-2 m-t m-b">
+        <%= render(partial: "/shared/service_label", collection: @theme.services.order(:code), as: :service) || ''%>
+      </div>
+  </div>
+</div>

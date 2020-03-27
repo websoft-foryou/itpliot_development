@@ -1,0 +1,25 @@
+<div class="panel-body">
+  <div class="row status_row">
+    <div class="col-sm-3 col-xs-12 m-t-sm">
+      <h4><%= t("evaluation_services.overall_progress")%></h4>
+    </div>
+    <div class="col-sm-2 col-xs-12 text-center">
+      <span class="count"><%= @evaluation.evaluation_services.active.count %></span><br/>
+      <%= t('evaluation_services.statuses.active') %>
+    </div>
+    <div class="col-sm-2 col-xs-12 text-center">
+      <span class="count"><%= @evaluation.evaluation_services.ignored.count %></span><br/>
+      <%= t('evaluation_services.statuses.ignored') %>
+    </div>
+    <div class="col-sm-2 col-xs-12 text-center">
+      <span class="count"><%= @evaluation.evaluation_services.deactivated.count %></span><br/>
+      <%= t('evaluation_services.statuses.deactivated') %>
+    </div>
+    <div class="col-sm-2 col-xs-12 text-center">
+      <span class="count"><%= @evaluation.evaluation_services.draft.count %></span><br/>
+      <%= t('evaluation_services.statuses.draft') %>
+    </div>
+  </div>
+</div>
+
+

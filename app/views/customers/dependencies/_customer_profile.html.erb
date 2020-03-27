@@ -1,0 +1,130 @@
+<div class="row">
+  <div class="col-xs-11">
+    <h3 class="front-pannel m-t"><%= t('customers.company_profile') %></h3>
+  </div>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="header-info circle_buttons">
+          <% editlink = @reseller.present? ?  edit_company_reseller_customer_path(current_company, @reseller, @customer) : edit_customer_path(@customer) %>
+          <%= link_to editlink, title: t('customers.edit_customer') do %>
+            <div class="circle-button"><i class="fa fa-pencil"></i></div>
+          <% end %>
+          <%= image_tag( @customer.avatar.url(:list) + "?timestamp=#{Time.now.to_i}", class: 'img-thumbnail med m-b pull-left')%>
+          <h1 class="m-t-none ellipsis-overflow"><%= @customer.full_name %></h1>
+          <% if @customer.is_blocked? %>
+            <p><%= yes_no_label( (@customer.is_blocked ? t('commons.blocked').upcase : t('commons.active').upcase) ,@customer.is_blocked) %></p>
+          <% end %>
+          <%= company_contact_details(@customer) %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 m-t">
+        <div class="header-info circle_buttons">
+          <%= link_to new_customer_customer_branch_path(@customer), title: t('branches.add_branch') do %>
+            <div class="circle-button"><i class="fa fa-plus"></i></div>
+          <% end %>
+          <h2 class="m-t-none">
+            <%= link_to customer_customer_branches_path(@customer) do %><%= t('branches.branches')%><% end %>
+          </h2>
+          <% if @customer.company_branches.any?%>
+            <ul class="owl-carousel">
+              <% @customer.company_branches.in_groups_of(3).each do |company_branch_group| %>
+                <li>
+                  <% company_branch_group.each do |company_branch|%>
+                    <% next if !company_branch %>
+                    <div class="inner-list">
+                      <%= link_to customer_customer_branch_path(company_branch.company.id, company_branch), title: t('branches.edit_branch') do %>
+                        <%= company_branch.name %> | <%= company_branch.description %> | <%= company_branch.location.city if company_branch.location %>
+                      <% end %>
+                      <br/>
+                      <%= company_branch.users.size %> <%= t('users.users').downcase %>
+                    </div>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="add-arrow"><i class="fa fa-expand" aria-hidden="true"></i><%= t('branches.add_companies_branches') %></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 m-t">
+        <div class="header-info circle_buttons">
+          <%= link_to new_member_path(customer_id: @customer, addto: 1), title: t('users.add_user') do %>
+            <div class="circle-button"><i class="fa fa-plus"></i></div>
+          <% end %>
+          <h2 class="m-t-none">
+            <%= link_to customer_members_path(customer_id: @customer) do %><%= t('users.users') %><% end %>
+          </h2>
+          <% if @customer.company_users.any? %>
+            <ul class="owl-carousel" id="company_users_list">
+              <% @customer.company_users.includes(:user).in_groups_of(3).each do |company_user_group| %>
+                <li>
+                  <% company_user_group.each do |company_user| %>
+                    <% next if !company_user %>
+                    <div class="inner-list" id="cuu_id_<%=company_user.id%>">
+                      <%= link_to edit_member_path(company_user.user, customer_id: company_user.company_id) do %>
+                        <%= company_user.user.name %>
+                        <small><%= "(#{company_user.company_branch.name})" if company_user.company_branch %></small>
+                      <% end %>
+                      <% if current_user.is_admin? %>
+                        <div class="btn-group" style="float:right;">
+                          <%= link_to [company_user.company, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+                            <i class="fa fa-trash"></i>
+                            Delete
+                          <% end %>
+                        </div>
+                      <% end %>
+                      <br/><%= company_user.user.email%>
+                    </div>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="add-arrow"><i class="fa fa-expand" aria-hidden="true"></i><%= t('users.invite_users_at_company_level') %></div>
+          <% end %>
+          <%= form_for [@customer, @customer.company_users.build], html: {class: "form-horizontal"} do |f|%>
+            <div class="form-group">
+              <div class="col-xs-9">
+                <%= f.hidden_field :user_id,
+                                   class: "single_select2 width_100",
+                                   data: {
+                                       url: select_members_path(company_id:@customer.id),
+                                       init_value: f.object.user.to_json(only: [:id, :name]),
+                                       no_results: t('commons.no_results_found'),
+                                       min_length_required: t('commons.enter_at_least_2_chars'),
+                                       searching: t('commons.searching'),
+                                       placeholder: t('users.add_existing_user'),
+                                   }%>
+              </div>
+              <div class="col-xs-2">
+                <%= f.submit t('commons.add'), class: "btn btn-primary"%>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <% if current_user.is_admin? %>
+      <div class="row">
+        <div class="col-md-12 m-t">
+          <% if @customer.is_sample? %>
+            <span class="label label-info">Sample customer</span>
+          <% else %>
+            <%#= link_to set_as_sample_customer_path(@customer), method: 'post', data: { confirm: t('commons.are_you_sure') } do %>
+            <!--<button class="btn btn-primary"><%#= t('customers.set_as_sample_customer') %></button>-->
+            <%# end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

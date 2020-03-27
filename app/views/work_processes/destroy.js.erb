@@ -1,0 +1,3 @@
+<% if @work_process.destroyed? %>
+	$("#work_process_list").find("#work_process_id_<%=@work_process.id%>").remove();
+<% end %>

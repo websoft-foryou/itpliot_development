@@ -1,0 +1,10 @@
+<% with_delete =  with_delete || false %>
+<li id="evaluation_result_file_<%= document.id %>">
+  <%= link_to document.document_file_name, customer_evaluation_evaluation_result_evaluation_result_file_path(current_customer, document.evaluation_result.evaluation, document.evaluation_result, document), target: '_blank'%>
+  <% if with_delete %>
+    <%= link_to customer_evaluation_evaluation_result_evaluation_result_file_path(current_customer, document.evaluation_result.evaluation, document.evaluation_result, document),
+      method: :delete, class: "del", remote: true, confirm: t('commons.are_you_sure') do %>
+      <i class="fa fa-trash-o fa-sm"></i>
+    <% end %>
+  <% end %>
+</li>

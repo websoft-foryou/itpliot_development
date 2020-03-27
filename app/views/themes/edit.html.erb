@@ -1,0 +1,15 @@
+<%= breadcrumb(links: [
+                {key: 'themes', name: t('themes.themes'), url: themes_path}, 
+                {key: '', name: @theme.name, url: theme_path(@theme)},
+                {key: '', name: t('commons.editing')}
+                ]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="col-md-10 col-md-offset-2 m-t m-b">
+      <%= form_for(@theme, validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<%= breadcrumb(links: [
+                {key: 'businesses', name: t('businesses.company_industries'), url: businesses_path},
+                {key: '', name: @business.name}
+                ]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <div class="pos-rlt"><div class="pos-abt" style="right:0;z-index:1000;"><%= link_to t('commons.edit'), edit_business_path(@business), class: 'btn btn-primary' %></div></div>
+    <div class="col-md-10 col-md-offset-2 m-t m-b">
+
+      <div class="form-horizontal m-t-small viewstyle">
+        <% I18n.available_locales.each do |locale| %>
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('businesses.company_name') + ' ' + t('locales.'+locale.to_s) %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= @business.name(locale) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

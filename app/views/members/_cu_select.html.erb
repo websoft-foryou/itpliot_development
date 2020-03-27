@@ -1,0 +1,19 @@
+<%
+	selected = ''
+	if @user.company_users.first
+		if company_user.company_id == @user.company_users.first.company_id && company_user.company_branch_id == @user.company_users.first.company_branch_id
+			selected = 'selected'
+		end
+  elsif params[:addto].present?
+    selected = 'selected' if params[:customer_id].present? && company_user.company_id == params[:customer_id].to_i
+    selected = 'selected' if params[:branch_id].present? && company_user.company_branch_id == params[:branch_id].to_i
+    selected = 'selected' if params[:reseller_id].present? && company_user.company_id == params[:reseller_id].to_i
+	end
+%>
+<% if company_user.company %>
+  <option value="<%= company_user.company_id%>#<%=company_user.company_branch_id%>" <%= selected %>>
+    <%= "&nbsp&nbsp&nbsp&nbsp".html_safe if company_user.company.is_partner? -%><%= "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp".html_safe if company_user.company.is_customer? %><%= company_user.company.name %><%= ' / ' + company_user.company_branch.name if company_user.company_branch %>
+  </option>
+<% else %>
+  <option value=""></option>
+<% end %>

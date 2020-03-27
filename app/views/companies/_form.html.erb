@@ -1,0 +1,75 @@
+<% if @company.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@company.errors.count, "error") %> <%= t('companies.prohibited_error') %>:</h2>
+    <ul>
+      <% @company.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="row">
+  <div class="col-md-6 m-b">
+    <%= render partial: '/shared/company_details_form', locals: {f: f} %>
+  </div>
+  <div class="col-md-6">
+    <div class="row">
+      <%= render partial: '/shared/company_location_form', locals: {f: f} %>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <%= f.label :remarks, t('companies.form.remarks'),class: "control-label col-xs-3" %>
+        <div class="col-xs-9"><%= f.text_area :remarks, rows: 3, class: "form-control" %></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row m-t-large">
+  <div class="col-md-6">
+    <% if current_user.is_admin? || current_company.is_jvp? || current_company.is_partner? %>
+      <div class="form-group interval_container">
+        <%= label_tag :premium_plan, t('upgrade.premium_plan'), class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+        <div class="col-xs-4">
+          <%= f.text_field :premium_from, value: f.object.premium_from.present? && f.object.premium_from.strftime("%d-%m-%Y") || "", readonly: true, class: "form-control toggle_datepicker start_at", data: {min_date: "now", interval: ".end_at", clear_btn: true} %>
+        </div>
+        <div class="col-xs-1 text-center m-t-small">-</div>
+        <div class="col-xs-4">
+          <%= f.text_field :premium_until, value: f.object.premium_until.present? && f.object.premium_until.strftime("%d-%m-%Y") || "", readonly: true, class: "form-control end_at toggle_datepicker", data: {min_date: "now"} %>
+        </div>
+      </div>
+    <% elsif f.object.persisted? %>
+      <div class="form-group interval_container m-t-small">
+         <div class="col-sm-3 col-xs-12 m-t-small text-right p-r-none"><label><%= t('upgrade.subscription_plan') %></label></div>
+        <div class="col-sm-7 col-xs-12 m-t-small"> 
+          <%= f.object.premium? ? t('upgrade.premium_membership') : t('upgrade.freemium_membership') %><br/>
+          <%= "#{f.object.premium_from.to_formatted_s(:long)} - #{f.object.premium_until.to_formatted_s(:long)}" if f.object.premium? %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-xs-6 m-t">
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <% if !@company.new_record? %>
+          <%= link_to t('commons.delete'), company_path(@company), method: :delete, class: "btn btn-default", data: { confirm: t('commons.are_you_sure') } %>
+          <div><small><%= t('companies.permanently_delete_all') %></small></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xs-6 m-t text-right">
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+    <% if @company.new_record? %>
+      <%= link_to t('commons.cancel'), companies_path, class: "btn btn-default" %>
+    <% else %>
+      <%= link_to t('commons.cancel'), company_path(@company), class: "btn btn-default"%>
+    <% end %>
+  </div>
+</div>
+

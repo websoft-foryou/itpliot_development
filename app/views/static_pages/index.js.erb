@@ -1,0 +1,2 @@
+$('#static_pages_list').html("<% @static_pages.group_by(&:uid).each do |uid, static_pages| %><%=j render partial: '/static_pages/static_page', object: static_pages.first, locals: {locales: static_pages.map(&:locale)} %><% end %>");
+$('#pagination').html("<%=j will_paginate @static_pages %>");

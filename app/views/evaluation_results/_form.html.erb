@@ -1,0 +1,528 @@
+<% if @evaluation_result.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@evaluation_result.errors.count, "error") %> <%= t('evaluation_results.prohibited_error') %>:</h2>
+
+    <ul>
+    <% @evaluation_result.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col-md-9">
+      <h3 class="m-t-none"><%= @evaluation_result.service.code %><%= @evaluation_result.cloned_index %> <%= @evaluation_result.service.name %></h3>
+      <div id="evaluation_result_<%= @evaluation_result.id %>_service_status_note"><small><%= t("services.service_is_#{@evaluation_result.status_name}_html") %></small></div>
+    </div>
+    <div class="col-md-3 text-right">
+      <div class="btn-group" role="group" id="evaluation_result_service_<%= @evaluation_result.id %>">
+        <%= render partial: '/evaluation_results/service_status_buttons', object: @evaluation_result, as: :evaluation_result %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"><%= t('branches.customer_branch') %></header>
+  <div class="panel-body">
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><%= t('customers.customer') %></label>
+      <div class="col-xs-8 control-input"><%= current_customer.name %></div>
+    </div>
+    <div class="form-group">
+      <%=raw f.label :company_branch_id, t('evaluation_results.home_of_service'),class: "control-label col-xs-2" %>
+      <div class="col-xs-4">
+        <%= f.select :company_branch_id, current_customer.company_branches.all.map{|a| [(a.name + branch_inline_info(a)).html_safe, a.id] }, {}, class: "single_select2 width_100" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :evaluation_result_company_branches, t('evaluation_results.support_of_location'), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= f.select :evaluation_result_company_branches, options_for_select(current_customer.company_branches.all.map{|a| [(a.name + branch_inline_info(a)).html_safe, a.id] }, f.object.evaluation_result_company_branches.includes(:company_branch).map{|a| a.company_branch.id} ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+      </div>
+      <div class="col-xs-2">
+        <label for="toggle_select_los"> <%= t('commons.select_all') %>
+          <%= check_box_tag t('commons.select_all'),'', false, id: 'toggle_select_los'%>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluations.service') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">ID</label>
+      <div class="col-xs-8">
+        <div class="control-input"><%= f.object.service.code %></div>
+        <%= f.hidden_field :service_id %>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><%= t('evaluation_results.name') %></label>
+      <div class="col-xs-8">
+        <div id="er_service_name" class="control-input"><%= f.object.service.name if f.object.service%></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><%= t('evaluation_results.purpose') %></label>
+      <div class="col-xs-8">
+        <div id="er_service_purpose" class="control-input"><%= f.object.service.purpose if f.object.service%></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label"><%= t('services.product_examples') %></label>
+      <div class="col-xs-8">
+        <div id="er_service_product_examples" class="control-input"><%= f.object.service.product_examples if f.object.service%></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :supplier, t('evaluation_results.form.labels.supplier'), class: "control-label col-sm-2"%>
+      <div class="col-xs-5">
+        <%= f.text_field :supplier, class: "form-control" %>
+      </div>
+      <div class="col-sm-3">
+        <label class="check_box">
+          <%= f.check_box :cloud_service %>
+          <%= t('evaluation_results.cloud_service') %>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :planned_supplier, t('evaluation_results.form.labels.supplier_planned'), class: "control-label col-sm-2"%>
+      <div class="col-xs-5">
+        <%= f.text_field :planned_supplier, class: "form-control" %>
+      </div>
+      <div class="col-sm-3">
+        <label class="check_box">
+          <%= f.check_box :planned_cloud_service %>
+          <%= t('evaluation_results.cloud_service') %> (<%= t('full_report.planned') %>)
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :distributor, t('evaluation_results.form.labels.distributor'), class: "control-label col-sm-2"%>
+      <div class="col-xs-5">
+        <%= f.text_field :distributor, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :planned_distributor, t('evaluation_results.form.labels.distributor_planned'), class: "control-label col-sm-2"%>
+      <div class="col-xs-5">
+        <%= f.text_field :planned_distributor, class: "form-control" %>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.service_usage') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <%= f.label :overview, t('evaluation_results.form.labels.usage_description'), class: "control-label col-sm-2"%>
+      <div class="col-md-8"><%= f.text_area :overview, rows: 3, class: "form-control" %></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.sla_significancy') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <%= f.label :recovery_time, t('evaluation_results.service_must_be_up_after'),  class: "control-label col-xs-4" %>
+      <div class="col-xs-4">
+        <%= f.number_field :recovery_time, class: "form-control" %>
+      </div>
+      <div class="col-xs-2"><%= t('evaluation_results.hours_max') %></div>
+    </div>
+    <div class="form-group">
+      <%= f.label :guaranteed_recovery_time, t('evaluation_results.guaranteed_recovery_time'),  class: "control-label col-xs-4" %>
+      <div class="col-xs-4">
+        <%= f.number_field :guaranteed_recovery_time, class: "form-control" %>
+      </div>
+      <div class="col-xs-2"><%= t('evaluation_results.hours_max') %></div>
+    </div>
+    <div class="form-group">
+      <%= f.label :impact, t('evaluation_results.direct_impact_relationship'),  class: "control-label col-xs-4" %>
+      <div class="col-xs-4">
+        <%= f.select :impact, EvaluationResult::IMPACT_TYPES.each_with_index.map{|v,i| [t('evaluation_results.impact_types.type_'+v.to_s),i]}, {}, class: "single_select2 width_100" %>
+      </div>
+      <div class="col-xs-2"><%= t('evaluation_results.level') %></div>
+    </div>
+    <div class="form-group">
+      <%= f.label :failure_impact_per_day, t('evaluation_results.direct_impact_revenue'),  class: "control-label col-xs-4" %>
+      <div class="col-xs-4">
+        <%= f.number_field :failure_impact_per_day, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+      </div>
+      <div class="col-xs-2"><%= t('evaluation_results.eur_max') %> <%= t('evaluation_results.per_day') %></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.efforts') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <div class="form-group">
+        <%= f.label :hours_intern, t('evaluation_results.support_hours_internal'), class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :hours_intern, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.hours_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :planned_hours_intern, t('evaluation_results.support_hours_internal') + ' ('+t('full_report.planned')+')',  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :planned_hours_intern, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.hours_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :hours_extern, t('evaluation_results.support_hours_external'),  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :hours_extern, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.hours_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :planned_hours_extern, t('evaluation_results.support_hours_external') + ' ('+t('full_report.planned')+')',  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :planned_hours_extern, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.hours_per_month') %></div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="form-group">
+        <%= f.label :capex, t('evaluation_results.capex_per_month'),  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :capex, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.eur_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :planned_capex, t('evaluation_results.capex_per_month') + ' ('+t('full_report.planned')+')',  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :planned_capex, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.eur_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :opex, t('evaluation_results.opex_per_month'),  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :opex, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.eur_per_month') %></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :planned_opex, t('evaluation_results.opex_per_month') + ' ('+t('full_report.planned')+')',  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.number_field :planned_opex, class: "form-control", placeholder: t('commons.decimal_placeholder') %>
+        </div>
+        <div class="col-xs-2"><%= t('evaluation_results.eur_per_month') %></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.strategy') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <div class="form-group">
+        <%= f.label :enhancements, t('evaluation_results.planned_enhancements'),  class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.text_field :enhancements, class: "form-control" %>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="form-group">
+        <%= f.label :future_strategy, t('evaluation_results.future_strategy'), class: "control-label col-xs-4" %>
+        <div class="col-xs-4">
+          <%= f.text_field :future_strategy, class: "form-control" %>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.technical_attributes') %></header>
+  <div class="panel-body">
+      <div class="form-group padded">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="fixed_height_label"><%= f.label :servers_count, t('evaluation_results.number_of_servers'), class: "control-label"%></div>
+            <%= f.number_field :servers_count, class: "form-control" %>
+          </div>
+          <div class="col-md-3">
+            <div class="fixed_height_label"><%= f.label :planned_servers_count, t('evaluation_results.number_of_servers') + ' ('+t('full_report.planned')+')', class: "control-label"%></div>
+            <%= f.number_field :planned_servers_count, class: "form-control" %>
+          </div>
+          <div class="col-md-3">
+            <div class="fixed_height_label"><%= f.label :gb_reserved, t('evaluation_results.gb_reserved'), class: "control-label"%></div>
+            <%
+=begin%>
+ <%= f.number_field :gb_reserved, class: "form-control" %> 
+<%
+=end%>
+            <%= f.number_field :gb_reserved, value: @evaluation_result.evaluation_result_servers.map(&:gb_reserved).compact.sum, class: "form-control evaluation_result_total_gb_reserved", readonly: "readonly" %>
+          </div>
+          <div class="col-md-3">
+            <div class="fixed_height_label"><%= f.label :gb_used, t('evaluation_results.gb_used'), class: "control-label"%></div>
+            <%= f.number_field :gb_used, value: @evaluation_result.evaluation_result_servers.map(&:gb_used).compact.sum, class: "form-control evaluation_result_total_gb_used", readonly: "readonly" %>
+            <%
+=begin%>
+ <%= f.number_field :gb_used, class: "form-control" %> 
+<%
+=end%>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="fixed_height_label"><%= f.label :appliances_count, t('evaluation_results.number_of_appliances'), class: "control-label"%></div>
+                <%= f.number_field :appliances_count, class: "form-control" %>
+              </div>
+              <div class="col-md-6">
+                <div class="fixed_height_label"><%= f.label :planned_appliances_count, t('evaluation_results.number_of_appliances') + ' ('+t('full_report.planned')+')', class: "control-label"%></div>
+                <%= f.number_field :planned_appliances_count, class: "form-control" %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="fixed_height_label"><%= f.label :users_count, t('evaluation_results.number_of_users'), class: "control-label"%></div>
+                <%= f.number_field :users_count, class: "form-control" %>
+              </div>
+              <div class="col-md-6">
+                <div class="fixed_height_label"><%= f.label :planned_users_count, t('evaluation_results.number_of_users') + ' ('+t('full_report.planned')+')', class: "control-label"%></div>
+                <%= f.number_field :planned_users_count, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="fixed_height_label"><%= f.label :service_attributes_info, t('evaluation_results.other_technical_attributes'), class: "control-label"%></div>
+            <%= f.text_area :service_attributes_info, rows: 5, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+      <div class="form-group padded">
+        <h4><%= t('evaluation_results.form.group_titles.list_of_servers_appliances') %></h4>
+        <div class="row hidden-sm hidden-xs">
+          <div class="col-sm-3"><%= t('evaluation_results.form.servers.name') %></div>
+          <div class="col-sm-2"><%= t('evaluation_results.form.servers.os') %></div>
+          <div class="col-sm-2"><%= t('evaluation_results.gb_reserved') %></div>
+          <div class="col-sm-2"><%= t('evaluation_results.gb_used') %></div>
+          <div class="col-sm-3"><%= t('evaluation_results.form.servers.additional_information') %></div>
+        </div>
+        <div class="js_crud" data-new-button-text="<%= t('evaluation_results.form.servers.add_new_server') %>" data-property="evaluation_result_servers">
+          <%= f.fields_for :evaluation_result_servers do |a_form|%>
+            <div class="children">
+              <div class="form-group m-t-small" style="padding-right:20px;position:relative">
+                <div class="col-sm-3"><%= a_form.text_field :name, placeholder: t('evaluation_results.server_name'), class: "form-control" %></div>
+                <div class="col-sm-2"><%= a_form.text_field :os, placeholder: "", class: "form-control" %></div>
+                <div class="col-sm-2"><%= a_form.number_field :gb_reserved, placeholder: t('commons.decimal_placeholder'), class: "form-control evaluation_result_server_gb_reserved" %></div>
+                <div class="col-sm-2"><%= a_form.number_field :gb_used, placeholder: t('commons.decimal_placeholder'), class: "form-control evaluation_result_server_gb_used" %></div>
+                <div class="col-sm-3"><%= a_form.text_field :details, placeholder: "", class: "form-control" %></div>
+                <div class="delete" style="position:absolute;right:0;">
+                  <a href="#" class="delete_button btn btn-white btn-small">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% end %>
+             <div class="row m-t-small">
+              <div class="new_children col-xs-12 text-right"></div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="form-group padded">
+        <div class="row hidden-sm hidden-xs">
+          <div class="col-sm-3"><%= t('evaluation_results.form.appliances.name') %></div>
+          <div class="col-sm-6"><%= t('evaluation_results.form.appliances.technical_system') %></div>
+          <div class="col-sm-3"><%= t('evaluation_results.form.appliances.additional_information') %></div>
+        </div>
+        <div class="js_crud" data-new-button-text="<%= t('evaluation_results.form.appliances.add_new_appliance') %>" data-property="evaluation_result_appliances">
+          <%= f.fields_for :evaluation_result_appliances do |a_form|%>
+            <div class="children">
+              <div class="form-group m-t-small" style="padding-right:20px;position:relative">
+                <div class="col-sm-3"><%= a_form.text_field :name, class: "form-control" %></div>
+                <div class="col-sm-6"><%= a_form.text_field :tech_system, class: "form-control" %></div>
+                <div class="col-sm-3"><%= a_form.text_field :info_details, class: "form-control" %></div>
+                <div class="delete" style="position:absolute;right:0;">
+                  <a href="#" class="delete_button btn btn-white btn-small">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% end %>
+             <div class="row m-t-small">
+              <div class="new_children col-xs-12 text-right"></div>
+            </div>
+        </div>
+      </div>
+
+
+  </div>
+</section>
+
+
+<section class="panel  panel-default">
+  <header class="panel-heading"><%= t('evaluation_results.form.group_titles.dependencies') %></header>
+  <div class="panel-body">
+    <div class="row m-b-small">
+      <div class="col-md-8 col-sm-10 col-xs-12 m-t-small">
+        <div class="form-group">
+          <%= f.label :result_dependant_services, t('services.supporting_needed'), class: "control-label col-xs-2" %>
+          <div class="col-xs-8">
+            <%= f.select :result_dependant_services, options_for_select(@evaluation_result.evaluation.active_evaluation_results.where('service_id <> (?)',f.object.service_id).includes(:service).where('services.code <> ? AND services.code <> ?', "S060", "S205").order('services.code').map{|er| er.service}.map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.result_dependant_services.map(&:id) ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-sm-10 col-xs-12 m-t-small">
+        <div class="form-group">
+          <%= f.label :result_depending_services, t('services.supports_following'), class: "control-label col-xs-2" %>
+          <div class="col-xs-8">
+            <%= f.select :result_depending_services, options_for_select(@evaluation_result.evaluation.active_evaluation_results.where('service_id <> (?)',f.object.service_id).includes(:service).where('services.code <> ? AND services.code <> ?', "S060", "S205").order('services.code').map{|er| er.service}.map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.result_depending_services.map(&:id) ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel  panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.evaluation_summary') %> </header>
+  <div class="panel-body">
+    <div class="form-group">
+      <%= f.label :assessment_description, t('evaluation_results.form.labels.assessment_description'), class: "control-label col-md-2 col-xs-12"%>
+      <div class="col-md-5 col-sm-8 col-xs-12"><%= f.text_area :assessment_description, rows: 4, class: "form-control m-b-small" %></div>
+      <div class="col-md-5 col-sm-4 col-xs-12">
+        <label class="radio-item block">
+          <%= f.radio_button :assessment_status, EvaluationResult::ASSESSMENT_STATUSES.index(:urgent) %>
+          <%= image_tag image_path('icons/btn_red.png')%>
+          <span><%= t('evaluation_results.form.labels.urgent') %></span>
+        </label>
+        <label class="radio-item block">
+          <%= f.radio_button :assessment_status, EvaluationResult::ASSESSMENT_STATUSES.index(:medium) %>
+          <%= image_tag image_path('icons/btn_yellow.png')%>
+          <span><%= t('evaluation_results.form.labels.medium') %></span>
+        </label>
+        <label class="radio-item block">
+          <%= f.radio_button :assessment_status, EvaluationResult::ASSESSMENT_STATUSES.index(:no_action) %>
+          <%= image_tag image_path('icons/btn_green.png')%>
+          <span><%= t('evaluation_results.form.labels.no_action') %></span>
+        </label>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :recommended_measures, t('evaluation_results.form.labels.recommended_measures'), class: "control-label col-md-2 col-xs-12"%>
+      <div class="col-md-10 col-xs-12"><%= f.text_area :recommended_measures, rows: 3, class: "form-control" %></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="panel panel-default">
+  <header class="panel-heading"> <%= t('evaluation_results.form.group_titles.attachments') %></header>
+  <div class="panel-body">
+
+  <% unless f.object.new_record? %>
+    <div class="row">
+      <div class="col-md-6">
+        <section class="panel panel-default">
+          <header class="panel-heading"> <%= t('evaluation_results.form.labels.documents') %></header>
+          <div class="panel-body documents_panel">
+            <%= label_tag do %>
+              <%= file_field_tag "documents[]", type: :file, multiple: false, data: {'preview-image' => false}, class: "styled_file_input" %>
+              <span class="btn btn-default btn-sm"><strong><%= t('evaluation_results.add_files') %></strong></span>
+            <% end %>
+            <span> &nbsp; (docx|doc|pdf|xls|xlsx|csv)</span>
+            <ul id="documents_list">
+              <%= render partial: '/evaluation_result_files/documents_container', collection: @evaluation_result.evaluation_result_files.documents.order(:id), as: :document || '' , locals: {with_delete: true} %>
+            </ul>
+          </div>
+        </section>
+      </div>
+      <div class="col-md-6">
+        <section class="panel panel-default">
+          <header class="panel-heading"> <%= t('evaluation_results.photos') %></header>
+          <div class="panel-body">
+            <ul class="image_gallery portlet list-inline <%= params[:action] %>" id="image_gallery">
+              <%= render partial: '/evaluation_result_files/evaluation_result_file', collection: @evaluation_result.evaluation_result_files.assets, as: :evaluation_result_file %>
+              <li class="new_photo pos-rlt <%= "hide" if @evaluation_result.evaluation_result_files.size >= 20%>">
+                <%= label_tag do %>
+                  <%= file_field_tag "assets[]", type: :file, multiple: true, data: {'preview-image' => true}, class: "styled_file_input" %>
+                  <span class="new_photo_btn"><strong><%= t('evaluation_results.add_files') %></strong></span>
+                <% end %>
+              </li>
+            </ul>
+            <%= render partial: "/evaluation_result_files/gallery_container"%>
+          </div>
+      </section>
+      </div>
+    </div>
+  <% end %>
+
+
+    <div class="row">
+      <div class="col-md-6">
+        <section class="panel panel-default">
+          <header class="panel-heading"> <%= t('evaluation_results.form.labels.remarks') %></header>
+          <div class="panel-body">
+            <div class="col-md-8"><%= f.text_area :remarks, rows: 3, class: "form-control" %></div>
+          </div>
+        </section>
+      </div>
+      <div class="col-md-6">
+        <section class="panel panel-default">
+          <header class="panel-heading"> <%= t('evaluation_results.form.labels.links') %></header>
+          <div class="panel-body">
+            <div id="link_container">
+              <%= hidden_field_tag "links[]", "" %>
+              <% f.object.links.each do |link|%>
+                <div class="form-group link">
+                  <div class="col-xs-10">
+                    <span><%= text_field_tag "links[]", link, class: "form-control" %></span>
+                  </div>
+                  <div class="col-xs-2 text-center">
+                    <%= link_to "#", class: "btn btn-link delete_link" do %>
+                      <span class="text-danger"><i class="fa fa-trash-o"></i></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <%= link_to t("evaluation_results.new_link_btn"), "#", id: "new_link", class: "btn btn-link"%>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+

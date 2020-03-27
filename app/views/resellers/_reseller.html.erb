@@ -1,0 +1,35 @@
+<div class="list-group-item">
+    <div class="row">
+		<div class="col-md-5">
+			<%= link_to company_reseller_path(current_company, reseller), class: '' do %>
+                <%= image_tag reseller.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", class: "img-thumbnail mini"%>
+                <% if @filters && @filters[:search] %>
+                	<%= highlight(reseller.full_name, @filters[:search]) %>
+                <% else %>
+                	<%= reseller.full_name %>
+                <% end %>
+            <% end %> <%= label_danger(t('commons.blocked.upcase')) if reseller.is_blocked %>
+		</div>
+    <div class="col-md-3">
+      <% if reseller.is_dsp? %>
+        DSP
+      <% elsif reseller.premium? %>
+        Premium<br/>
+        <%= l(reseller.premium_from_date, format: :human_short) %> ~ <%= l(reseller.premium_until_date, format: :human_short) %>
+      <% else %>
+        Freemium
+      <% end %>
+    </div>
+
+    <div class="col-md-2 m-t-small">
+			<%= link_to company_reseller_customers_path(current_company, reseller) do%>
+                <%= t('customers.count_customers',count: reseller.children.customer.size )%>
+            <% end %>
+		</div>
+		<div class="col-md-2 m-t-small">
+			<%= link_to company_reseller_members_path(current_company, reseller) do%>
+                <%= t('users.count_users',count: reseller.all_users.size )%>
+            <% end %>
+		</div>
+    </div>
+</div>

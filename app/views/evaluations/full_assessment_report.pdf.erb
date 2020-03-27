@@ -1,0 +1,72 @@
+<div class="row m-b">
+  <div class="col-xs-1">itpilot</div>
+  <div class="col-xs-10 text-center"><h3><%= @evaluation.customer.name %> - <%= @evaluation.name %> - <%= t('reports.it_services_assessment') %></h3></div>
+  <div class="col-xs-1"><%= l(Date.today, format: :long) %></div>
+</div>
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr class="captbl">
+          <td colspan="3"><%= t('traffic_report.it_service') %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan="2"><%= t('traffic_report.recovery_time_in_hours') %></td>
+          <td colspan="2"><%= t('traffic_report.direct_impact') %></td>
+          <td colspan="2"><%= t('traffic_report.assessment') %></td>
+          <td></td>
+        </tr>
+        <tr class="captbl">
+          <td>ID</td>
+          <td><%= t('traffic_report.name') %></td>
+          <td><%= t('full_report.theme') %></td>
+          <td><%= t('traffic_report.cloud_service') %></td>
+          <td><%= t('traffic_report.producer') %></td>
+          <td><%= t('traffic_report.distributor') %></td>
+          <td><%= t('traffic_report.service_usage') %></td>
+          <td><%= t('traffic_report.required') %></td>
+          <td><%= t('traffic_report.guaranteed') %></td>
+          <td><%= t('traffic_report.on_client') %></td>
+          <td><%= t('traffic_report.on_service') %> <br/><%= t('traffic_report.eur_max_per_day') %></td>
+          <td></td>
+          <td></td>
+          <td><%= t('traffic_report.recommended_measures') %></td>
+        </tr>
+        <% @active_evaluation_results.each do |evaluation_result| %>
+          <tr>
+            <td><%= evaluation_result.service.code%></td>
+            <td class="left" style="max-width:230px;"><%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name %> <%= service_not_active_label(evaluation_result) %></td>
+            <td class="left" style="max-width:230px;"><%= evaluation_result.service.themes.map(&:name).join(", ") %></td>
+            <td class="text-center"><%= yes_no_value evaluation_result.cloud_service %></td>
+            <td><%= evaluation_result.supplier %></td>
+            <td><%= evaluation_result.distributor %></td>
+            <td><%= evaluation_result.overview %></td>
+            <td><%= evaluation_result.recovery_time %></td>
+            <td><%= evaluation_result.guaranteed_recovery_time %></td>
+            <td><%= t("evaluation_results.impact_types.type_#{evaluation_result.impact_name}") %></td>
+            <td><%= format_num(evaluation_result.failure_impact_per_day, '€') %></td>
+            <td><%= evaluation_result.assessment_description %></td>
+            <td>
+              <%= wicked_pdf_image_tag result_status_pdf_image(evaluation_result) , style: 'width:10px;height:10px;'%>
+            </td>
+            <td><%= evaluation_result.recommended_measures %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<% if @active_evaluation_results.any? %>
+  <section class="panel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-12" style="text-align:center;margin-top:30px;">
+          <img src="<%=embed_remote_image(@evaluation,'traffic_light','pie')%>" style="width: 250px; height: auto;"/>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>

@@ -1,0 +1,312 @@
+<section class="panel">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="text-center">
+					<h1>Hilfemenü</h1>
+					<%= image_tag("pages/help/logo.png", class: "") %>			
+				</div>
+			
+				<h3>Inhalt</h3>
+				<ol class="m-t-large">
+					<li><%= link_to 'Login', '#ref1'%></li>
+					<li><%= link_to 'URL https://www.it-pilot.de', '#ref2'%> </li>
+					<li><%= link_to 'Forgot your Password', '#ref3'%></li>
+					<li><%= link_to 'My Profile', '#ref4'%></li>
+					<li><%= link_to 'Change Screen language', '#ref5'%></li>
+					<li><%= link_to 'Change your password', '#ref6'%></li>
+					<li><%= link_to 'Company Profile', '#ref7'%></li>
+					<li><%= link_to 'Add company locations', '#ref8'%></li>
+					<li><%= link_to 'Internal & External Employees', '#ref9'%></li>
+					<li><%= link_to 'Start your it pilot Evaluation', '#ref10'%></li>
+					<li><%= link_to 'Your Dashboard', '#ref11'%></li>
+					<li><%= link_to 'Editing the next IT Service', '#ref12'%></li>
+					<li><%= link_to 'Entering data / edit an IT Service', '#ref13'%></li>
+					<li><%= link_to 'Home of Service', '#ref14'%></li>
+					<li><%= link_to 'Support of Location', '#ref15'%></li>
+					<li><%= link_to 'Cloud Service', '#ref16'%></li>
+					<li><%= link_to 'Edit Attributes', '#ref17'%></li>
+					<li><%= link_to 'Adding a server', '#ref18'%></li>
+					<li><%= link_to 'Overview', '#ref19'%></li>
+					<li><%= link_to 'Dependent / Depending Services', '#ref20'%></li>
+					<li><%= link_to 'Complete rest of information', '#ref21'%></li>
+					<li><%= link_to 'Save', '#ref22'%></li>
+					<li><%= link_to 'Ignoring a Service', '#ref23'%></li>
+					<li><%= link_to 'Deactivating a Service', '#ref24'%></li>
+					<li><%= link_to 'Continue working', '#ref25'%></li>
+					<li><%= link_to 'Online Reporting', '#ref26'%></li>
+					<li><%= link_to 'Status of an it service Evaluation', '#ref27'%></li>
+					<li><%= link_to 'Adding Resources and Processes', '#ref28'%></li>
+					<li><%= link_to 'Manage Resources', '#ref29'%></li>
+					<li><%= link_to 'Adding Processes', '#ref30'%></li>
+				</ol>
+
+				<div id="ref1" class="m-t-large">
+					<h3>1.Login</h3>
+					<div class="text-center">
+						<%= image_tag("pages/help/login.png") %>
+					</div>
+				</div>
+
+				<div id="ref2" class="m-t-large">
+					<h3>2.URL https://www.it-pilot.de</h3>
+					<p>
+						Please request your login via your medialine or netcos partner contact.
+						<br/>e-mail: itpilot@medialine.com
+						<br/>or 
+						<br/>e-mail: itpilot@netcos.de
+					</p>
+				</div>
+				<div id="ref3" class="m-t-large">
+					<h3>3.Forgot your Password</h3>
+					<p>Please follow the instructions given on the login screen, “Forgot your password”.</p>
+				</div>
+				<div id="ref4" class="m-t-large">
+					<h3>4.My Profile</h3>
+					<p>To change or edit your profile information please click on your name at the top right of your screen and edit the information. You may as well change or add a picture by clicking on the image frame at your convenience.</p>
+				</div>
+				<div id="ref5" class="m-t-large">
+					<h3>5.Change Screen language</h3>
+					<p>In your Profile section you may as well change your preferred language to D or E.</p>
+				</div>
+				<div id="ref6" class="m-t-large">
+					<h3>6.Change your password</h3>
+					<p>You may change your initial password in your profile section. Password requirements are:</p>
+					<ul>
+						<li>Minimum 8 chars</li>
+						<li>At least 1 uppercase letter</li>
+						<li>At least 1 lowercase letter</li>
+						<li>At least 1 digit</li>
+					</ul>
+					<p>After your login your screen should look similar to this.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/after_login.png") %>
+					</div>
+				</div>
+				<div id="ref7" class="m-t-large">
+					<h3>7.Company Profile</h3>
+					<p>Start with updating your Company Profile if necessary</p>
+				</div>
+				<div id="ref8" class="m-t-large">
+					<h3>8.Add company locations</h3>
+					<p>Add all your locations where your company runs an IT infrastructure with at least 10 IT Services.</p>
+					<p>The idea is that you will have to add locations that are relevant to some IT Services and according users. You may as well change this at a later stage.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/add_locations.png") %>
+					</div>
+					<p>While creating your location the system tries to propose the address according to internet standards (Google fencing coordinates).</p>
+					<p>Make sure that you enter at least the (HQ) location where most of your IT Services are located.</p>
+					<p>This first location will appear always as the first suggested location for each IT Service that you will edit later on.</p>
+					<p>After you have created the location you may click on the location link and add a user to this location. Alternatively, you may add users from your dashboard at any time and assign them to your location.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/add_user.png") %>
+					</div>
+				</div>
+				<div id="ref9" class="m-t-large">
+					<h3>9.Internal & External Employees</h3>
+					<p>Start now with entering the information of external and internal employees that are working on IT Services.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/add_employee.png") %>
+					</div>
+					<p>Click on the plus button and enter the name of the employee.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/edit_employee.png") %>
+					</div>
+					<p>Enter the hours that the employee is working on a monthly base and indicate if the employee is working as an internal or external source by clicking on the radiation button.</p>			
+				</div>
+				<div id="ref10" class="m-t-large">
+					<h3>10.Start your it pilot Evaluation</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/add_service_set.png") %>
+					</div>
+					<p>By pressing on the “+” symbol you should give your itpilot Service set a name , <br/>for example  “Evaluation August 17”.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/add_new_service_set.png") %>
+					</div>
+				</div>
+				<div id="ref11" class="m-t-large">
+					<h3>11.Your Dashboard</h3>
+					<p>should look like this now.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/dashboard.png") %>
+					</div>
+					<p>What you see here is that there are 135 IT Services left to be “created” / edited by you.</p>
+					<p>On this screen you may press “Add Service” to start editing your IT Services.</p>
+				</div>
+				<div id="ref12" class="m-t-large">
+					<h3>12.Editing the next IT Service</h3>
+					<p>you may use one of the three drop down menus.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/service_select1.png") %>
+					</div>
+					<p>Click on “Suggested” and choose the next proposed IT Service</p>
+					<div class="figure">
+						<%= image_tag("pages/help/service_select2.png") %>
+					</div>
+					<p>and click next</p>
+					<div class="figure">
+						<%= image_tag("pages/help/service_select3.png") %>
+					</div>
+					<p>Entering data into the IT Service</p>
+				</div>
+				<div id="ref13" class="m-t-large">
+					<h3>13.Entering data / edit an IT Service</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/edit_service_info.png") %>
+					</div>
+				</div>
+				<div id="ref14" class="m-t-large">
+					<h3>14.Home of Service</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/hos.png") %>
+					</div>
+					<p>This Questions refers to where this IT Service is located (you may choose the location if you have several)</p>
+				</div>
+				<div id="ref15" class="m-t-large">
+					<h3>15.Support of Location</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/los.png") %>
+					</div>
+					<p>Please indicate which locations are being supported by this specific IT Services.</p>
+					<p>You may choose as well the tick box “Select all”</p>
+				</div>
+				<div id="ref16" class="m-t-large">
+					<h3>16.Cloud Service</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/vendor.png") %>
+					</div>
+					<p>Indicate the name of the Vendor or Provider and as well whether this IT Service is already a Cloud Service.</p>
+				</div>
+				<div id="ref17" class="m-t-large">
+					<h3>17.Edit Attributes</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/attributes.png") %>
+					</div>
+				</div>				
+				<div id="ref18" class="m-t-large">
+					<h3>18.Adding a Server</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/add_servers.png") %>
+					</div>
+					<p>add as many servers that are in use for this IT Service.</p>
+				</div>	
+				<div id="ref19" class="m-t-large">
+					<h3>18.Overview</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/overview.png") %>
+					</div>
+					<p>Describe necessary information with regards to this it service</p>
+				</div>	
+				<div id="ref20" class="m-t-large">
+					<h3>18.Dependent / Depending Services</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/dd1.png") %>
+					</div>
+					<p>
+						choose the relevant dependent or depending it services 
+						<br/>dependent, = the listed IT Services are needed for the current IT Service 
+						<br/>depending, = the listed IT Services can not work without this IT Service
+					</p>
+					<div class="figure">
+						<%= image_tag("pages/help/dd2.png") %>
+					</div>
+					<p>Just click into the field and a list of all it services is presented, so you may scroll and select one.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/dd3.png") %>
+					</div>
+					<p>Alternatively, you may as well type a “word you are looking for” into the section- use it like a search engine.</p>
+				</div>	
+				<div id="ref21" class="m-t-large">
+					<h3>21.Complete rest of information</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/service_bottom_info.png") %>
+					</div>
+					<p>according to the questions</p>
+				</div>
+				<div id="ref22" class="m-t-large">
+					<h3>22.Save</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/save.png") %>
+					</div>
+					<p>the information entered at the button of the page.</p>
+				</div>
+				<div id="ref23" class="m-t-large">
+					<h3>23.Ignoring a Service</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/ignore1.png") %>
+					</div>
+					<p>If you feel that this IT Service has to be ignored because you are unsure about it – you may just ignore it for now by pressing “Ignore” at the bottom of the page. It will be presented to you at the end of the “Suggested” list towards the end of you evaluation. So don´t worry you will not lose this it service – just ignore it for now.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/ignore2.png") %>
+					</div>
+				</div>
+				<div id="ref24" class="m-t-large">
+					<h3>24.Deactivating a Service</h3>
+					<p></p>
+				</div>				
+				<div id="ref25" class="m-t-large">
+					<h3>25.Continue working</h3>
+					<div class="figure">
+						<%= image_tag("pages/help/continue.png") %>
+					</div>
+					<p>continue to work or editing data of an IT Service</p>
+					<p>From your Dashboard you will be able to hyperlink to one specific service at any time of the process for a review or to continue your unfinished work.</p>
+				</div>
+				<div id="ref26" class="m-t-large">
+					<h3>26.Online Reporting</h3>
+					<p>While you are editing or entering new data into your evaluation you will be able to see online reports on the fly</p>
+					<div class="figure">
+						<%= image_tag("pages/help/online1.png") %>
+					</div>
+					<p>Just click on the Link “Fullreport”. The reports will be instantly updated as you enter the data into each of the it services.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/online2.png") %>
+					</div>
+				</div>
+				<div id="ref27" class="m-t-large">
+					<h3>27.Status of an it service Evaluation</h3>
+					<p>On your Dashboard you will see at any time of the process your relevant information about the evaluation. Especially it´s status. It will remain in “Draft” as long as the evaluation is not finished. Once all IT Services are edited (and some are maybe ignored / de-activated), the evaluation can be published and stored. While publishing - your data is being frozen for later benchmarking possibilities.</p>
+					<p>If you want to go on editing you will be creating a new evaluation so that you can compare you progress with former versions of your evaluation sets.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/status.png") %>
+					</div>
+				</div>
+				<div id="ref28" class="m-t-large">
+					<h3>28.Adding Resources and Processes</h3>
+					<p>Once your evaluation is done and “Published”</p>
+					<div class="figure">
+						<%= image_tag("pages/help/publish.png") %>
+					</div>
+					<p>you will be able to manage resources and processes associated to your IT Services.</p>
+				</div>
+				<div id="ref29" class="m-t-large">
+					<h3>29.Manage Resources</h3>
+					<p>Click on Manage on the Resource Tab and your Evaluation with all previously edited it services will be presented vertically, and all employees (internal and external) horizontally</p>
+					<div class="figure">
+						<%= image_tag("pages/help/resources1.png") %>
+					</div>
+					<p>You may now fine-tune the effective tasks per employee within the following granular structure.</p>
+					<div class="figure">
+						<%= image_tag("pages/help/resources2.png") %>
+					</div>
+					<p>Per Service - just click on the appropriate task (E,T,O,V, etc..) and indicate on which tasks  the employee is working on. (you may as well add missing employees on this site).</p>
+					<div class="figure">
+						<%= image_tag("pages/help/resources3.png") %>
+					</div>
+				</div>
+				<div id="ref30" class="m-t-large">
+					<h3>30.Adding Processes</h3>
+					<p>For a menu that needs to be defined You add it services and link them to the core company processes</p>
+					<div class="figure">
+						<%= image_tag("pages/help/add_process.png") %>
+					</div>
+					<p></p>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+</section>
+<a href="#main-content" id="gotop_btn">top</a>

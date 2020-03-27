@@ -1,0 +1,20 @@
+<% if company_user.user.present? %>
+  <div class="list-group-item" id="cuu_id_<%=company_user.id%>">
+    <div class="row">
+      <div class="col-md-1"><%= image_tag company_user.user.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", class: "img-thumbnail mini"%></div>
+      <div class="col-md-5"><%= company_user.user.last_name %>, <%= company_user.user.first_name %></div>
+      <div class="col-md-3"><%= company_user.user.email %></div>
+      <div class="col-md-3 text-right">
+        <%= link_to edit_member_path(company_user.user, customer_id: company.id), class: 'btn btn-default btn-sm' do %>
+          <%= t('commons.edit') %>
+        <% end %>
+        <% if params[:action] == 'show' && company_user.user.id != current_user.id %>
+          <%= link_to [company, company_user], method: :delete, remote: true, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure') } do %>
+            <i class="fa fa-trash"></i> 
+            <%= t('commons.delete') %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

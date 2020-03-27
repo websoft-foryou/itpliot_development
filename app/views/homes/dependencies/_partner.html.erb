@@ -1,0 +1,26 @@
+<div class="row">
+  <% unless current_user.accept_terms %>
+    <%= dashboard_step_box(edit_user_registration_path, t('users.invitation.basic_info.your_profile'), 'fa-user','incomplete',t('users.invitation.basic_info.incomplete')) %>
+  <% end %>
+
+  <% if current_company.present? && current_company.location.present? %>
+    <%= dashboard_box(edit_company_reseller_path(current_company.parent_id, current_company), t('users.invitation.basic_info.company_profile'), 'fa-building') %>
+  <% elsif current_user.accept_terms %>
+    <%= dashboard_step_box(step2_homes_path, t('users.invitation.basic_info.company_profile'), 'fa-building','incomplete',t('users.invitation.basic_info.incomplete')) %>
+  <% end %>
+
+  <% if current_company.present? %>
+    <%= dashboard_step_box(company_customers_path(current_company), t('customers.customers'), 'fa-building', '', t('customers.count_customers',count: current_company.children.count)) %>
+    <%= dashboard_step_box(company_reseller_members_path(current_company.parent_id, current_company), t('commons.users'), 'fa-users','',t('users.count_users',count: current_company.all_users.count)) %>
+  <% end %>
+
+  <% if current_company.present? && !current_company.is_dsp? %>
+    <%= dashboard_step_box(upgrade_reseller_path(current_company), t("upgrade.title"), 'fa-credit-card', '', current_company.premium? ? t('dashboard.using_premium_plan') : "Freemium") %>
+  <% end %>
+
+  <% if current_company.present? && current_company.is_dsp? %>
+    <%= dashboard_step_box(invoices_path(dsp_id: current_company), t("invoice.title"), 'fa-credit-card', '', '') %>
+  <% end %>
+  <%= dashboard_box(new_service_requests_path(), t('commons.it_service_request'), 'fa-file-o') %>
+  <%= dashboard_box(dynamic_page_path("xyfuywqz"), t('commons.help'), 'fa-question-circle') %>
+</div>

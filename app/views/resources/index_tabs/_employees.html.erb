@@ -1,0 +1,25 @@
+
+<section>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-4 text-right">
+      <% if current_customer.premium? %>
+        <%= link_to customer_evaluation_resources_path(current_customer, @evaluation, format: :pdf, type: :employees), class: 'btn btn-default m-t-small', target: '_blank' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+      <% else %>
+        <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+        <p class="help-block">
+          <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+        </p>
+      <% end %>
+    </div>
+  </div>
+  <div class="table-responsive" style="/*max-height: calc(100vh - 288px);*/">
+    <table id="employees-tbl" class="table table-simple wauto">
+      <%= render partial: "/employees/table" %>
+    </table>
+  </div>
+
+</section>

@@ -1,0 +1,13 @@
+<%= breadcrumb(links: [
+                {key: 'services', name: t('services.services'), url: services_path}, 
+                {key: '', name: @service.code },
+                {key: '', name: t('commons.editing')}
+                ]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@service, url: service_path(@service), validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f} %>
+    <% end %>
+  </div>
+</div>

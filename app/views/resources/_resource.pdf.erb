@@ -1,0 +1,26 @@
+<tr>
+  <td><%= evaluation_result.service.code%></td>
+  <td>
+    <%= evaluation_result.cloned_index[1..-1] %>
+    <%= evaluation_result.service.name %>
+    <% if evaluation_result.is_ignored? %>
+      <br/><span class="label label-info lisible"><%= t('services.ignored')%></span>
+    <% end %>
+    <% if evaluation_result.is_deactivated? %>
+      <br/><span class="label label-danger lisible"><%= t('services.deactivated')%></span>
+    <% end %>
+  </td>
+  <td class="text-center"><%= yes_no_value evaluation_result.cloud_service %></td>
+  <td><%= evaluation_result.hours_intern %></td>
+  <td><%= evaluation_result.hours_extern %></td>
+  <% @ordered_employee_evaluations.slice(offset, offset+Evaluation::EMPLOYEE_MAX_COUNT).each_with_index do |ee, employee_index| %>
+    <% has_selected = false %>
+    <% eer = evaluation_result.employee_evaluation_results.where(employee_id: ee.employee_id).first %>
+    <% EmployeeEvaluationResult::ACTIVITY_TYPES.each do |key,value|%>
+      <% has_selected = true if eer && eer.has_attribute?("#{value}") && eer.send("#{value}")%>
+    <% end %>
+    <td id="overview_<%= ee.employee_id %>_<%= evaluation_result.id %>" class="small-view text-center employee_<%= ee.employee_id %>" colspan="12">
+    <%= has_selected ? 'Y' : 'N' %>
+  </td>
+  <% end %>
+</tr>

@@ -1,0 +1,28 @@
+<div class="list-group-item" id="cb_id_<%=company_branch.id%>">
+
+	<div class="row">
+		<div class="col-md-3">
+			<%= link_to company_branch.name, customer_customer_branch_path(company_branch.company.id, company_branch) %>
+		</div>
+		<div class="col-md-3"></div>
+		<div class="col-md-3"><%= company_branch.users.size %> users</div>
+		<div class="col-md-3 text-right">
+			<div class="btn-group">
+				<% if params[:controller] == 'customers' && params[:action] == 'show' %>
+					<%= link_to customer_customer_branch_path(company_branch.company, company_branch), method: :delete, remote: true, confirm: "Are you sure?", class: "btn btn-default btn-sm" do %>
+						<i class="fa fa-trash"></i> 
+						Delete
+					<% end %>
+				<% elsif params[:action] == 'edit' %>
+					<%= link_to customer_customer_branch_path(company_branch.company, company_branch), method: :delete, remote: true, confirm: "Are you sure?", class: "btn btn-default btn-sm" do %>
+						<i class="fa fa-trash"></i> 
+						Delete
+					<% end %>
+				<% end %>
+			</div>
+			
+		</div>
+	</div>
+
+	
+</div>

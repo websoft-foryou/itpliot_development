@@ -1,0 +1,38 @@
+<% if location %>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2"><%= t('companies.form.address') %></label>
+    <div class="col-sm-5 control-input">
+      <%= location.address %>
+    </div>
+  </div>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2"><%= t('companies.form.city') %></label>
+    <div class="col-sm-5 control-input">
+      <%= location.city %>
+    </div>
+  </div>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2"><%= t('companies.form.zip') %></label>
+    <div class="col-sm-5 control-input">
+      <%= location.zip %>
+    </div>
+  </div>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2"><%= t('companies.form.country') %></label>
+    <div class="col-sm-5 control-input">
+      <%= location.country%>
+    </div>
+  </div>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2">Latitude</label>
+    <div class="col-sm-5 control-input">
+      <%= location.latitude %>
+    </div>
+  </div>
+  <div class="form-group m-b-none">
+    <label class="control-label col-sm-2">Longitude</label>
+    <div class="col-sm-5 control-input">
+      <%= location.longitude %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,164 @@
+<%#= javascript_include_tag 'lib/jquery.dataTables.min.js' %>
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('evaluations.status_menu.dashboard'), dashboard_customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><i class="fa fa-table"></i><%= link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %> </li>
+</ol>
+
+<div class="row">
+  <div class="col-md-4"><h3><%= t('reports.it_services_assessment') %></h3></div>
+  <div class="col-md-4 text-center">
+    <%= link_to "#", class: 'btn btn-default m-t-small', id: "view_chart_btn" do %>
+      <%= t('commons.view_chart') %>
+    <% end %>
+  </div>
+  <div class="col-md-4 text-right">
+    <% if !@customer.is_customer? || @customer.premium? %>
+      <%= link_to full_assessment_report_customer_evaluation_path(current_customer, @evaluation, format: :pdf, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small', target: '_blank' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to full_assessment_report_customer_evaluation_path(current_customer, @evaluation, format: :csv, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small', target: '_blank' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+    <% else %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+      <p class="help-block">
+         <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+      </p>
+    <% end %>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table table-simple table-bordered" id="full_assessment_report_eval">
+      <thead>
+        <tr class="captbl">
+          <td colspan="3"><%= t('traffic_report.it_service') %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan="2"><%= t('traffic_report.recovery_time_in_hours') %></td>
+          <td colspan="2"><%= t('traffic_report.direct_impact') %></td>
+          <td colspan="2"><%= t('traffic_report.assessment') %></td>
+          <td></td>
+        </tr>
+        <tr class="captbl sort">
+          <td>ID
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'id') %>
+          </td>
+          <td style="min-width:300px"><%= t('traffic_report.name') %></td>
+          <td style="min-width:300px"><%= t('full_report.theme') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'theme')%>
+          </td>
+          <td><%= t('traffic_report.cloud_service') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'cloud_service')%>
+          </td>
+          <td><%= t('traffic_report.producer') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'supplier') %>
+          </td>
+          <td><%= t('traffic_report.distributor') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'distributor')%>
+          </td>
+          <td><%= t('traffic_report.service_usage') %></td>
+          <td><%= t('traffic_report.required') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'recovery_time') %>
+          </td>
+          <td><%= t('traffic_report.guaranteed') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'guaranteed_recovery_time') %>
+          </td>
+          <td><%= t('traffic_report.on_client') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'impact_name') %>
+          </td>
+          <td><%= t('traffic_report.on_service') %> <br/><%= t('traffic_report.eur_max_per_day') %>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'failure_impact_per_day') %>
+          </td>
+          <td></td>
+          <td>
+            <%= full_assessment_report_actions(current_customer.id, @evaluation.id, 'assessment_description') %>
+          </td>
+          <td><%= t('traffic_report.recommended_measures') %></td>
+        </tr>
+        </thead>
+        <tbody>
+        <% @active_evaluation_results.each do |evaluation_result| %>
+          <tr>
+            <td><%= evaluation_result.service.code%></td>
+            <td class="left"><%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name %> <%= service_not_active_label(evaluation_result) %></td>
+            <td class="left"><%= evaluation_result.service.themes.map(&:name).join(", ")%></td>
+            <td class="text-center"><%= yes_no_value evaluation_result.cloud_service %></td>
+            <td><%= evaluation_result.supplier %></td>
+            <td><%= evaluation_result.distributor %></td>
+            <td><%= evaluation_result.overview %></td>
+            <td class="text-center"><%= evaluation_result.recovery_time %></td>
+            <td class="text-center"><%= evaluation_result.guaranteed_recovery_time %></td>
+            <td class="text-center"><%= t("evaluation_results.impact_types.type_#{evaluation_result.impact_name}") %></td>
+            <td class="text-center"><%= format_num(evaluation_result.failure_impact_per_day, '€') %></td>
+            <td class="text-center"><%= evaluation_result.assessment_description %></td>
+            <td>
+              <small><%= result_status_info(evaluation_result) %></small>
+            </td>
+            <td><%= evaluation_result.recommended_measures %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+  <section class="panel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="pie_chart_canvas" style="max-width:300px;max-height:300px;margin:0 auto;"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% if @active_evaluation_results.any? %>
+    <%= content_for :scripts do %>
+      <script>
+        var pieoptions = {
+          title: {
+            display: true,
+            text: "<%= t('traffic_report.graph.assessment_title_html') %>",
+            fontSize: 15,
+            fontStyle: 'normal',
+            lineHeight: 1.4
+          },
+          legend: {
+            display: true, 
+            position: 'top',
+            fontSize: 12
+          },
+          responsive: true,
+          animation: {
+            onComplete: function() {
+                saveGraphResource("<%=@customer.id%>", "<%=@evaluation.id%>", "traffic_light", "pie", canvas_pie.toDataURL('image/jpeg'));
+            }
+          }
+        }
+        var labels = ["<%= t('traffic_report.graph.no_action') %>", "<%= t('traffic_report.graph.medium') %>", "<%= t('traffic_report.graph.urgent') %>"]
+        var graphdataset = <%= @graph_pieset %>;
+        var colors = ["#4CBD15", "#FDD51B", "#FC295C"];
+        var pieChartData = {
+          labels: labels,
+          datasets: [{data: graphdataset, backgroundColor:colors}]
+        };
+
+        var canvas_pie = document.getElementById("pie_chart_canvas");
+        var myPieChart = new Chart(canvas_pie,{ type: 'pie', data: pieChartData, options: pieoptions });
+      </script>
+  <% end %>
+
+<% end %>
+

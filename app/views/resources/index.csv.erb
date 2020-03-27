@@ -1,0 +1,9 @@
+<% if params[:type] == "employees" %>
+  <%= render partial: "/resources/index_tabs/employees" %>
+<% elsif params[:type] == "resources" %>
+  <%= render partial: "/resources/index_tabs/resources" %>
+<% elsif params[:type] == "aggregated" %>
+  <%= render partial: "/resources/index_tabs/aggregated" %>
+<% elsif params[:type] == "fte" %>
+  <%= render partial: "/resources/index_tabs/fte" %>
+<% end %>

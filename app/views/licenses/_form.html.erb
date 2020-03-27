@@ -1,0 +1,73 @@
+<% if @license.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= t('commons.prevent_save_error', count: @license.errors.count) %>:</h2>
+    <ul>
+      <% @license.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<div class="form-group">
+  <%= f.label :name, t('commons.name'), class: "control-label col-xs-2" %>
+  <div class="col-xs-5">
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :price, t('licenses.price'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3" style="display:flex; align-items:center;">
+    <%= f.number_field :price, class: "form-control" %>EURO
+  </div>
+  <%= f.label :days, t('licenses.days'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.number_field :days, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :incl_freemium, t('licenses.incl_freemium'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.number_field :incl_freemium, class: "form-control" %>
+  </div>
+  <%= f.label :incl_premium, t('licenses.incl_premium'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.number_field :incl_premium, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :incl_partner, t('licenses.incl_partner'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.number_field :incl_partner, class: "form-control" %>
+  </div>
+</div>
+
+<% I18n.available_locales.each do |locale| %>
+  <%= f.globalize_fields_for locale do |ff| %>
+    <div class="form-group">
+      <%= f.label :description, t('licenses.description') + ' ' + t('locales.'+locale.to_s), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_area :description, rows: 5, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<hr/>
+<div class="form-group">
+  <div class="col-xs-4 col-xs-offset-2">
+    <% if f.object.persisted? %>
+      <%= link_to license_path(@license), method: :delete, remote: false, class: "btn btn-default", data: {confirm: t('commons.are_you_sure')} do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-xs-4 text-right">
+    <%=link_to t('commons.cancel'), licenses_path(), class: "btn btn-default" %>
+    <%= f.submit t('commons.save'), {class: "btn btn-primary", id: "license_form_submit", data: {'disable-with'=>t("commons.saving")} } %>
+  </div>
+</div>

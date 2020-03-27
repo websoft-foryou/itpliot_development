@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-eye"></i> <%= t('evaluation_results.new_it_service_result_for')%> <%= @evaluation.name%></h3></div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <% unless current_company.is_customer? %>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company) %></li>
+  <% end %>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><%= link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><%= t('services.add_new_service') %></li>
+</ol>
+
+<%= form_for(@evaluation_result, url: customer_evaluation_evaluation_results_path(current_customer, @evaluation, @evaluation_result), validate: true, html: {class: "form-horizontal"}) do |f| %>
+  <%= render partial: 'form', locals: {f: f} %>
+
+  <div class="form-group">
+    <div class="col-xs-4 col-xs-offset-4 text-right">
+      <%= link_to t('commons.cancel'), customer_evaluation_path(current_customer, @evaluation), class: "btn btn-default" %>
+      <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

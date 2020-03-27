@@ -1,0 +1,53 @@
+<% if @evaluation.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@evaluation.errors.count, "error") %> prohibited this evaluation from being saved:</h2>
+    <ul>
+    <% @evaluation.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= hidden_field_tag :testing, params[:testing] %>
+<div class="form-group">
+  <%= f.label :name, t('evaluations.name'),class: "control-label col-md-2 col-sm-2" %>
+  <div class="col-md-8 col-sm-10">
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+</div>
+
+<% if @evaluation.new_record? && @evaluation.customer.customer_evaluations.not_sandbox.count > 0 && !params[:testing] %>
+  <div class="form-group">
+    <div class="col-md-4 col-md-offset-2 col-sm-10 col-sm-offset-2">
+      <%= label_tag 'clone_false' do %>
+        <%= radio_button_tag :clone, false %> &nbsp; 
+        <%= t('evaluations.clone.create_new_empty_dataset') %>
+      <% end %>
+    </div>
+    <div class="col-md-4 col-md-offset-0 col-sm-10 col-sm-offset-2"> 
+      <%= label_tag 'clone_true' do %>
+        <%= radio_button_tag :clone, true, :checked => true %> &nbsp; 
+        <%= t('evaluations.clone.keep_data_from_previous_dataset') %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-2 col-xs-2 col-xs-offset-0">
+    <% unless @evaluation.new_record? %>
+      <% unless (current_company.is_customer? && @evaluation.is_published?) %>
+        <%= link_to customer_evaluation_path(current_customer,@evaluation), method: :delete, remote: false, class: "btn btn-default btn-sm", data: { confirm: t('commons.are_you_sure'), 'disable-with'=>t('commons.deleting') } do %>
+          <i class="fa fa-trash"></i>
+          <%= t('commons.delete') %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-6 col-sm-8 col-xs-10 text-right">
+    <%= f.submit t('commons.save'), {class: "btn btn-primary", data: {'disable-with'=>t("commons.saving")} } %>
+    <% back_link = @evaluation.new_record? ? customer_path(current_customer) : customer_evaluation_path(current_customer, @evaluation) %>
+    <%= link_to t('commons.cancel'), back_link, class: "btn btn-default" %>
+  </div>
+</div>
+

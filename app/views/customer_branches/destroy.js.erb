@@ -1,0 +1,3 @@
+<% if @company_branch.destroyed? %>
+	$("#company_branches_list").find("#cb_id_<%=@company_branch.id%>").remove();
+<% end %>

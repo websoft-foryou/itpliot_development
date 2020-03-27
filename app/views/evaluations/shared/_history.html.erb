@@ -1,0 +1,21 @@
+<strong><%= t('evaluations.history') %></strong>
+<table style="width:100%;">
+  <% if evaluation.is_published? %>
+    <tr><td><%= t('commons.published') %></td><td><%= format_datetime_to_local(evaluation.published_at) %></td></tr>
+    <% if evaluation.publisher.present? %>
+      <tr><td></td><td><%= evaluation.publisher.name %></td></tr>
+    <% end %>
+  <% end %>
+
+  <tr><td><%= t('commons.created') %></td><td><%= format_datetime_to_local(evaluation.created_at) %></td></tr>
+  <% if evaluation.user %>
+    <tr><td></td><td><%= evaluation.user.name %></td></tr>
+  <% end %>
+
+  <tr><td><%= t('commons.updated') %></td><td><%= format_datetime_to_local(evaluation.updated_at) %></td></tr>
+  <% if evaluation.update_user %>
+    <tr><td></td><td><%= evaluation.update_user.name %></td></tr>
+  <% end %>
+</table>
+
+

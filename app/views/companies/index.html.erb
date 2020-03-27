@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="btn-group pull-right m-b-small">
+      <%= link_to new_company_path(), class: "btn btn-info" do %>
+        <i class="fa fa-plus"></i> <%= t('tenants.add_tenant') %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= breadcrumb(links: [{key: 'companies', name: t('tenants.tenants')}]) %>
+
+<div class="panel panel-default">
+  <div class="list-group">        
+    <%= render partial: "/companies/company", collection: @companies %>  
+  </div>
+</div>

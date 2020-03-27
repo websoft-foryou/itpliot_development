@@ -1,0 +1,49 @@
+<%= breadcrumb(links: [
+                    {key: 'industries', name: t('industries.industries'), url: industries_path},
+                    {key: '', name: (I18n.locale == :en ? @industry.name : @industry.name_de)}
+                    ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+      <div class="pos-rlt"><div class="pos-abt" style="right:0;z-index:1000;"><%= link_to t('commons.edit'), edit_industry_path(@industry), class: 'btn btn-primary' %></div></div>
+
+      <div class="col-md-11 col-md-offset-1 m-t m-b">
+        <div class="form-horizontal m-t-small viewstyle">
+
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('industry_fields.form.field_name') + ' ' + t('locales.en') %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= @industry.name %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('industry_fields.form.field_name') + ' ' + t('locales.de') %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= @industry.name_de %>
+            </div>
+          </div>
+          <hr/>
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('industry_fields.form.short_name') + ' ' + t('locales.en') %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= @industry.short_name_en %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('industry_fields.form.short_name') + ' ' + t('locales.de') %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= @industry.short_name_de %>
+            </div>
+          </div>
+          <hr/>
+          <div class="form-group">
+            <div class="col-sm-3 col-xs-12 text-muted text-right"><%= t('services.services') %></div>
+            <div class="col-sm-7 col-xs-12">
+              <%= render(partial: "/shared/service_label", collection: @industry.services.order(:code), as: :service) || ''%>
+            </div>
+          </div>
+
+        </div>
+    </div>
+  </div>
+</div>

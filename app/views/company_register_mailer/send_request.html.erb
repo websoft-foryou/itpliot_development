@@ -1,0 +1,4 @@
+<h3>New company was registered just now.</h3>
+<p>
+  Company name: <%= link_to @company.name, @company.is_customer? ? customer_url(@company) : company_reseller_url(@company.parent_id, @company)%>
+</p>

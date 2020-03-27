@@ -1,0 +1,41 @@
+<h3 class="page-header"><i class="fa fa-road"></i> <%= t('branches.branches') %></h3>
+
+<% unless current_company.is_customer?%>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+    <li><i class="fa fa-building-o"></i><%= link_to @customer.name, customer_path(@customer) %></li>
+    <li><%= t('branches.branches') %></li>
+  </ol>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12 m-b-small">
+        <div class="btn-group pull-right">
+            <%= link_to new_customer_customer_branch_path(@customer), class: "btn btn-info" do %>
+                <i class="fa fa-plus"></i> <%= t('branches.add_branch') %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="list-group">
+        <div class="list-group-item">
+            <div class="row header-list-group">
+                <div class="col-md-4">
+                  <%= t('branches.form.name') %>
+                  <br/><span style="font-weight:normal;"><%= t('branches.form.description') %></span>
+                </div>
+                <div class="col-md-5"><%= t('branches.form.address') %></div>
+                <div class="col-md-1"><%= t('branches.form.city') %></div>
+                <div class="col-md-1"><%= t('branches.form.country') %></div>
+                <div class="col-md-1"><%= t('branches.form.zip') %></div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group" id="list_customers">
+        <%= render partial: "/customer_branches/customer_branch", collection: @customer_branches, as: :customer_branch %>
+    </div>
+</div>
+

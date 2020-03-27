@@ -1,0 +1,25 @@
+<h1>Listing service_dependances</h1>
+
+<table>
+  <tr>
+    <th>Service</th>
+    <th>Depending</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @service_dependances.each do |service_dependance| %>
+  <tr>
+    <td><%= service_dependance.service_id %></td>
+    <td><%= service_dependance.depending_id %></td>
+    <td><%= link_to 'Show', service_dependance %></td>
+    <td><%= link_to 'Edit', edit_service_dependance_path(service_dependance) %></td>
+    <td><%= link_to 'Destroy', service_dependance, method: :delete, data: { confirm: t('commons.are_you_sure') } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Service dependance', new_service_dependance_path %>

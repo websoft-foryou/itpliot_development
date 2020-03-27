@@ -1,0 +1,4 @@
+<% if @company_user.destroyed? %>
+	$("#company_users_list").find("#cuu_id_<%=@company_user.id%>").remove();
+	$("#company_users_list").find("#user_id_<%=@company_user.user_id%>").remove();
+<% end %>

@@ -1,0 +1,13 @@
+<li class="pos-rlt photo portlet-item" id="evaluation_result_file_<%= evaluation_result_file.id%>">
+	<%= link_to evaluation_result_file.asset.url(:original), data: {gallery: ""}, title: evaluation_result_file.asset_file_name, class: 'ablock' do %>
+		<%= image_tag evaluation_result_file.asset.url(:thumb) + "?timestamp=#{Time.now.to_i}"%>
+	<% end %>
+	<% if ['edit','update'].include? params[:action]%>
+		<div class="overlayer action_button hoverable">	
+			<%= link_to customer_evaluation_evaluation_result_evaluation_result_file_path(current_customer, @evaluation, evaluation_result_file.evaluation_result, evaluation_result_file),
+				method: :delete, class: "pull-right stop_prop", remote: true, confirm: t('commons.are_you_sure') do %>
+				<i class="fa fa-trash-o fa-lg"></i>
+			<% end %>
+		</div>
+	<% end %>
+</li>

@@ -1,0 +1,15 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-sm-1"><%= evaluation_result.service.code%></div>
+    <div class="col-sm-2">
+      <%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name %>
+      <%= service_not_active_label(evaluation_result) %>
+    </div>
+    <div class="col-sm-2 "><%= evaluation_result.service.themes.map(&:name).join(", ") %></div>
+    <div class="col-sm-1 text-center"><%= yes_no_value evaluation_result.cloud_service %></div>
+    <div class="col-sm-1 text-center"><%= evaluation_result.recovery_time %></div>
+    <div class="col-sm-2 text-center"><%= evaluation_result.guaranteed_recovery_time %></div>
+    <div class="col-sm-1"><small><%= result_status_info(evaluation_result) %></small></div>
+    <div class="col-sm-3"><%= evaluation_result.recommended_measures %></div>
+  </div>
+</div>

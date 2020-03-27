@@ -1,0 +1,31 @@
+<%= content_for :header_scripts do %>
+    <%= javascript_include_tag "http://maps.google.com/maps/api/js?key=AIzaSyAbR_28tEZPVOxE3gtkXpo8-FS2ZtjfUFM" %>
+<% end %>
+
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+    <li><i class="fa fa-building-o"></i><%= link_to @customer.name, customer_path(@customer) %></li>
+    <li><%= t('branches.add_branch') %></li>
+  </ol>
+<% end %>
+
+<h3 class="page-header"><%= t('branches.add_a_branch') %></h3>
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-1">
+        <%= form_for @customer_branch, url: customer_customer_branches_path(@customer), validate: true, html: {class: "form-horizontal"} do |f|%>
+          <%= render partial: 'form', locals: {f: f} %>
+          <div class="form-group">
+            <div class="col-sm-10 col-md-offset-2">
+              <%= f.submit t('commons.save'), class: "btn btn-primary"%>
+              <%= link_to t('commons.cancel'), customer_customer_branches_path(@customer), class: 'btn btn-default' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

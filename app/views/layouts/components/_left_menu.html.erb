@@ -1,0 +1,231 @@
+<aside>
+    <div id="sidebar"  class="nav-collapse ">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/">
+                    <i class="fa fa-dashboard fa-lg"></i>
+                    <span><%= t('commons.dashboard') %></span>
+                </a>
+            </li>
+            <% if current_company.present? && current_company.persisted? %>
+
+                <% if (current_user.is_admin?) %>
+                    <li>
+                        <%= link_to companies_path do %>
+                            <i class="fa fa-globe fa-lg"></i> <%= t('left_menu.joint_venture_partners') %>
+                        <% end %>
+                    </li>
+                <% end %>
+
+                <% if (current_user.is_admin? || current_company.is_jvp?) && current_company.company_type_name.to_s == 'jvp' %>
+                    <li>
+                      <%= link_to company_path(current_company) do %>
+                        <i class="fa fa-building-o fa-lg"></i> <%= t('left_menu.company_profile') %>
+                      <% end %>
+                    </li>
+                    <li>
+                        <%= link_to company_resellers_path(current_company.id) do %>
+                            <i class="fa fa-users fa-lg"></i> <%= t('left_menu.partners') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to company_customers_path(current_company.id) do %>
+                            <i class="fa fa-building fa-lg"></i> <%= t('commons.customers') %>
+                        <% end %>
+                    </li>
+                <% end %>
+
+                <% if current_company.is_partner? && current_company.company_type_name.to_s == 'partner' %>
+                    <li>
+                        <%= link_to company_reseller_path(current_company.parent_id, current_company) do %>
+                            <i class="fa fa-building-o fa-lg"></i> <%= t('left_menu.company_profile') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to company_customers_path(current_company.id) do %>
+                            <i class="fa fa-building fa-lg"></i> <%= t('commons.customers') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to company_reseller_members_path(current_company.parent_id, current_company) do %>
+                            <i class="fa fa-users fa-lg"></i> <%= t('commons.users') %>
+                        <% end %>
+                    </li>
+                    <% unless current_company.is_dsp? %>
+                      <li>
+                        <%= link_to upgrade_reseller_path(current_company) do %>
+                          <i class="fa fa-credit-card fa-lg"></i> <%= t('upgrade.title') %>
+                        <% end %>
+                      </li>
+                    <% end %>
+                    <% if current_company.is_dsp? %>
+                      <li>
+                        <%= link_to invoices_path(dsp_id: current_company.id) do %>
+                          <i class="fa fa-money fa-lg"></i> <%= t('invoice.title') %>
+                        <% end %>
+                      </li>
+                    <% end %>
+                <% end %>
+
+                <% if current_company.is_customer? %>
+                    <li>
+                        <%= link_to edit_customer_path(current_company) do %>
+                            <div class="ellipsis-overflow"><i class="fa fa-building-o fa-lg"></i> <%= current_company.full_name %></div>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to customer_customer_branches_path(current_company) do %>
+                            <i class="fa fa-road fa-lg"></i> <%= t('branches.branches') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to customer_members_path(current_company) do %>
+                            <i class="fa fa-users fa-lg"></i> <%= t('commons.users') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to customer_evaluations_path(current_company) do %>
+                            <i class="fa fa-list-ul fa-lg"></i> <%= t('evaluations.service_sets') %>
+                        <% end %>
+                    </li>
+                    <li>
+                      <%= link_to upgrade_customer_path(current_company) do %>
+                        <i class="fa fa-credit-card fa-lg"></i> <%= t('upgrade.title') %>
+                      <% end %>
+                    </li>
+                <% end %>
+
+            <% end %>
+
+            <% if current_user.is_admin? %>
+                <li class="sub-menu">
+                    <a href="javascript:;"><i class="fa fa-folder fa-lg"></i> <%= t('commons.settings') %> <span class="arrow"></span></a>
+                    <ul class="sub">
+                      <% if current_user.is_admin? %>
+                        <li>
+                          <%= link_to export_data_path do %>
+                            <i class="fa fa-download fa-lg"></i> <%= t('commons.export_data') %>
+                          <% end %>
+                        </li>
+                      <% end %>
+
+                        <li>
+                            <%= link_to customers_path do %>
+                                <i class="fa fa-building fa-lg"></i> <%= t('commons.customers') %>
+                            <% end %>
+                        </li>
+
+                        <li>
+                            <%= link_to members_path do %>
+                                <i class="fa fa-user fa-lg"></i> <%= t('commons.users') %>
+                            <% end %>
+                        </li>
+
+                        <li>
+                            <%= link_to services_path do %>
+                                <i class="fa fa-share-alt fa-lg"></i> <%= t('left_menu.services') %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <%= link_to work_processes_path do %>
+                                <i class="fa fa-puzzle-piece fa-lg"></i> <%= t('commons.processes') %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <%= link_to themes_path do %>
+                                <i class="fa fa-cube fa-lg"></i> <%= t('commons.themes') %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <%= link_to industries_path do %>
+                                <i class="fa fa-industry fa-lg"></i> <%= t('left_menu.industries') %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <%= link_to businesses_path do %>
+                                <i class="fa fa-briefcase fa-lg"></i> <%= t('left_menu.businesses') %>
+                            <% end %>
+                        </li>
+                        <li>
+                            <%= link_to static_pages_path do %>
+                                <i class="fa fa-file-o fa-lg"></i> <%= t('static_pages.title') %>
+                            <% end %>
+                        </li>
+                    </ul>
+                </li>
+            <% end %>
+
+            <% if current_company.present? && current_company.persisted? %>
+              <% if current_company.is_jvp? %>
+<!--
+                <li>
+                  <%#= link_to licenses_path do %>
+                    <i class="fa fa-money fa-lg"></i> <%#= t('licenses.title') %>
+                  <%# end %>
+                </li>
+-->
+                <% unless current_user.is_admin? %>
+                  <li>
+                    <%= link_to company_members_path(current_company) do %>
+                      <i class="fa fa-users fa-lg"></i> <%= t('commons.users') %>
+                    <% end %>
+                  </li>
+                <% end %>
+
+                <li>
+                  <%= link_to invoices_path do %>
+                    <i class="fa fa-money fa-lg"></i> <%= t('invoice.title') %>
+                  <% end %>
+                </li>
+              <% end %>
+            <% end %>
+
+            <% if current_user.is_admin? %>
+                <li>
+                  <%= link_to dynamic_page_path("_xgm7knl") do %>
+                    <i class="fa fa-question-circle fa-lg"></i>
+                    <%= t('commons.admin_knowledge_base') %>
+                  <% end %>
+                </li>
+            <% end %>
+            <li>
+                <%= link_to new_service_requests_path() do %>
+                    <i class="fa fa-file-o"></i>
+                    <%= t('commons.it_service_request') %>
+                <% end %>
+            </li>
+            <li class="sub-menu">
+                <a href="javascript:;"><i class="fa fa-folder fa-lg"></i> <%= t('commons.help') %> <span class="arrow"></span></a>
+                <ul class="sub">
+                    <li>
+                        <%= link_to dynamic_page_path("xyfuywqz") do %>
+                            <i class="fa fa-share-alt fa-lg"></i> <%= t('commons.help_menu.general') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to dynamic_page_path("nx57dwhw") do %>
+                            <i class="fa fa-video-camera fa-lg"></i> <%= t('commons.help_menu.freemium') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to dynamic_page_path("l6u-jalz") do %>
+                            <i class="fa fa-video-camera fa-lg"></i> <%= t('commons.help_menu.premium') %>
+                        <% end %>
+                    </li>
+
+                    <li>
+                        <%= link_to dynamic_page_path("0l0mt3yk") do %>
+                            <i class="fa fa-camera fa-lg"></i> <%= t('commons.help_menu.partner') %>
+                        <% end %>
+                    </li>
+                    <li>
+                        <%= link_to dynamic_page_path("zcc0xefl") do %>
+                            <i class="fa fa-download fa-lg"></i> <%= t('commons.help_menu.downloads') %>
+                        <% end %>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</aside>

@@ -1,0 +1,91 @@
+<thead>
+<tr class="captbl">
+  <td style="min-width:45px;"></td>
+  <td></td>
+  <td class="vtop" style="min-width: 46px;">
+    <div id="editable-wrapper_0" class="editable-wrapper">
+      <% if @evaluation.is_draft? %>
+        <%= link_to "#", class: "pos-abt btn btn-xs btn-default pos-right manage_edit_employee edit_btn", title: t('employees.add_new_employee'), data: {employee_id: 0} do %>
+          <span class="open_txt">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span>
+          <span class="close_txt"><i class="fa fa-times"></i> <%= t("commons.cancel").downcase %></span>
+        <% end %>
+      <% end %>
+      <div class="manage_employee_form">
+        <%= form_for(Employee.new, url: customer_employees_path(@customer, evaluation_id: @evaluation.id), validate: true, html: {class: "form-horizontal"}) do |f| %>
+          <%= render partial: 'employees/form', locals: {f: f} %>
+        <% end %>
+      </div>
+    </div>
+  </td>
+ 
+  <% @ordered_employees.each_with_index do |employee, index| %>
+    <td class="vtop">
+      <div id="editable-wrapper_<%= employee.id%>" class="editable-wrapper">
+
+        <% if @evaluation.is_draft? %>
+          <%= link_to customer_employee_path(@customer,employee.id, evaluation_id: @evaluation.id), title: t('commons.delete'), method: :delete, data: { confirm: t('commons.are_you_sure') }, class: "pos-abt pos-left" do %>
+            <i class="fa fa-trash" style="color: black;"></i>
+          <% end %>
+          <%= link_to "#", class: "pos-abt btn btn-xs btn-default pos-right manage_edit_employee edit_btn", data: {employee_id: employee.id} do %>
+                    <span class='open_txt'>
+                      <i class="fa fa-pencil"></i>
+                      <%= t("commons.edit").downcase %>
+                    </span>
+            <span class="close_txt">
+                      <i class="fa fa-times"></i>
+              <%= t("commons.cancel").downcase %>
+                    </span>
+          <% end %>
+        <% end %>
+
+        <div class="manage_employee_info" id="manage_employee_info_<%= employee.id %>">
+          <div class="name <%= 'not_editable' if @evaluation.is_published? %>"><%= employee.current_first_name %> <%= employee.current_last_name %></div>
+          <div style="display: flex; align-items: center;">
+            <div>
+              <% if @evaluation.is_draft? && index > 0 %>
+                <button id="order-up-btn-<%= employee.id %>" class="btn btn-order-up" data-employee-id="<%= employee.id %>" data-customer-id="<%= @customer.id %>" data-evaluation-id="<%= @evaluation.id %>"><i class="fa fa-arrow-left" style="color: black;"></i></button>
+              <% end %>
+            </div>
+            <div class="text-muted" style="flex: 1;">
+              <small><%= t("full_report.#{employee.current_work_type_name}") %></small><br/>
+              <small><%= employee.current_monthly_hours %></small> <%= t('employees.hours') %>
+            </div>
+            <div>
+              <% if @evaluation.is_draft? && index < @ordered_employees.size - 1 %>
+                <button id="order-down-btn-<%= employee.id %>" class="btn btn-order-down" data-employee-id="<%= employee.id %>" data-customer-id="<%= @customer.id %>" data-evaluation-id="<%= @evaluation.id %>"><i class="fa fa-arrow-right" style="color: black;"></i></button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="manage_employee_form">
+          <%= form_for(employee, url: customer_employee_path(@customer, employee.id, evaluation_id: @evaluation.id),validate: true, html: {class: "form-horizontal", id: "manage_employee_form_#{employee.id}"}) do |f| %>
+            <%= render partial: 'employees/form', locals: {f: f} %>
+          <% end %>
+        </div>
+
+      </div>
+    </td>
+  <% end %>
+</tr>
+</thead>
+<tbody>
+<% @domains.each do |d| %>
+  <tr>
+    <td class="text-center" style="width:50px;"><%= d.code %></td>
+    <td class="minimal-name-column"><%= t("employees.domains.#{d.code.downcase}", default: d.name) %></td>
+    <td>&nbsp;</td>
+    <% @ordered_employees.each do |employee| %>
+      <td class="text-center">
+        <% if @evaluation.is_draft? %>
+          <% simbol = yes_no_check(employee.employee_domains.where(:evaluation_id => @evaluation.id).map(&:domain_id).include?(d.id)) %>
+          <%= link_to simbol.html_safe, toggle_employee_domain_customer_employee_path(@customer, employee.id, domain_id: d.id, evaluation_id: @evaluation.id), class: 'ablock' %>
+        <% else %>
+          <% simbol = yes_no_check(employee.employee_domains.where(:evaluation_id => @evaluation.id).map(&:domain_id).include?(d.id),false,false) %>
+          <%= simbol.html_safe %>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>
+</tbody>

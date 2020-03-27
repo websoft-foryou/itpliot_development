@@ -1,0 +1,3 @@
+<% if @industry.destroyed? %>
+	$("#industry_list").find("#industry_id_<%=@industry.id%>").remove();
+<% end %>

@@ -1,0 +1,10 @@
+<h1>New registration</h1>
+
+<div>
+  <div><label>Date:&nbsp;</label><span><%= @user.invitation_sent_at %></span></div>
+  <div><label>First name:&nbsp;</label><span><%= @user.first_name %></span></div>
+  <div><label>Last name:&nbsp;</label><span><%= @user.last_name %></span></div>
+  <div><label>Email:&nbsp;</label><span><%= @user.email %></span></div>
+  <div><label>Role:&nbsp;</label><span><%= User::ROLE_TYPES[@user.role_type] if @user.role_type.present? %></span></div>
+  <div><label>Belongs to:&nbsp;</label><span><%= Company.find(@user.invitation_parent_company_id).name if @user.invitation_parent_company_id.present? %></span></div>
+</div>

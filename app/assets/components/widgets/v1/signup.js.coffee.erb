@@ -1,0 +1,81 @@
+class WidgetSignUp
+  @container = null
+  @content = null
+  @sign_up_button = null
+  @iframe = null
+  _outer = null
+  @lang = null
+
+  init: (options = {}) ->
+    _outer = @
+
+    @baseURL = "http://itpilot.companycloud.de:81"
+    @lang = @browserLang()
+    @role = options.role
+    @belong = options.belong
+    @token = options.token
+    window.addEventListener 'load', @fireEvents
+
+  browserLang: ->
+    if Array.isArray(navigator.languages) && navigator.languages.length > 0 && navigator.languages[0]
+      lang = navigator.languages[0]
+    else if navigator.language
+      lang = navigator.language
+    else if navigator.browserLanguage
+      lang = navigator.browserLanguage
+    else if navigator.userLanguage
+      lang = navigator.userLanguage
+    else
+      lang = 'en-US'
+
+    lang.startsWith('de') ? 'de' : 'en'
+
+
+  fireEvents: ->
+    _outer.container = document.getElementById 'app-itpilot-root'
+    _outer.container.setAttribute('style', '-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: rgba(0, 0, 0, 0.4);display: none;height: 100%;left: 0;overflow: auto;position: fixed;top: 0;width: 100%;z-index: 99999;')
+    _outer.content = document.createElement('div')
+    _outer.content.setAttribute('style', 'background-color: #fefefe;border: 1px solid #888;margin: 5% auto;max-width: 800px;padding: 0 20px 10px;position: relative;z-index: 100000;width: 95%;')
+    _outer.container.appendChild _outer.content
+
+
+    _outer.sign_up_button = document.querySelector('[data-toggle=itpilot-signup]')
+    return if _outer.sign_up_button is null
+    _outer.sign_up_button.addEventListener "click", _outer.openModal
+
+    _outer.iframe = document.createElement('iframe')
+    _outer.iframe.setAttribute('id', 'itpilot_iframe')
+    _outer.iframe.setAttribute('width', 0)
+    _outer.iframe.setAttribute('height', 0)
+    _outer.iframe.setAttribute('frameborder', 0)
+    _outer.iframe.addEventListener 'load', _outer.onLoadIframe
+
+    close_btn = document.createElement('a')
+    close_btn.setAttribute('href', '#')
+    close_btn.setAttribute('style', "background: transparent url(#{_outer.baseURL}/assets/widgets/v1/close.png) no-repeat scroll 0 0 / 20px 20px;height: 20px;opacity: 0.8;position: absolute;right: 8px;top: 14px;width: 20px;z-index: 100000;")
+    close_btn.addEventListener 'click', _outer.closeModal
+
+    _outer.content.innerHTML = "<p id='loading_iframe' style='display:none;'>Loading...</p>"
+    _outer.content.appendChild _outer.iframe
+    _outer.content.appendChild close_btn
+
+  openModal: (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    _outer.container.style.display = 'block'
+    document.getElementById('loading_iframe').setAttribute('style', 'display:block;')
+    _outer.iframe.setAttribute('src', "#{_outer.baseURL}/widgets/v1/registrations/new.html?lang=#{_outer.lang}&role=#{_outer.role}&belong=#{_outer.belong}&token=#{_outer.token}")
+    _outer.iframe.setAttribute('width', 800)
+    _outer.iframe.setAttribute('height', 660)
+
+  closeModal: (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    _outer.iframe.setAttribute('width', 0)
+    _outer.iframe.setAttribute('height', 0)
+    _outer.container.style.display = 'none'
+
+  onLoadIframe: ->
+    document.getElementById('loading_iframe').setAttribute('style', 'display:none;')
+
+window.itpilot = new WidgetSignUp()

@@ -1,0 +1,4 @@
+"ID","<%= t('full_report.name') %>","<%= t('full_report.theme') %>","<%= I18n.transliterate(t('full_report.dependant')) %>","<%= I18n.transliterate(t('full_report.depending')) %>"
+<% @evaluation_results.each do |evaluation_result| %>
+"<%= evaluation_result.service.code%>","<%= evaluation_result.cloned_index[1..-1] %> <%= I18n.transliterate(evaluation_result.service.name) %> <%= '[ignored]' if evaluation_result.is_ignored? %>", "<%= evaluation_result.service.themes.map(&:name).join(", ")%>", "<%= render(partial: "/shared/service_label", collection: evaluation_result.result_dependant_services, as: :service) || "" %>","<%= render(partial: "/shared/service_label", collection: evaluation_result.result_depending_services, as: :service) || "" %>"
+<% end %>

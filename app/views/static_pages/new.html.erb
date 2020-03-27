@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-plus"></i> <%= t('.page_title') %></h3></div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('static_pages.title'), static_pages_path %></li>
+  <li><i class="fa fa-building-o"></i> <%= t('.page_title') %></li>
+</ol>
+<div class="row">
+  <div class="col-xs-12">
+    <ul class="nav nav-tabs pull-left nav-tabs-presentation">
+      <% I18n.available_locales.map(&:to_s).each.with_index do |locale, i| %>
+        <li class="<%= "active" if @static_page.locale == locale%>">
+          <%= link_to locale.upcase, edit_static_page_path(@static_page.uid, locale: locale), id: "edit_translations_tab_header_link_#{locale}",
+            class: ("text-danger" unless locale == @static_page.locale || StaticPage.where(uid: @static_page.uid, locale: locale).exists?) %>
+        </li>
+      <% end %>
+      </ul>
+  </div>
+</div>
+<div class="panel">
+  <%= form_for(@static_page, url: static_page_path(@static_page.uid), method: :put, validate: true, html: {class: "form-horizontal"}) do |f| %>
+    <%= render partial: 'form', locals: {f: f}  %>
+  <% end %>
+</div>
+
+
+
+

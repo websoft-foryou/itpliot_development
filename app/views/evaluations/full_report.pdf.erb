@@ -1,0 +1,124 @@
+<%= javascript_include_tag "http://code.jquery.com/jquery-1.10.0.min.js" %>
+<%= javascript_include_tag "http://code.jquery.com/ui/1.10.3/jquery-ui.min.js" %>
+
+<style>
+  .page-break1{ page-break-inside: avoid;}
+</style>
+
+<div id="first-item" class="row m-b">
+  <div class="col-xs-1">itpilot</div>
+  <div class="col-xs-10 text-center"><h3><%= @evaluation.customer.name %> - <%= @evaluation.name %> - <%= params[:report].present? ? t("evaluations.top_20_by.#{params[:report]}") : t('full_report.services') %></h3></div>
+  <div class="col-xs-1"><%= l(Date.today, format: :long) %></div>
+</div>
+
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr id="table_header1" class="captbl">
+          <td colspan="3"><%= t('full_report.service') %></td><!--number/name/cost-->
+          <td></td><!--cloud-->
+          <td></td><!--vendor-->
+          <td></td><!--distributor-->
+          <td colspan="5"><%= t('full_report.service_attributes') %></td><!--server/appliances/users/gbreserved/gbused-->
+          <td colspan="2"><%= t('full_report.supporting_services') %></td><!--depenant/depending-->
+          <td colspan="2"><%= t('full_report.cost_per_month') %> <%= t('full_report.in_eur_html') %></td><!--capex/opex-->
+          <td colspan="2"><%= t('full_report.support_mountly_hours') %></td><!--hours extern/intern-->
+          <td colspan="2"><%= t('full_report.recovery_time') %> <%= t('full_report.hours_max') %></td><!--service up-->
+          <td><%= t('full_report.direct_impact_on_client_relationship') %></td><!--impact-->
+          <td><%= t('full_report.direct_impact_on_revenue_per_day_of_service_outage') %></td><!--revenue-->
+          <td><%= t('full_report.planned_enhancements') %></td><!--enhancements-->
+          <td><%= t('full_report.future_strategy') %></td><!--strategy-->
+        </tr>
+        <tr id="table_header1_1" class="captbl">
+          <td>ID</td>
+          <td><%= t('full_report.name') %></td>
+          <td><%= t('full_report.theme') %></td>
+
+          <td><%= t('full_report.cloud_service') %></td>
+          <td><%= t('full_report.supplier') %></td>
+          <td><%= t('full_report.vendor') %></td>
+
+          <td><%= t('full_report.servers') %></td>
+          <td><%= t('full_report.appliances') %></td>
+          <td><%= t('full_report.users') %></td>
+          <td><%= t('full_report.gb_reserved') %></td>
+          <td><%= t('full_report.gb_used') %></td>
+
+          <td><%= t('full_report.dependant') %></td>
+          <td><%= t('full_report.depending') %></td>
+
+          <td>Capex</td>
+          <td>Opex</td>
+
+          <td><%= t('full_report.internal') %></td>
+          <td><%= t('full_report.external') %></td>
+
+          <td><%= t('full_report.needed') %></td>
+          <td><%= t('full_report.guaranteed') %></td>
+
+          <td><%= t('full_report.level') %></td>
+          <td><%= t('full_report.eur_max') %></td>
+
+          <td></td>
+          <td></td>
+        </tr>
+        <%= render partial: '/evaluation_results/evaluation_result_full', collection: @evaluation_results, as: :evaluation_result %>
+      </tbody>
+    </table>
+    <br/><br/>
+  </div>
+</section>
+
+<% if params[:report] && @evaluation_results.any? %>
+  <section class="panel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="chart-container">
+            <img src="<%=embed_remote_image(@evaluation, params[:report],'bar')%>"/>
+          </div>
+        </div>
+        <div class="col-md-5" style="text-align:center;margin-top:30px;">
+          <img src="<%=embed_remote_image(@evaluation, params[:report],'pie')%>"/>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<script>
+$(document).ready(function() {
+  // Very top of items
+  var current_page_top = 0;
+  // Check distance from top of page to bottom of item
+  // If greater than page size put page break and headers before
+  // Reset top of page to top of item.
+  var page_index = 1;
+  var page_height = 1400;
+
+  const header_height = parseInt($('#table_header1').eq(0).outerHeight()) + parseInt($('#table_header1_1').eq(0).outerHeight());
+  $('.page-break1').each(function(index) {
+    const item_top = parseInt($(this).eq(0).position().top);
+    const item_bottom = item_top + parseInt($(this).eq(0).outerHeight());
+    if ((item_bottom - current_page_top) > page_height) {
+      page_index ++;
+
+      $(this).before(
+        "<tr class=''><td colspan='23' style='height: " + (current_page_top + page_height - item_top) + "px; border-color: transparent;'>" + 
+          (page_index - 1) +
+        "</td></tr>" + 
+        "<tr id='table_header" + page_index + "' class='captbl' style='page-break-inside: avoid;'>" +
+          $('#table_header1').html() +
+        "</tr>" +
+        "<tr class='captbl' style='page-break-inside: avoid;'>" +
+          $('#table_header1_1').html() +
+        "</tr>"
+      );
+      current_page_top = parseInt($('#table_header' + page_index).position().top); // item - header height
+      // current_page_top += page_height;
+    }
+  });
+});
+
+</script>

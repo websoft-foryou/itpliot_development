@@ -1,0 +1,36 @@
+<%= hidden_field_tag :locale, @static_page.locale%>
+<div class="panel-body">
+  <div class="form-group">
+    <%= f.label :title, t("static_pages.form.title_label"), class: "control-label col-xs-2"%>
+    <div class="col-xs-8">
+      <%= f.text_field :title, class: "form-control" %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-xs-10">
+      <%= f.cktext_area :description, class: "form-control", ckeditor: { language: I18n.locale} %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :user_type_permission, t("static_pages.form.user_type_permission_label"), class: "control-label col-xs-2"%>
+    <div class="col-xs-8">
+      <%= f.select :user_type_permission, Company::COMPANY_TYPES.map.with_index{|a, index| [a.to_s.humanize, index] }, {include_blank: "Public"}, class: "form-control" %>
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <div class="col-xs-4 col-xs-offset-2">
+      <% if f.object.persisted? && current_user.is_admin? %>
+        <%= link_to t('static_pages.form.delete_btn'), static_page_path(@static_page.uid, locale: @static_page.locale), method: :delete, class: "btn btn-danger", data: { confirm: t('commons.are_you_sure') } %>
+    <% end %>
+    </div>
+    <div class="col-xs-4 text-right">
+      <%= f.submit t('static_pages.form.save_btn'), class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>

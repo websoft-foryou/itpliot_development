@@ -1,0 +1,92 @@
+<% if @reseller.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@reseller.errors.count, "error") %> <%= t('partners.prohibited_error') %>:</h2>
+    <ul>
+      <% @reseller.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="row">
+  <div class="col-md-6">
+    <%= render partial: '/shared/company_details_form', locals: {f: f} %>
+  </div>
+  <div class="col-md-6">
+    <div class="row">
+        <%= render partial: '/shared/company_location_form', locals: {f: f} %>
+    </div>
+
+    <div class="row">
+      <% if current_user.is_admin? || current_company.is_jvp? %>
+        <div class="form-group">
+          <%= f.label :is_blocked, t('commons.is_blocked'),  class: "control-label col-xs-3" %>
+          <div class="col-xs-9"><%= f.select :is_blocked, [[t('commons.blocked'), true], [t('commons.not_blocked'), false]], {}, {class: "form-control"}%></div>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :remarks, t('companies.form.remarks'),class: "control-label col-xs-3" %>
+        <div class="col-xs-9"><%= f.text_area :remarks, rows: 3, class: "form-control" %></div>
+      </div>
+
+      <% if current_user.is_admin? || current_company.is_jvp? %>
+        <div class="form-group">
+          <%= label_tag :is_dsp, class: "col-xs-offset-3 col-xs-9" do %>
+            <%= f.check_box :is_dsp, {}, true, false%>
+            <%= t("upgrade.direct_selling_partner")%>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if current_user.is_admin? || current_company.is_jvp? %>
+        <div id="plan_container" style="display: <%= @reseller.is_dsp? ? 'none' : 'block' %>;">
+          <div class="form-group">
+            <%= f.label :plan_id, t('upgrade.premium_plan'),  class: "control-label col-xs-3" %>
+            <div class="col-xs-9">
+              <%= f.select :plan_id, [[t('upgrade.no_plan'), nil]].concat(Plan.for_partner.map{|a| [((a.employees_from <= Plan::PARTNER_MAX_EMPLOYEES ? "#{a.employees_from}-#{a.employees_to}" : "> #{a.employees_from - 1}") + " #{t('employees.employees')} | €#{a.price}").html_safe, a.id] }), {}, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% if f.object.persisted? %>
+        <div class="form-group interval_container m-t-small">
+          <div class="col-sm-3 col-xs-12 m-t-small text-right p-r-none"><label><%= t('upgrade.subscription_plan') %></label></div>
+          <div class="col-sm-9 col-xs-12 m-t-small">
+            <%= f.object.premium? ? t('upgrade.premium_membership') : t('upgrade.freemium_membership') %><br/>
+            <%= "#{f.object.premium_from.to_formatted_s(:long)} - #{f.object.premium_until.to_formatted_s(:long)}" if f.object.premium? %>
+          </div>
+        </div>
+      <% end %>
+
+
+    </div>
+
+    <div class="row">
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 col-xs-6 m-t">
+      <div class="row">
+        <div class="col-md-9 col-md-offset-3">
+          <% if @reseller.persisted? && (current_user.is_admin? || current_company.is_jvp?) %>
+            <%= link_to t('commons.delete'), company_reseller_path(@reseller.parent, @reseller), method: :delete, class: "btn btn-default", data: { confirm: t('commons.are_you_sure') } %>
+            <div><small><%= t('partners.permanently_delete_all') %></small></div> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-6 m-t text-right">
+        <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+        <% if @reseller.new_record? %>
+            <%= link_to t('commons.cancel'), company_resellers_path(current_company), class: "btn btn-default" %>
+        <% else %>
+            <%= link_to t('commons.cancel'), company_reseller_path(current_company, @reseller), class: "btn btn-default"%>
+        <% end %>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<% if @user.errors.any? %>
+    <div id="error_explanation">
+        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+        <ul>
+            <% @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+<% end %>
+
+<%= hidden_field_tag :addto, params[:addto] if params[:addto].present? %>
+<%= hidden_field_tag :customer_id, params[:customer_id] if params[:customer_id].present? %>
+<%= hidden_field_tag :branch_id, params[:branch_id] if params[:branch_id].present? %>
+<%= hidden_field_tag :reseller_id, params[:reseller_id] if params[:reseller_id].present? %>
+
+<div class="form-group">
+  <%= f.label :first_name, t('users.first_name'), class: "control-label col-xs-2"%>
+  <div class="col-xs-8">
+    <%= f.text_field :first_name, class: "form-control"%>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :last_name, t('users.last_name'),class: "control-label col-xs-2"%>
+  <div class="col-xs-8">
+    <%= f.text_field :last_name, class: "form-control"%>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :email, class: "control-label col-xs-2"%>
+  <div class="col-xs-8">
+    <%= f.text_field :email, class: "form-control", disabled: f.object.new_record? ? false : true %>
+  </div>
+</div>
+
+<% if (current_user.is_admin? || current_company.is_jvp?) && params[:addto].blank?  %>
+  <div class="form-group">
+    <label class="control-label col-xs-2"><%= t('users.role_type') %></label>
+    <div class="col-xs-2">
+        <% if current_user.is_admin? %>
+            <%= f.select :role_type, [['-', nil]].concat(f.object.new_record? ? User::ROLE_TYPES.select { |v| current_user.is_admin? ? true : v != :admin }.each_with_index.map{|v| [t('users.role_types.'+v.to_s), User::ROLE_TYPES.index(v)]} : [[t('users.role_types.admin'), User::ROLE_TYPES.index(:admin)]]), {}, class: "single_select2 width_100" %>
+        <% end %>
+        <% if !current_user.is_admin? && current_company.is_jvp? %>
+            <%= f.select :role_type, [['-', nil]], {}, class: "single_select2 width_100" %>
+        <% end %>
+
+    </div>
+    <% if f.object.new_record? %>
+      <label class="control-label col-xs-2"><%= t('users.parent_company') %></label>
+      <div class="col-xs-4">
+        <%= select_tag :invitation_parent_company_id, [], {class: "single_select2 width_100", disabled: f.object.role_type!='' } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <label class="control-label col-xs-2"><%= t('commons.belongs_to') %></label>
+  <div class="col-xs-8">
+    <div id="reload_opt_tree">
+      <%= f.select :company_users,
+                   options_for_select(
+                       @company_users.collect {
+                           |company_user| ["#{'&nbsp;&nbsp;&nbsp;&nbsp' if company_user.company.parent && company_user.company.parent.is_jvp?}#{'&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp' if company_user.company.parent && company_user.company.parent.is_partner?}#{company_user.company.name}#{' / ' + company_user.company_branch.name if company_user.company_branch}".html_safe,
+                                           "#{company_user.company_id}##{company_user.company_branch_id}##{company_user.id}"]
+                       },
+                       if @customer
+                         "#{@customer.id}##{@customer.company_branches.first.id}#"
+                       elsif @partner
+                         "#{@partner.id}##"
+                       else
+                        f.object.company_users.map {|cu| "#{cu.company_id}##{cu.company_branch_id}##{cu.id}"}
+                       end
+                   ),
+                   {},
+                   id: "cu_options_tree",
+                   class: "single_select2 width_100",
+                   disabled: @customer, #f.object.role_type.present? || @customer,
+                   multiple: true
+      %>
+
+    </div>
+    <% if @user.persisted? %>
+      <div class="note">
+        <small>
+          <%= t('commons.current_value') %>:
+          <%= @user.company_users ? @user.company_users.map{|cu| cu.company.name}.join(', ') : t('commons.not_assigned_yet') %>
+        </small>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= f.fields_for :company_users, f.object.company_users do |ff| %>
+  <%= ff.hidden_field :company_id, class: "form-control", disabled: !@company_users.first %>
+  <%= ff.hidden_field :company_branch_id, class: "form-control", disabled: !@company_users.first %>
+<% end %>
+
+
+<% if f.object.new_record? && current_user.is_admin?%>
+  <div class="form-group">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="checkbox">
+        <%= label_tag :send_email, style: "padding-left:0;" do %>
+          <%= check_box_tag :send_email, true, true%>
+          <%= t("users.send_invitation_email")%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+    <div class="col-xs-4 col-xs-offset-2">
+        <% if f.object.persisted? && current_user.is_admin? %>
+          <%= link_to t('commons.delete'), member_path(@user), method: :delete, class: "btn btn-default", data: { confirm: t('commons.are_you_sure') } %>
+      <% end %>
+    </div>
+    <div class="col-xs-4 text-right">
+      <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+    </div>
+</div>

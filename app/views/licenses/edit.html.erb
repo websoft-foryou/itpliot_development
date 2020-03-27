@@ -1,0 +1,13 @@
+<%= breadcrumb(links: [
+                {key: 'licenses', name: t('licenses.title'), url: licenses_path},
+                {key: '', name: @license.name },
+                {key: '', name: t('commons.editing')}
+                ]) %>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@license, url: license_path(@license), validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f} %>
+    <% end %>
+  </div>
+</div>

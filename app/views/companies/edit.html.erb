@@ -1,0 +1,29 @@
+<%= breadcrumb(links: [
+                {key: 'companies', name: t('tenants.tenants'), url: companies_path},
+                {key: 'company', name: @company.name, url: company_path(@company)},
+                {key: '', name: t('commons.editing')},
+                ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+      <div class="col-md-2">
+        <div class="thumb-xlarge">
+          <div class="pos-rlt img-thumbnail" id="avatar-photo-container">
+          <%= form_for @company, url: company_path(@company), multipart: true, html: {id: "company_avatar_form", class: "basic_file_upload m-b-none", :method => :put} do |f| %>
+            <%= f.file_field :avatar, class: "styled_file_input" %>
+            <%= f.label :avatar do %>
+              <%= image_tag( f.object.avatar.url(:list) + "?timestamp=#{Time.now.to_i}") %>
+            <% end %>
+          <% end %>
+          </div>
+        <p class="help-block"><small class="text-justify"><%= t('photos.change_photo_html') %></small></p>
+      </div>
+    </div>
+      <div class="col-md-10 m-t m-b">
+        <%= form_for(@company, validate: true, html: {class: "form-horizontal"}) do |f| %>
+          <%= render partial: 'form', locals: {f: f} %>
+        <% end %>
+    </div>
+  </div>
+</div>
+

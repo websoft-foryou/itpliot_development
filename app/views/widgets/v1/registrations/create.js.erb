@@ -1,0 +1,5 @@
+<% if @user.errors.any? %>
+$("#form_container").html("<%=j render partial: 'error', formats: [:html] %>");
+<% else %>
+$("#form_container").html("<%=j render partial: 'success', formats: [:html] %>");
+<% end %>

@@ -1,0 +1,52 @@
+.dashboard-category{
+  position: relative;
+  background-color: #FFFFFF;
+  border: 1px solid #777;
+  border-radius: 5px; min-height:170px;
+  text-align: center;
+  max-width:350px;margin: 0 auto 25px auto;
+  a{display:block;min-height:190px;padding:40px 10px 10px 10px;}
+  a, a:visited, a:focus{color:#777;}
+  a:hover{color:#333;}
+  .fa{font-size:40px;}
+  .status{
+    position: absolute;
+    right:0;
+    bottom:0;
+    padding:10px;
+    font-size:15px;
+    font-weight:100;
+    &:before{
+      content: '';
+      font-family: "FontAwesome";
+      margin-right:5px;
+      position:relative;
+      top:1px;
+      font-size:18px;
+    }
+  }
+  &.incomplete{
+    color:#333;
+    border: 1px solid #777;
+    .status:before{
+      content: "\f12a";
+      color: #ffcc00;
+    }
+  }
+  &.completed{
+    color:#333;
+    border: 1px solid #777;
+    .status:before{
+      content: "\f046";
+      color: #29a329;
+    }
+  }
+  &.closed{
+    a:hover{color:#777;cursor:default;}
+    .status:before{
+      content: "\f023";
+      color: #999999;
+    }
+  }
+}
+#edit_user span.error label[for="user_accept_terms"].message{ position:absolute; top:24px; left: 36px;}

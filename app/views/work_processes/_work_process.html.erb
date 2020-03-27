@@ -1,0 +1,13 @@
+<div class="list-group-item actions_on_hover" id="work_process_id_<%=work_process.id%>">
+  <div class="row">
+    <div class="col-md-10">
+      <%=link_to work_process.name, edit_work_process_path(work_process) %>
+    </div>
+    <div class="col-md-2 text-right">
+      <div class="actions">
+        <%=link_to t('commons.edit'), edit_work_process_path(work_process), class: 'btn btn-default btn-xs' %>
+        <%= link_to t('commons.delete'), work_process_path(work_process), method: :delete, remote: true, class: 'btn btn-default btn-xs', data: { confirm: t('commons.are_you_sure') } %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<%= breadcrumb(links: [
+                {key: 'services', name: t('services.services'), url: services_path}, 
+                {key: 'service', name: @service.code}
+                ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+      <div class="pos-rlt"><div class="pos-abt" style="right:0;z-index:1000;"><%= link_to t('commons.edit'), edit_service_path(@service), class: 'btn btn-primary' %></div></div>
+      <div class="col-md-12 m-t m-b">
+        <div class="form-horizontal m-t-small viewstyle">
+
+          <div class="form-group">
+            <div class="col-xs-2 text-muted text-right"><%= t('services.id_number') %></div>
+            <div class="col-xs-3"><%= @service.code %></div>
+            <div class="col-xs-2 text-muted text-right"><%= t('services.position') %></div>
+            <div class="col-xs-3"><%= @service.position %></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-xs-2 text-muted text-right"><%= t('services.owner') %></div>
+            <div class="col-xs-8">
+              <%= @service.owner_id && @service.owner.name || "Core" %>
+            </div>
+          </div>
+
+
+          <% I18n.available_locales.each do |locale| %>
+              <hr/>
+              <div class="form-group">
+                 <div class="col-xs-2 text-right"><strong><%= t('locales.'+locale.to_s) %></strong></div>
+              </div>
+              <div class="form-group">
+                <div class="col-xs-2 text-muted text-right"><%= t('commons.name') %></div>
+                <div class="col-xs-8">
+                  <%= @service.name(locale) %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-xs-2 text-muted text-right"><%= t('services.purpose') %></div>
+                <div class="col-xs-8">
+                  <%= @service.purpose(locale) %>
+                </div>
+              </div>
+          <% end %>
+
+          <hr/>
+          <div class="form-group">
+            <div class="col-md-2 text-muted text-right"><%= t('services.supporting_needed') %></div>
+            <div class="col-md-10"><%= @service.dependings.order(:code).map(&:code).join(", ")%></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 text-muted text-right"><%= t('services.supports_following') %></div>
+            <div class="col-md-10"><%= @service.inverse_dependings.order(:code).map(&:code).join(", ")%></div>
+          </div>
+
+        </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="form-group">
+  <%= f.label :name, t('companies.form.name')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :name, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :name2, t('companies.form.name2'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :name2, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :vat_number, t('companies.form.vat_number')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :vat_number, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :business_id, t('companies.form.industry')+"*", class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12">
+     <%= f.select :business_id, Business.includes(:translations).with_locales(I18n.locale).order('business_translations.name').map{|a| [a.name, a.id] }, {:include_blank => t('commons.not_specified')}, class: "single_select2 width_100" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :contact_person, t('companies.form.contact_person')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :contact_person, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :phone, t('companies.form.phone')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :phone, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :mobile, t('companies.form.mobile')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :mobile, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :email, t('companies.form.email')+"*",class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :email, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :invoice_email, class: "control-label col-sm-3 col-xs-12 p-r-none" do %>
+    <i class="fa fa-info-circle vertical-top" title="<%= t("companies.form.invoice_email_usage_description")%>" data-toggle="tooltip"></i> <%= t('companies.form.invoice_email')+"*" %>
+  <% end %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :invoice_email, class: "form-control" %></div>
+</div>
+
+<div class="form-group">
+  <%= f.label :contact_person2, t('companies.form.contact_person2'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :contact_person2, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :phone2, t('companies.form.phone2'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :phone2, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :mobile2, t('companies.form.mobile2'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :mobile2, class: "form-control" %></div>
+</div>
+<div class="form-group">
+  <%= f.label :email2, t('companies.form.email2'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :email2, class: "form-control" %></div>
+</div>
+
+<div class="form-group">
+  <%= f.label :url, t('companies.form.url'),class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+  <div class="col-sm-9 col-xs-12"><%= f.text_field :url, autocomplete: 'bugchrome', class: "form-control" %></div>
+</div>

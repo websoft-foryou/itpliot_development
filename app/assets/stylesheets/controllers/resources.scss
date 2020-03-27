@@ -1,0 +1,119 @@
+.editable-wrapper{
+  position: relative;
+  .open_txt{
+    display: block;
+  }
+  .close_txt{
+    display: none;
+  }
+  .manage_employee_info{
+    text-align: center;
+    width: 100%;
+    width: 200px;
+    .name{
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      margin-left: 13px;
+      text-align: left;
+      max-width: 120px;
+      &.not_editable{
+        margin-left: 0;
+        text-align: center;
+        max-width: 100%;
+      }
+    }
+  }
+  .manage_employee_form{
+    display:none;
+    min-width: 335px;
+    form{
+      max-width: 230px;
+      margin-left: 20px;
+      text-align: left;
+      input[type="text"],
+      input[type="number"]{
+        height: auto;
+        line-height: 1em;
+        padding: 5px 5px;
+        margin-bottom: 4px;
+        font-size: 13px;
+      }
+      input[type="radio"]{
+        display: inline;
+        width: 12px;
+        height: 12px;
+      }
+      input[type="number"]{
+        display: inline-block;
+        width: 60px;
+        height: 26px;
+        padding: 0 4px;
+      }
+      label{
+        display: inline-block;
+        font-size: 13px;
+        font-weight: normal;
+      }
+    }
+  }
+  &.active{
+    .manage_employee_info{
+      display: none;
+    }
+    .manage_employee_form{
+      display: block;
+    }
+    .open_txt{
+      display: none;
+    }
+    .close_txt{
+      display: block;
+    }
+  }
+  .submit_btn, .edit_btn{
+    position: absolute;
+    right: 0;
+  }
+  .submit_btn{
+    top: 30px;
+  }
+
+}
+
+.nav-tab-buttons{
+  border-bottom: none;
+  margin-bottom: 20px;
+  li, li.active{
+    a:link, a:visited, a:hover, a:active{
+      margin-right: none;
+      border: none;
+      border-radius: none;
+      background: none;
+    }
+  }
+}
+
+/*tab resources*/
+.resource_edit_employee{
+  .open_txt{
+    display: block;
+  }
+  .close_txt{
+    display: none;
+  }
+  &.active{
+    .open_txt{
+      display: none;
+    }
+    .close_txt{
+      display: block;
+    }
+  }
+}
+
+.table-simple tr.captbl td.minimal-name-column,
+td.minimal-name-column{
+  width: 250px;
+  min-width: 250px;
+}

@@ -1,0 +1,40 @@
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <% if @reseller %>
+      <li><i class="fa fa-users"></i><%= link_to t('partners.partners'), company_resellers_path(current_company.id) %></li>
+      <li><i class="fa fa-building"></i><%= link_to @reseller.name, company_reseller_path(current_company, @reseller) %></li>
+      <li><i class="fa fa-building-o"></i><%= link_to @customer.name, company_reseller_customer_path(current_company, @reseller, @customer) %> - <%= t('commons.editing') %></li>
+    <% else %>
+      <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+      <li><i class="fa fa-building-o"></i><%= link_to @customer.name, customer_path(@customer) %></li>
+      <li><%= t('commons.editing') %></li>
+    <% end %>
+  </ol>
+<% end %>
+
+<h3><%= t('companies.company_profile') %></h3>
+<div class="panel">
+    <div class="panel-body">
+      <div class="col-md-2">
+          <div class="thumb-xlarge">
+            <div class="pos-rlt img-thumbnail" id="avatar-photo-container">
+          <%= form_for @customer, url: customer_path(@customer), multipart: true, html: {id: "customer_avatar_form", class: "basic_file_upload m-b-none", :method => :put} do |f| %>
+            <%= f.file_field :avatar, class: "styled_file_input" %>
+            <%= f.label :avatar do %>
+              <%= image_tag( f.object.avatar.url(:list) + "?timestamp=#{Time.now.to_i}") %>
+            <% end %>
+          <% end %>
+        </div>
+        <p class="help-block"><small class="text-justify"><%= t('photos.change_photo_html') %></small></p>
+      </div>
+    </div>
+      <div class="col-md-10 m-t m-b">
+
+      <%= form_for(@customer, url: customer_path(@customer), validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

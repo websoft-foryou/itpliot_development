@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="btn-group pull-right m-b-small">
+      <%= link_to new_theme_path(), class: "btn btn-info" do %>
+        <i class="fa fa-plus"></i> <%= t('themes.add_new_theme') %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= breadcrumb(links: [{key: 'theme', name: t('themes.themes')}]) %>
+
+<div class="panel panel-default">
+  <div class="list-group" id="theme_list">
+    <%= render partial: "/themes/theme", collection: @themes %>  
+  </div>
+</div>

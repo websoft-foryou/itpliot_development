@@ -1,0 +1,13 @@
+<%= breadcrumb(links: [
+              session[:breadcrumb],
+              {key: 'user', name: @user.name},
+              {key: '', name: t('commons.editing')}
+              ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+    <%= form_for(@user, url: member_path(@user), validate: true, html: {class: "form-horizontal"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f} %>
+    <% end %>
+    </div>
+</div>

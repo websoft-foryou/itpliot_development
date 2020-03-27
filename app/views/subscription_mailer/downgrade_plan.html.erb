@@ -1,0 +1,7 @@
+<h3><%= @company.name%>  was downgraded to FREEMIUM</h3>
+<p>
+  <%= @company.company_type_name %> name: <%= link_to @company.name, @company.is_customer? ? customer_url(@company) : company_reseller_url(@company.parent_id, @company)%>
+</p>
+<p>
+  <%= @company.company_type_name %> employees range: <%= @plan.employees_from %> - <%= @plan.employees_to %>
+</p>

@@ -1,0 +1,19 @@
+.code_service_label{
+  display:inline-block;
+  border: 1px solid #CCC;
+  padding: 3px 5px 3px 18px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #000;
+  background-color: #fafafa;
+  margin-bottom:4px;
+  margin-right: 5px;
+  &.ignored{
+    color:#666;
+    background-color: #DDD;
+  }
+  &.deactivated{
+    color: #666;
+    background-color: #DDD;
+  }
+}

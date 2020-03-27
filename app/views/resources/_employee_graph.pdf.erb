@@ -1,0 +1,28 @@
+<% activity = employee_activity(evaluation,employee_id) %>
+<% if activity && activity.any? %>
+  <table style="width:100%;height:100%;">
+    <tr class="full-view employee_<%= employee_id %>" style="display:none">
+      <% activity.each do |k,v| %>
+        <td><%= k.upcase %></td>
+      <% end %>
+    </tr>
+    <tr class="full-view employee_<%= employee_id %>" style="display:none">
+      <% activity.each do |k,v| %>
+        <td style="min-width:38px;">
+          <%= v %>
+        </td>
+      <% end %>
+    </tr>
+    <tr>
+      <td colspan="12" class="text-right">
+        <%= activity.values.sum %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="12" style="background:white;">
+        <%= resource_activity_legend(activity) %>
+        <img src="<%=embed_remote_image(evaluation,"employee_graph_#{employee_id}",'pie')%>" style="width: 250px; height: auto;"/>
+      </td>
+    </tr>
+  </table>
+<% end %>

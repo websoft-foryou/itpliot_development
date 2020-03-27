@@ -1,0 +1,5 @@
+<h3><%= t('commons.dashboard') %></h3><br/>
+<%= render "homes/dependencies/#{current_user.is_admin? ? 'admin' : current_company.company_type_name}" %>
+
+
+

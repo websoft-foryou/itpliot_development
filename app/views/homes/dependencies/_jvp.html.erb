@@ -1,0 +1,11 @@
+<div class="row">
+  <% if current_company.present? %>
+    <%= dashboard_box(company_path(current_company), t('users.invitation.basic_info.company_profile'), 'fa-building') %>
+    <%= dashboard_box(company_resellers_path(current_company), t('left_menu.partners'), 'fa-users') %>
+    <%= dashboard_box(company_customers_path(current_company), t('customers.customers'), 'fa-building') %>
+    <%= dashboard_box(company_members_path(current_company), t('commons.users'), 'fa-user') %>
+    <%= dashboard_box(invoices_path, t('invoice.title'), 'fa-money') %>
+    <%= dashboard_box(new_service_requests_path(), t('commons.it_service_request'), 'fa-file-o') %>
+    <%= dashboard_box(dynamic_page_path("xyfuywqz"), t('commons.help'), 'fa-question-circle') %>
+<% end %>
+</div>

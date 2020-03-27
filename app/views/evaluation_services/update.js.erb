@@ -1,0 +1,3 @@
+$('#evaluation_service_<%= @evaluation_service.id %>').html("<%=j render partial: 'evaluation_service_buttons', object: @evaluation_service, as: :evaluation_service %>")
+$("#status_overview_container").html("<%=j render partial: '/evaluation_services/status_overview'%>")
+$('#evaluation_service_<%= @evaluation_service.id %>_status_note').html('<%= t("services.service_is_#{@evaluation_service.status_name}_html") %>');

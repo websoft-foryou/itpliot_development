@@ -1,0 +1,95 @@
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+de:
+  devise:
+    invitations:
+      hello: "Hallo"
+      you_have_an_invitation_html: "Sie erhalten hiermit eine Einladung zur Nutzung der <strong>itpilot Plattform</strong>"
+      from: "von"
+      click_to_confirm: "Bitte klicken Sie auf die Schaltfläche unten und bestätigen Sie Ihren Account:"
+      confirm_account: "Zugang bestätigen"
+      not_inteded_info: "Wenn Sie nicht der richtige Adressat sind oder diese E-Mail irrtümlich erhalten haben, informieren Sie bitte den Absender und löschen Sie diese E-Mail."
+      thank_you: "Vielen Dank."
+      best_regards_html: "Mit freundlichen Grüßen<br/><br/>%{company_name}"
+      best_regards_html1: "Mit freundlichen Grüßen<br/><br/>Ihr %{company_name}"
+      do_not_reply: "Bitte senden Sie keine Antworten direkt an diese E-Mail-Adresse und benutzen unsere Kontaktinformationen unten."
+      subscribe: "Als registrierter itpilot Nutzer erhalten Sie unseren Newsletter, den Sie jederzeit abbestellen können."
+      user:
+        updated: "Ihr Kennwort wurde erfolgreich geändert."
+      edit: 
+        header: "Ändern Sie Ihr Passwort"
+        submit_button: "Ändere mein Passwort"
+        new_password: "Neues Kennwort"
+        confirm_password: "Bestätige neues Passwort"
+    confirmations:
+      confirmed: "Ihr Passwort wurde erfolgreich vergeben. Sie sind jetzt angemeldet."
+      send_instructions: "Sie erhalten eine E-Mail mit Anweisungen, wie Sie Ihr Konto in wenigen Minuten bestätigen können. "
+      send_paranoid_instructions: "Wenn Ihre E-Mail-Adresse in unserer Datenbank existiert, erhalten Sie eine E-Mail mit Anleitungen zur Bestätigung Ihres Kontos in wenigen Minuten."
+    failure:
+      already_authenticated: "Sie sind bereits angemeldet."
+      inactive: "Ihr Konto wurde noch nicht aktiviert."
+      invalid: "Ungültige E-Mail oder Passwort."
+      invalid_token: "Ungültiges Authentifizierungstoken."
+      locked: "Ihr Konto ist gesperrt."
+      not_found_in_database: "Ungültige E-Mail oder Passwort."
+      timeout: "Ihre Sitzung ist abgelaufen, bitte melden Sie sich erneut an, um fortzufahren."
+      unauthenticated: "Sie müssen sich anmelden oder sich anmelden, bevor Sie fortfahren."
+      unconfirmed: "Sie müssen Ihr Konto bestätigen, bevor Sie fortfahren."
+    mailer:
+      confirmation_instructions:
+        subject: "Bestätigungshinweise"
+      reset_password_instructions:
+        subject: "Anweisungen zur Passwort-Zurücksetzung;"
+      unlock_instructions:
+        subject: "Unlock-Anweisung"
+    omniauth_callbacks:
+      failure: "Sie konnten nicht authentifiziert werden %{kind} because \"%{reason}\"."
+      success: "Erfolgreich authentifiziert von %{kind} Konto."
+    passwords:
+      no_token: "Auf diese Seite können Sie nur zugreifen, wenn Sie durch eine Passwort-Reset Mail hingeleitet wurden. Stellen Sie bitte ggf. sicher, dass Sie die vollständige URL verwenden."
+      send_instructions: "Sie erhalten in wenigen Minuten eine E-Mail mit Anweisungen, wie Sie Ihr Passwort zurücksetzen können."
+      send_paranoid_instructions: "Wenn Ihre E-Mail-Adresse in unserer Datenbank existiert, erhalten Sie in wenigen Minuten einen Passwort-Wiederherstellungs-Link an Ihrer E-Mail-Adresse."
+      updated: "Ihr Kennwort wurde erfolgreich geändert. Sie sind jetzt angemeldet"
+      updated_not_active: "Ihr Kennwort wurde erfolgreich geändert."
+    registrations:
+      destroyed: "Auf Wiedersehen! Ihr Konto wurde erfolgreich gelöscht. Wir hoffen, Sie bald wieder zu sehen."
+      signed_up: "Herzlich willkommen! Sie haben sich erfolgreich angemeldet."
+      signed_up_but_inactive: "Sie haben sich erfolgreich angemeldet. Allerdings konnten wir Sie nicht vollständig anmelden, weil Ihr Konto noch nicht aktiviert ist."
+      signed_up_but_locked: "Sie haben sich erfolgreich angemeldet. Allerdings konnten wir Sie nicht vollständig anmelden, weil Ihr Konto gesperrt ist."
+      signed_up_but_unconfirmed: "Eine Nachricht mit einem Bestätigungslink wurde an Ihre E-Mail-Adresse gesendet. Bitte öffnen Sie den Link, um Ihr Konto zu aktivieren."
+      update_needs_confirmation: "Sie haben Ihr Konto erfolgreich aktualisiert, aber wir müssen Ihre neue E-Mail-Adresse bestätigen. Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um die Bestätigung Ihrer neuen E-Mail-Adresse abzuschließen."
+      updated: "Sie haben Ihr Profil erfolgreich eingerichtet."
+    sessions:
+      signed_in: "Erfolgreiche Anmeldung"
+      signed_out: "Erfolgreiche Abmeldung."
+      new:
+        header: "Einloggen"
+        email: "Email"
+        password: "Passwort"
+        sign_in_btn: "Einloggen"
+        forgot_password_link: "Haben Sie Ihr Passwort vergessen?"
+        receive_instructions: "Sie haben keine Bestätigungsanweisungen erhalten?"
+        receive_unlock: "Sie haben keine Anweisungen zum Entsperren erhalten?"
+    unlocks:
+      send_instructions: "Sie erhalten eine E-Mail mit Anweisungen darüber, wie Sie Ihr Konto in wenigen Minuten entsperren können."
+      send_paranoid_instructions: "Falls Ihr Konto vorhanden ist, erhalten Sie eine E-Mail mit Anweisungen darüber, wie Sie es in ein paar Minuten entsperren können."
+      unlocked: "Ihr Konto wurde erfolgreich freigeschaltet. Bitte einloggen, um fortzufahren."
+  errors:
+    messages:
+      already_confirmed: "Wurde bereits bestätigt, bitte melden Sie sich an"
+      confirmation_period_expired: "Muss innerhalb von %{period} bestätigt werden. Bitte fordern Sie eine neue an."
+      expired: "Ist abgelaufen, bitte eine neue anfordern"
+      not_found: "nicht gefunden"
+      not_locked: "nicht blockiert"
+      not_saved:
+        one: "Ein Fehler hat das Speichern diese Konto verhindert:"
+        other: "%{count} hat das Speichern diese Konto verhindert:"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            password:
+              too_short:
+                one: "Zu kurz! Ein Passwort muss aus mindestens 1 Zeichen bestehen, einschließlich einem Kleinbuchstaben, einem Großbuchstaben und einer Ziffer."
+                other: "Zu kurz! Ein Passwort muss aus mindestens %{count} Zeichen bestehen, einschließlich einem Kleinbuchstaben, einem Großbuchstaben und einer Ziffer."

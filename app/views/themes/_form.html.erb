@@ -1,0 +1,42 @@
+<% if @theme.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@theme.errors.count, "error") %> prohibited this service from being saved:</h2>
+    <ul>
+      <% @theme.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% I18n.available_locales.each do |locale| %>
+  <%= f.globalize_fields_for locale do |ff| %>
+    <div class="form-group">
+      <%= f.label :name, t('themes.form.theme_name') + ' ' + t('locales.'+locale.to_s), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_field :name, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="form-group">
+  <%= f.label :services, t('services.services'), class: "control-label col-xs-2" %>
+  <div class="col-xs-8">
+    <%= f.select :theme_services, options_for_select(Service.all.map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.theme_services.includes(:service).map{|a| a.service.id} ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-xs-2 col-xs-offset-2">
+    <% if @theme.persisted? %>
+      <%= link_to theme_path(@theme), method: :delete, remote: false, class: 'btn btn-default', data: { confirm: t('commons.are_you_sure') } do %>
+      <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-xs-6 text-right">
+    <%= link_to t('commons.cancel'), themes_path, class: "btn btn-default"%>
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+  </div>
+</div>

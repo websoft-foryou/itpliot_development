@@ -1,0 +1,66 @@
+<div class="row">
+  <div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="card-container">
+      <h3><%= t('export_data.export_customer_data') %></h3>
+
+
+      <%= form_tag(download_export_data_path, method: "get") do %>
+        <%= label_tag :company_information, style: "padding-left:0;" do %>
+          <%= check_box_tag :company_information, true, false%>
+          <%= t("companies.company_information")%>
+        <% end %>
+        <%= label_tag :service_sets, style: "padding-left:0;" do %>
+          <%= check_box_tag :service_sets, true, false%>
+          <%= t("services.service_sets")%>
+        <% end %>
+        <%= label_tag :invoices, style: "padding-left:0;" do %>
+          <%= check_box_tag :invoices, true, false%>
+          <%= t("invoice.title")%>
+        <% end %>
+        <%= label_tag :users, style: "padding-left:0;" do %>
+          <%= check_box_tag :users, true, false%>
+          <%= t("users.users")%>
+        <% end %>
+        <%= label_tag :company_members, style: "padding-left:0;" do %>
+          <%= check_box_tag :company_members, true, false%>
+          <%= t("company_users.title")%>
+        <% end %>
+        <div style="text-align: right;"><%= submit_tag(t('export_data.download'), id: 'btn-download', disabled: true, class: "btn btn-primary") %></div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= t('export_data.download_dataset') %>?</h5>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <%= label_tag :password, t('users.password'), class: "control-label col-sm-3 col-xs-12 p-r-none" %>
+                  <div class="col-sm-9 col-xs-12"><%= password_field_tag :password, nil, class: "form-control" %></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="btn-yes" type="button" class="btn btn-primary"><%= t('commons._yes') %></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('commons._no') %></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default" style="padding: 10px;">
+  <h4><%= t('commons.logs') %></h4>
+  <div>
+    <% @logs.each do |log| %>
+      <p>
+        <%= t('export_data.log_description', time: log.created_at, user_name: log.user.present? ? log.user.name : t('export_data.deleted_user'), user_id: log.user_id, dataset: log.description.present? ? log.description : t('export_data.a_dataset')) %>
+      </p>
+    <% end %>
+  </div>
+</div>
+

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>itpilot</title>
+  <%= stylesheet_link_tag    "widgets/v1/layout", :media => "all" %>
+  <%= yield :header_scripts %>
+  <%= javascript_include_tag "widgets/v1/layout" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div id="loading-overlay"></div>
+  <section id="main-content">
+    <section class="wrapper">
+      <%= flash_messages %>
+      <%= yield %>
+    </section>
+  </section>
+</body>
+</html>

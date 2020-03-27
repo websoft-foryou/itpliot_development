@@ -1,0 +1,26 @@
+<%= render partial: "/evaluations/shared/service_set_selector" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render partial: "/evaluations/shared/status_menu", object: @evaluation, as: :evaluation %>
+  </div>
+</div>
+
+<%= render partial: "/evaluations/shared/status_processes", object: @evaluation, as: :evaluation %>
+
+<div class="row">
+  <div class="col-md-4"><h4><%= t('processes.processes') %></h4></div>
+  <div class="col-md-8">
+    <div class="pull-right">
+      
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="list-group" id="list_resellers">
+      <%= render partial: "/evaluation_processes/evaluation_process", collection: @evaluation.evaluation_processes, as: :evaluation_process %>
+    </div>
+  </div>
+</div>

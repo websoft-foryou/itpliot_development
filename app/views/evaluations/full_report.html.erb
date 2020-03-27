@@ -1,0 +1,380 @@
+<%#= javascript_include_tag 'lib/jquery.dataTables.min.js' %>
+<%#= javascript_include_tag 'lib/dataTables.fixedColumns.min.js' %>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('evaluations.status_menu.dashboard'), dashboard_customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><i class="fa fa-table"></i><%= link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %> </li>
+</ol>
+
+<div class="row">
+  <div class="col-md-4"><h3><%= params[:report].present? ? t("evaluations.top_20_by.#{params[:report]}") : t('full_report.services') %></h3></div>
+  <div class="col-md-4 text-center">
+    <% if params[:report] && @evaluation_results.any? %>
+      <%= link_to "#", class: 'btn btn-default m-t-small', id: "view_chart_btn" do %>
+        <%= t('commons.view_chart') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-4 text-right">
+    <% if !@customer.is_customer? || @customer.premium? %>
+      <%= link_to full_report_customer_evaluation_path(current_customer, @evaluation, format: :pdf, report: params[:report], order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small', target: '_blank' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to full_report_customer_evaluation_path(current_customer, @evaluation, format: :csv, report: params[:report], order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+    <% else %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+      <p class="help-block">
+         <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+      </p>
+    <% end %>
+  </div>
+</div>
+
+<section class="panel" style="/*max-height: calc(100vh - 266px);*/ margin-bottom: 0;">
+  <div class="table-responsive" style="/*max-height: inherit;*/">
+    <table class="table table-simple table-bordered" id="full_report_eval_column">
+      <thead>
+        <tr class="captbl sort">
+          <td colspan="3"><%= t('full_report.service') %></td><!--number/name/cost-->
+          <td class="ncol_3 tggable" colspan="2"><div class="toggle_column">&laquo;</div></td><!--cloud-->
+          <td class="ncol_4 tggable" colspan="2"><div class="toggle_column">&laquo;</div></td><!--vendor=supplier-->
+          <td class="ncol_44 tggable" colspan="2"><div class="toggle_column">&laquo;</div></td><!--distributor-->
+
+          <td colspan="8" class="ncol_5 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.service_attributes') %>
+            </span>
+          </td><!--server/appliances/users/gbreserved/gbused-->
+
+          <td colspan="2" class="ncol_6 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.supporting_services') %>
+            </span>
+          </td><!--depenant/depending-->
+
+          <td colspan="4" class="ncol_7 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.cost_per_month') %>
+            </span>
+          </td><!--capex/opex-->
+
+          <td colspan="4" class="ncol_8 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.support_mountly_hours') %>
+            </span>
+          </td><!--hours extern/intern-->
+
+          <td colspan="2" class="ncol_9 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.recovery_time') %><br/>
+              <%= t('full_report.in_hours_max') %>
+            </span>
+          </td><!--service up-->
+
+          <td class="ncol_10 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.direct_impact_on_client_relationship') %>
+            </span>
+          </td><!--impact-->
+          <td  class="ncol_11 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.direct_impact_on_revenue_per_day_of_service_outage') %>
+            </span>
+          </td><!--revenue-->
+          <td  class="ncol_12 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.planned_enhancements') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'enhancements', params[:report]) %>
+            </span>
+          </td><!--enhancements-->
+          <td class="ncol_13 tggable">
+            <div class="toggle_column">&laquo;</div>
+            <span>
+              <%= t('full_report.future_strategy') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'future_strategy', params[:report]) %>
+            </span>
+          </td><!--strategy-->
+        </tr>
+
+        <tr class="captbl sort" style="height: 78px;">
+          <td style="min-width:50px;">ID
+            <%= full_report_actions(current_customer.id, @evaluation.id, 'id', params[:report]) %>
+          </td><!--number-->
+          <td style="min-width:300px;"><%= t('full_report.name') %>
+            <%#= full_report_actions(current_customer.id, @evaluation.id, 'name', params[:report]) %>
+          </td><!--name-->
+          <td style="min-width:300px;">
+            <%= t('full_report.theme') %>
+            <%= full_report_actions(current_customer.id, @evaluation.id, 'theme', params[:report]) %>
+          </td><!--theme-->
+          <td class="ncol_3" colspan="2"><!--cloud current-->
+            <span><%= t('full_report.cloud_service') %></span>
+          </td>
+          <td class="ncol_4" colspan="2"><!--vendor=supplier current-->
+            <span><%= t('full_report.supplier') %></span>
+          </td>
+          <td class="ncol_44" colspan="2"><!--distributor current-->
+            <span><%= t('full_report.vendor') %></span>
+          </td>
+          <td class="ncol_5" colspan="2"><!--severr current-->
+            <span><%= t('full_report.servers') %></span>
+          </td>
+          <td class="ncol_5" colspan="2"><!--appliances current-->
+            <span><%= t('full_report.appliances') %></span>
+          </td>
+          <td class="ncol_5" colspan="2"><!--users count current-->
+            <span><%= t('full_report.users') %></span>
+          </td>
+          <td class="ncol_5"><!--gb reserved current-->
+            <span><%= t('full_report.gb_reserved') %></span>
+          </td>
+          <td class="ncol_5"><!--gb used current-->
+            <span><%= t('full_report.gb_used') %></span>
+          </td>
+          <td class="ncol_6"><!--dependant current-->
+            <span><%= t('full_report.dependant') %></span>
+          </td>
+          <td class="ncol_6"><!--depending current-->
+            <span><%= t('full_report.depending') %></span>
+          </td>
+          <td class="ncol_7" colspan="2"><!--capex current-->
+            <span>Capex</span>
+          </td>
+          <td class="ncol_7" colspan="2"><!--opex current-->
+            <span>Opex</span>
+          </td>
+          <td  class="ncol_8" colspan="2"><!--internal current-->
+            <span><%= t('full_report.internal')%></span>
+          </td>
+          <td  class="ncol_8" colspan="2"><!--external current-->
+            <span><%= t('full_report.external') %></span>
+          </td>
+          <td  class="ncol_9"><!--hours max recovery time-->
+            <span>
+              <%= t('full_report.needed') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'recovery_time', params[:report]) %>
+            </span>
+          </td>
+          <td  class="ncol_9"><!--hours max guarenteed recovery time-->
+            <span>
+              <%= t('full_report.guaranteed') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'guaranteed_recovery_time', params[:report]) %>
+            </span>
+          </td>
+          <td  class="ncol_10"><!--impact current-->
+            <span>
+              <%= t('full_report.level') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'impact_name', params[:report]) %>
+            </span>
+          </td>
+          <td class="ncol_11"><!--failure_impact per day current-->
+            <span>
+              <%= t('full_report.eur_max') %>
+              <%= full_report_actions(current_customer.id, @evaluation.id, 'failure_impact_per_day', params[:report]) %>
+            </span>
+          </td>
+          <td class="ncol_12"><!--enhancements current-->
+          </td>
+          <td class="ncol_13"><!--future strategy current-->
+          </td>
+        </tr>
+
+        <tr class="captbl sort">
+          <td></td><!--number-->
+          <td></td><!--name-->
+          <td></td><!--theme-->
+          <td class="ncol_3"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'cloud_service', params[:report]) %></td><!--cloud current-->
+          <td class="ncol_3"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_cloud_service', params[:report]) %></td><!--cloud plannded-->
+          <td class="ncol_4"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'supplier', params[:report]) %></td><!--vendor=supplier current-->
+          <td class="ncol_4"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_supplier', params[:report]) %></td><!--vendor=supplier planned-->
+          <td class="ncol_44"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'distributor', params[:report]) %></td><!--distributor current-->
+          <td class="ncol_44"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_distributor', params[:report]) %></td><!--distributor planned-->
+          <td class="ncol_5"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'servers_count', params[:report]) %></td><!--severr current-->
+          <td class="ncol_5"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_servers_count', params[:report]) %></td><!--severr planned-->
+          <td class="ncol_5"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'appliances_count', params[:report]) %></td><!--appliances current-->
+          <td class="ncol_5"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_appliances_count', params[:report]) %></td><!--appliances planned-->
+          <td class="ncol_5"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'users_count', params[:report]) %></td><!--users count current-->
+          <td class="ncol_5"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_users_count', params[:report]) %></td><!--users count planned-->
+          <td class="ncol_5"><%= full_report_actions(current_customer.id, @evaluation.id, 'gb_reserved', params[:report]) %></td><!--gb reserved current-->
+          <td class="ncol_5"><%= full_report_actions(current_customer.id, @evaluation.id, 'gb_used', params[:report]) %></td><!--gb used current-->
+          <td class="ncol_6"><%= full_report_actions(current_customer.id, @evaluation.id, 'result_dependant_services_count', params[:report]) %></td><!--dependant current-->
+          <td class="ncol_6"><%= full_report_actions(current_customer.id, @evaluation.id, 'result_depending_services_count', params[:report]) %></td><!--depending current-->
+          <td class="ncol_7"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'capex', params[:report]) %></td><!--capex current-->
+          <td class="ncol_7"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_capex', params[:report]) %></td><!--capex planned-->
+          <td class="ncol_7"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'opex', params[:report]) %></td><!--opex current-->
+          <td class="ncol_7"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_opex', params[:report]) %></td><!--opex planned-->
+          <td class="ncol_8"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'hours_intern', params[:report]) %></td><!--internal current-->
+          <td class="ncol_8"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_hours_intern', params[:report]) %></td><!--internal planned-->
+          <td class="ncol_8"><span><%= t('full_report.current') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'hours_extern', params[:report]) %></td><!--external current-->
+          <td class="ncol_8"><span><%= t('full_report.planned') %></span><%= full_report_actions(current_customer.id, @evaluation.id, 'planned_hours_extern', params[:report]) %></td><!--external planned-->
+          <td class="ncol_9"></td><!--hours max needed-->
+          <td class="ncol_9"></td><!--hours max guaranteed-->
+          <td class="ncol_10"></td><!--impact current-->
+          <td class="ncol_11"></td><!--failure_impact per day current-->
+          <td class="ncol_12"></td><!--enhancements current-->
+          <td class="ncol_13"></td><!--future strategy current-->
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: '/evaluation_results/evaluation_result_full', collection: @evaluation_results, as: :evaluation_result %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-center"><%= t('full_report.sum') %></td>
+          <td class="ncol_3"></td>
+          <td class="ncol_3"></td>
+          <td class="ncol_4"></td>
+          <td class="ncol_4"></td>
+          <td class="ncol_44"></td>
+          <td class="ncol_44"></td>
+
+          <!--server--><!--appliances--><!--users--><!--gb reserved--><!--gb used-->
+          <td class="ncol_5"></td>
+          <td class="ncol_5"></td>
+          <td class="ncol_5"></td>
+          <td class="ncol_5"></td>
+          <td class="ncol_5"></td>
+          <td class="ncol_5"></td>
+          <td class="ncol_5"><%= format_num(@evaluation_results.map(&:gb_reserved).compact.sum) %></td>
+          <td class="ncol_5"><%= format_num(@evaluation_results.map(&:gb_used).compact.sum) %></td>
+
+          <!--depenant/depending-->
+          <td class="ncol_6"></td>
+          <td class="ncol_6"></td>
+
+          <!--capex/opex-->
+          <td class="ncol_7 nowrap"><%= format_num(@evaluation_results.map(&:capex).compact.sum, '€') %></td>
+          <td class="ncol_7 nowrap"><%= format_num(@evaluation_results.map(&:planned_capex).compact.sum, '€') %></td>
+          <td class="ncol_7 nowrap"><%= format_num(@evaluation_results.map(&:opex).compact.sum, '€') %></td>
+          <td class="ncol_7 nowrap"><%= format_num(@evaluation_results.map(&:planned_opex).compact.sum, '€') %></td>
+
+          <!--hours extern/intern-->
+          <td class="ncol_8"><%= format_num(@evaluation_results.map(&:hours_intern).compact.sum) %></td>
+          <td class="ncol_8"><%= format_num(@evaluation_results.map(&:planned_hours_intern).compact.sum) %></td>
+          <td class="ncol_8"><%= format_num(@evaluation_results.map(&:hours_extern).compact.sum) %></td>
+          <td class="ncol_8"><%= format_num(@evaluation_results.map(&:planned_hours_extern).compact.sum) %></td>
+
+          <!--service up hours-->
+          <td class="ncol_9"></td>
+          <td class="ncol_9"></td>
+          <!--direct impact-->
+          <td class="ncol_10"></td>
+          <td class="ncol_11 nowrap"></td>
+
+          <!--enhancements-->
+          <td class="ncol_12"></td>
+          <!--strategy-->
+          <td class="ncol_13"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <br/><br/>
+  </div>
+</section>
+
+
+<% if params[:report] && @evaluation_results.any? %>
+
+  <section class="panel" style="margin-top: 30px;">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-7 m-b-large">
+          <div class="chart-container">
+            <canvas id="bar_chart_canvas"></canvas>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <canvas id="pie_chart_canvas" style="max-width:500px; max-height:500px; margin:30px auto 60px;"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <%= content_for :scripts do %>
+      <script>
+
+        var baroptions = {
+          maintainAspectRatio: true,
+          legend: {display: false},
+          title: {
+            display: true,
+            text: '<%=raw t("evaluations.top_20_by.#{params[:report]}") %>'
+          },
+          scales: {
+            yAxes: [{
+              scaleLabel: {display: true, labelString: "<%= t("evaluations.top_20_by_title.#{params[:report]}") %>", fontColor: '#555555', fontSize: 13},
+              stacked: true,
+              gridLines: {display: true,color: "rgba(255,99,132,0.2)"}
+            }],
+            xAxes: [{
+              scaleLabel: {display: true, labelString: "IT Services", fontColor: '#555555', fontSize: 13},
+              gridLines: {display: false}
+            }]
+          },
+          animation: {
+            onComplete: function() {
+                saveGraphResource("<%=@customer.id%>","<%=@evaluation.id%>","<%=params[:report]%>",'bar',canvas_bar.toDataURL('image/jpeg'));
+            }
+          }
+        };
+
+        var pieoptions = {
+          legend: {display: true},
+          responsive: true,
+          animation: {
+            onComplete: function() {
+                saveGraphResource("<%=@customer.id%>","<%=@evaluation.id%>","<%=params[:report]%>",'pie',canvas_pie.toDataURL('image/jpeg'));
+            }
+          }
+        }
+
+
+        var labels = <%=raw @evaluation_results.map{|a| "#{a.cloned_index[1..-1]} #{a.service.code} #{truncate(a.service.name, length: 25)}"} %>;
+        var graphdataset = <%=raw @evaluation_results.map{|a| a.send(params[:report]).to_f} %>;
+        var colors = ["#56E2CF","#56AEE2","#5668E2","#8A56E2","#CF56E2","#E256AE","#E25668","#E22F05","#E28203","#E2B869","#E2D011","#ACE232","#28E213","#48E2D2","#81C5E2","#2982E2","#AA88E2","#3458E2","#B362E2","#E2BDE2","#E248AB"]
+
+        var barChartData = {
+          labels : labels,
+          datasets : [
+            {
+              backgroundColor : colors,
+              data : graphdataset
+            }
+          ]
+        }
+
+        var pieChartData = {
+          labels: labels,
+          datasets: [{data: graphdataset, backgroundColor:colors}]
+        };
+
+        var canvas_bar = document.getElementById("bar_chart_canvas");
+        var myBarChart = new Chart(canvas_bar, { type: 'bar', data: barChartData, options: baroptions });
+        var canvas_pie = document.getElementById("pie_chart_canvas");
+        var myPieChart = new Chart(canvas_pie,{ type: 'pie', data: pieChartData, options: pieoptions });
+
+
+      </script>
+  <% end %>
+
+<% end %>
+
+

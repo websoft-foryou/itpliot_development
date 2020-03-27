@@ -1,0 +1,33 @@
+<div class="row">
+
+  <% if current_company.present? && current_company.location.present? %>
+    <%= dashboard_step_box(edit_customer_path(current_company), t('users.invitation.basic_info.company_profile'), 'fa-building','completed',t('users.invitation.basic_info.completed')) %>
+  <% elsif current_user.accept_terms %>
+    <%= dashboard_step_box(step2_homes_path, t('users.invitation.basic_info.company_profile'), 'fa-building','incomplete',t('users.invitation.basic_info.incomplete')) %>
+  <% else %>
+    <%= dashboard_step_box('', t('users.invitation.basic_info.company_profile'), 'fa-building','closed',t('users.invitation.basic_info.closed')) %>
+  <% end %>
+
+  <% if current_company.present? && current_company.location.present? && current_company.company_branches.any? %>
+    <%= dashboard_step_box(customer_customer_branches_path(current_company), t('users.invitation.basic_info.company_locations'), 'fa-road','completed',t('users.invitation.basic_info.completed')) %>
+  <% elsif current_company.present? && current_company.location.present? %>
+    <%= dashboard_step_box(step3_homes_path(), t('users.invitation.basic_info.company_locations'), 'fa-road','incomplete',t('users.invitation.basic_info.incomplete')) %>
+  <% else %>
+    <%= dashboard_step_box('#', t('users.invitation.basic_info.company_locations'), 'fa-road','closed',t('users.invitation.basic_info.closed')) %>
+  <% end %>
+
+  <% if current_company.present? && current_company.location.present? && current_company.company_branches.any? %>
+    <%= dashboard_step_box(members_path(), t('commons.users'), 'fa-users','',t('users.count_users',count: current_company.all_users.count)) %>
+    <%= dashboard_step_box(customer_evaluations_path(current_company), t('evaluations.service_sets'), 'fa-list-ul','',t('evaluations.count_service_sets',count: current_company.customer_evaluations.count)) %>
+  <% end %>
+
+  <% if current_company.present? %>
+    <%= dashboard_step_box(upgrade_customer_path(current_company), t("upgrade.title"), 'fa-credit-card', '', current_company.premium? ? t('dashboard.using_premium_plan') : "Freemium") %>
+  <% end %>
+
+  <%= dashboard_box(new_service_requests_path(), t('commons.it_service_request'), 'fa-file-o') %>
+  <%= dashboard_box(dynamic_page_path("xyfuywqz"), t('commons.help'), 'fa-question-circle') %>
+
+
+
+</div>

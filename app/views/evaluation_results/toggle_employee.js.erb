@@ -1,0 +1,14 @@
+<% if @act %>
+	$("#<%= params[:activity]%>_<%= @employee.id%>_<%= @evaluation_result.id%>").html("<%=j yes_no_check(@employee_evaluation_result.send(@act)) %>")
+  $("#service_graph_employee_<%= @employee.id%>").html("<%=j render partial: '/resources/employee_graph', object: @evaluation, as: :evaluation, locals: {employee_id: @employee.id} %>")
+  window.drawPieResource($("#employee_activity_graph_<%= @employee.id%>"))
+  $("#tab_aggregated").html("<%=j render partial: '/resources/index_tabs/aggregated' %>");
+  $("#tab_fte").html("<%=j render partial: '/resources/index_tabs/fte' %>");
+
+  <%  if @employee_evaluation_result.has_any_activity? %>
+    $("#overview_<%= @employee.id%>_<%= @evaluation_result.id%>").html('<i class="fa fa-check text-success"></i>')
+  <% else %>
+    $("#overview_<%= @employee.id%>_<%= @evaluation_result.id%>").html('<i class="fa fa-minus text-muted"></i>')
+  <% end %>
+
+<% end %>

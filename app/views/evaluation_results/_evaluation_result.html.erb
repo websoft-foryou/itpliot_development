@@ -1,0 +1,20 @@
+<div class="list-group-item has_hidden_hover" style="min-height:65px;">
+  <div class="row">
+    <div class="col-sm-4">
+      <%= link_to customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result) do %>
+        <%= evaluation_result.service.code%><%= evaluation_result.cloned_index %> <%= evaluation_result.service.name %>
+      <% end %>
+      <div class="btn-bar show_hidden">
+        <%= link_to t("commons.view"), customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result), class: "btn btn-xs btn-default btn-xs-custom" %>
+        <% unless evaluation_result.evaluation.is_published? %>
+          <%= link_to t("commons.edit"), edit_customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result), class: "btn btn-xs btn-default btn-xs-custom" %>
+          <%= link_to t("evaluation_results.clone"), clone_customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result), class: "btn btn-xs btn-default btn-xs-custom", method: :post %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <%= evaluation_result.evaluation_service.service.themes.map(&:name).join(", ")%>
+    </div>
+    <div class="col-sm-1"><small><%= result_status_info(evaluation_result) %></small></div>
+  </div>
+</div>

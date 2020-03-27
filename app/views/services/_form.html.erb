@@ -1,0 +1,90 @@
+<% if @service.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= t('commons.prevent_save_error', count: @service.errors.count) %>:</h2>
+    <ul>
+      <% @service.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<div class="form-group">
+  <%= f.label :code, t('services.id_number'), class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.text_field :code, class: "form-control" %>
+  </div>
+  <%= f.label :position, t('services.position'),class: "control-label col-xs-2" %>
+  <div class="col-xs-3">
+    <%= f.number_field :position, min: 0, class: "form-control" %>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :owner_id, t('services.owner'), class: "control-label col-xs-2" %>
+  <div class="col-xs-8">
+    <%= f.select :owner_id, Company.all.map{|a| [a.name, a.id] }, {:prompt => "Core"}, class: "form-control" %>
+  </div>
+</div>
+
+<%= f.hidden_field :is_disp, value: @service.is_disp ? @service.is_disp : true %>
+
+<% I18n.available_locales.each do |locale| %>
+  <%= f.globalize_fields_for locale do |ff| %>
+    <hr/>
+    <div class="form-group">
+       <div class="col-xs-2 text-right"><strong><%= t('locales.'+locale.to_s) %></strong></div>
+    </div>
+    <div class="form-group">
+      <%= ff.label :name, t('commons.name'), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_field :name, class: "form-control remote_jsvalid" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= ff.label :purpose, t('services.purpose'), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_field :purpose, class: "form-control remote_jsvalid" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= ff.label :product_examples, t('services.product_examples'), class: "control-label col-xs-2" %>
+      <div class="col-xs-8">
+        <%= ff.text_field :product_examples, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+
+<% unless f.object.new_record?%>
+  <hr/>
+  <div class="form-group">
+    <%= f.label :dependings, t('services.supporting_needed'), class: "control-label col-xs-2" %>
+    <div class="col-xs-8">
+      <%= f.select :dependings, options_for_select(Service.where('id <> (?)',f.object.id).order('LENGTH(code), code').map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.dependings.map(&:id) ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :inverse_dependings, t('services.supports_following'), class: "control-label col-xs-2" %>
+    <div class="col-xs-8">
+      <%= f.select :inverse_dependings, options_for_select(Service.where('id <> (?)',f.object.id).order('LENGTH(code), code').map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.inverse_dependings.map(&:id) ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+    </div>
+  </div>
+<% end %>
+
+<hr/>
+<div class="form-group">
+  <div class="col-xs-4 col-xs-offset-2">
+    <% if f.object.persisted? %>
+      <%= link_to service_path(@service), method: :delete, remote: false, class: "btn btn-default", data: {confirm: t('commons.are_you_sure')} do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-xs-4 text-right">
+    <%=link_to t('commons.cancel'), services_path(), class: "btn btn-default" %>
+    <%= f.submit t('commons.save'), {class: "btn btn-primary", id: "service_form_submit", data: {'disable-with'=>t("commons.saving")} } %>
+  </div>
+</div>

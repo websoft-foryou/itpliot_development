@@ -1,0 +1,106 @@
+<%#= javascript_include_tag 'lib/jquery.dataTables.min.js' %>
+<%= javascript_include_tag 'lib/dataTables.fixedColumns.min.js' %>
+
+<%= render partial: "/evaluations/shared/service_set_selector" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render partial: "/evaluations/shared/status_menu", object: @evaluation, as: :evaluation %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="panel">
+      <div class="panel-body">
+        <ul id="eliteregister" class="four">
+          <li id="progress_tab_employees" class="active">
+            <%= t("progress_bar.resources.step1_title_#{@evaluation.status_name}")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.resources.step1_description_#{@evaluation.status_name}")%>" data-toggle="tooltip"></i>
+          </li>
+          <li id="progress_tab_resources">
+            <%= t("progress_bar.resources.step2_title_#{@evaluation.status_name}")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.resources.step2_description_#{@evaluation.status_name}")%>" data-toggle="tooltip"></i>
+          </li>
+          <li id="progress_tab_aggregated">
+            <%= t("progress_bar.resources.step3_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.resources.step3_description")%>" data-toggle="tooltip"></i>
+          </li>
+          <li id="progress_tab_fte">
+            <%= t("progress_bar.resources.step4_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.resources.step4_description")%>" data-toggle="tooltip"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <div class="panel">
+     <div class="panel-body">
+
+      <ul class="nav-tabs1 nav-tab-buttons1 row">
+          <li class="col-xs-3 text-center">
+            <!--a href="#tab_employees" data-toggle="tab"-->
+            <a href="<%= request.path  %>" >
+              <button role="button" class="btn btn-default  <%= 'btn-info' if !params[:tab].present? %>"><%= t("resources.tabs.employees_#{@evaluation.status_name}") %></button>
+            </a>
+          </li>
+        <li class="col-xs-3 text-center">
+          <!--a href="#tab_resources" data-toggle="tab" -->
+          <a href="<%= request.path + '?tab=resources' %>" >
+            <button role="button" class="btn btn-default <%= 'btn-info' if params[:tab].present? && params[:tab] == 'resources' %>"><%= t('resources.tabs.resources') %></button>
+          </a>
+        </li>
+        <li class="col-xs-3 text-center" >
+          <!--a href="#tab_aggregated" data-toggle="tab"-->
+          <a href="<%= request.path + '?tab=aggregate' %>" >
+            <button role="button" class="btn btn-default <%= 'btn-info' if params[:tab].present? && params[:tab] == 'aggregate' %>"><%= t('resources.tabs.aggregated') %></button>
+          </a>
+        </li>
+        <li class="col-xs-3 text-center">
+          <!--a href="#tab_fte" data-toggle="tab"-->
+          <a href="<%= request.path + '?tab=rte' %>">
+            <button role="button" class="btn btn-default <%= 'btn-info' if params[:tab].present? && params[:tab] == 'rte' %>"><%= t('resources.tabs.fte') %></button>
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content m-t-small">
+      <% if !params[:tab].present? %>
+        <div class="tab-pane active" id="tab_employees">
+         <%= render partial: "/resources/index_tabs/employees" %>
+       </div>
+
+      <% elsif params[:tab] == 'resources'%>
+        <div class="tab-pane active" id="tab_resources">
+          <%= render partial: "/resources/index_tabs/resources" %>
+        </div>
+       <% elsif params[:tab] == 'aggregate'%>
+        <div class="tab-pane active" id="tab_aggregated">
+          <%= render partial: "/resources/index_tabs/aggregated" %>
+        </div>
+       <% elsif params[:tab] == 'rte'%>
+        <div class="tab-pane active" id="tab_fte">
+          <%= render partial: "/resources/index_tabs/fte" %>
+        </div>
+       <% end %>
+      </div>
+
+     </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+

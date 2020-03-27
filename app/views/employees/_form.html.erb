@@ -1,0 +1,11 @@
+<%= f.text_field :current_first_name, class: "form-control", placeholder: t('users.first_name') %>
+<%= f.text_field :current_last_name, class: "form-control", placeholder: t('users.last_name') %>
+<%= f.radio_button :current_work_type, Employee::WORK_TYPES.index(:internal) %>
+<%= label :current_work_type_intern, t('employees.internal') %>
+&nbsp; &nbsp;
+<%= f.radio_button :current_work_type, Employee::WORK_TYPES.index(:external) %>
+<%= label :current_work_type_extern, t('employees.external') %>
+&nbsp; &nbsp;
+<%= f.number_field :current_monthly_hours, class: "form-control" %>
+<small><%= t('employees.hours') %></small>
+<%= f.submit t('commons.save'), class: "btn btn-xs btn-primary submit_btn" %>

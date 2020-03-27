@@ -1,0 +1,181 @@
+<div class="row" style="margin-bottom: 20px;">
+  <div class="col-md-8">
+    <h3 class="front-pannel iblock"><span class='text-muted'><%=t('evaluations.service_set_name')%>:</span><%=@evaluation.name%></h3>
+    <% unless @evaluation.is_published? %>
+      <%=link_to edit_customer_evaluation_path(@evaluation.customer, @evaluation), title: t('evaluations.edit_service_set') do %>
+        <i class="fa fa-edit fa-lg fa-active m-l"></i>
+      <% end %>
+      <% if @evaluation.is_sandbox? %>
+        <span class="label label-warning">sandbox</span>
+        <i class="fa fa-info-circle" title="<%= t("evaluations.sample_service_set_tooltip")%>" data-toggle="tooltip"></i>
+      <% end %>
+    <% end %>
+
+  </div>
+  <div class="col-md-4 m-t-small text-right">
+    <div class="btn-group history_button">
+      <div data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<%= t('evaluations.history') %>">
+        <i class="fa fa-history"></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item"><%= render partial: "/evaluations/shared/history", object: @evaluation, as: :evaluation %></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="status_pannel">
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <%= link_to customer_evaluation_path(evaluation.customer, evaluation) do %>
+      <div class="status-box <%= 'active' if params[:action]=='show'%>">
+        <h4><%= t('evaluations.status_menu.it_services') %></h4>
+        <div class="status">
+          <% if evaluation.is_published? %>
+            <i class="fa fa-eye fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.services_locked') %>
+          <% else %>
+            <i class="fa fa-pencil fa-lg fa-active"></i>
+            <% if @evaluation.evaluation_services.draft.empty?%>
+              <%= t('evaluations.status_menu.services_open_edit') %>
+            <% else %>
+              <%= t('evaluations.status_menu.services_open') %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <% if @evaluation.evaluation_services.draft.empty? %>
+      <%= link_to dashboard_customer_evaluation_path(evaluation.customer, evaluation) do %>
+        <div class="status-box <%= 'active' if params[:action]=='dashboard'%>">
+          <h4><%= t('evaluations.status_menu.dashboard') %></h4>
+          <div class="status">
+            <i class="fa fa-eye fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.dashboard_draft_status') %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <%= link_to '#', class: 'disabled' do %>
+        <div class="status-box <%= 'active' if params[:action]=='dashboard'%>">
+          <h4><%= t('evaluations.status_menu.dashboard') %></h4>
+          <div class="status">
+            <i class="fa fa-lock fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.dashboard_locked_status') %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <% if current_customer.premium? && @evaluation.evaluation_services.draft.empty? %>
+      <%= link_to customer_evaluation_resources_path(evaluation.customer, evaluation) do %>
+        <div class="status-box <%= 'active' if params[:controller]=='resources'%>">
+        <h4><%= t('evaluations.status_menu.resources') %></h4>
+        <% unless evaluation.is_published? %>
+          <p class="text-muted"><small><%= t("evaluations.status_menu.only_premium")%></small></p>
+        <% end %>
+         <div class="status">
+          <% if evaluation.is_published? %>
+            <i class="fa fa-eye fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.resources_open') %>
+          <% else %>
+            <i class="fa fa-pencil fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.resources_open_premium_html') %>
+          <% end %>
+        </div>
+        </div>
+      <% end %>
+    <% else %>
+      <%= link_to '#', class: 'disabled' do %>
+        <div class="status-box <%= 'active' if params[:controller]=='resources'%>">
+          <h4><%= t('evaluations.status_menu.resources') %></h4>
+          <% if @evaluation.evaluation_services.draft.empty? %>
+            <p class="text-muted"><small><%= t("evaluations.status_menu.only_premium")%></small></p>
+          <% end %>
+          <div class="status">
+            <% if @evaluation.evaluation_services.draft.empty? %>
+              <i class="fa fa-eye fa-lg fa-active"></i>
+              <%= t('evaluations.status_menu.resources_open_premium_html') %>
+            <% else %>
+              <i class="fa fa-lock fa-lg fa-active"></i>
+              <%= t('evaluations.status_menu.resources_locked') %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <% if evaluation.is_published? %>
+      <%=link_to '#', class: 'm-b-small disabled' do %>
+        <div class="status-box">
+          <h4><%= t('evaluations.status_menu.publish') %></h4>
+          <div class="status">
+            <i class="fa fa-check fa-lg fa-active"></i> &nbsp;
+            <%= t('evaluations.status_menu.service_set_is_closed') %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <% if current_customer.premium? && evaluation.can_be_published? %>
+        <%=link_to publish_customer_evaluation_path(evaluation.customer, evaluation), class: 'm-b-small', data: {confirm: t('evaluations.are_you_sure_cant_be_edited')} do %>
+          <div class="status-box">
+            <h4><%= t('evaluations.status_menu.publish') %></h4>
+            <p class="text-muted"><small><%= t("evaluations.status_menu.only_premium")%></small></p>
+            <div class="status">
+              <i class="fa fa-check fa-lg fa-active"></i>
+              <%= t('evaluations.status_menu.publish_open_premium_html') %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <%=link_to '#', class: 'm-b-small disabled',title: t('evaluations.you_can_publish_after_editing') do %>
+          <div class="status-box">
+            <h4><%= t('evaluations.status_menu.publish') %></h4>
+            <% if evaluation.can_be_published? %>
+              <p class="text-muted"><small><%= t("evaluations.status_menu.only_premium")%></small></p>
+            <% end %>
+            <div class="status">
+              <i class="fa fa-lock fa-lg fa-active"></i> &nbsp;
+              <% if evaluation.can_be_published? %>
+                <%= t('evaluations.status_menu.publish_open_premium_html') %>
+              <% else %>
+                <%= t('evaluations.status_menu.publish_locked') %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  </div>
+
+
+  <% if false #Will be used in the future, for now comment it out %>
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <%= link_to customer_evaluation_evaluation_processes_path(evaluation.customer, evaluation) do %>
+      <div class="status-box <%= 'active' if params[:controller]=='evaluation_processes'%>">
+        <h4><%= t('evaluations.status_menu.processes') %></h4>
+         <div class="status">
+          <% if evaluation.is_published? %>
+            <i class="fa fa-lock fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.processes_locked') %>
+          <% else %>
+            <i class="fa fa-unlock fa-lg fa-active"></i>
+            <%= t('evaluations.status_menu.processes_open') %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+</div>
+
+
+

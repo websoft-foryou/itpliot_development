@@ -1,0 +1,35 @@
+<div class="js_crud" data-new-button-text="Add New Address" data-property="location" data-max-children="1">
+  <%= f.fields_for :location do |ff|%>
+    <div class="children m-b">
+      <div class="form-group">
+        <%= ff.label :address, t('companies.form.address1')+"*", class: "control-label col-xs-3" %>
+        <div class="col-xs-9"><%= ff.text_field :address, placeholder: t('companies.form.address1_placeholder'), class: "form-control" %></div>
+      </div>
+      <div class="form-group">
+        <%= ff.label :address2, t('companies.form.address2'), class: "control-label col-xs-3" %>
+        <div class="col-xs-9"><%= ff.text_field :address2, placeholder: t('companies.form.address2_placeholder'), class: "form-control" %></div>
+      </div>
+      <div class="form-group">
+        <%= ff.label :zip, t('companies.form.zip')+"*", class: "control-label col-xs-3" %>
+        <div class="col-xs-9">
+          <%= ff.text_field :zip, class: "form-control", placeholder: "" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= ff.label :city, t('companies.form.city')+"*", class: "control-label col-xs-3" %>
+        <div class="col-xs-9">
+          <%= ff.text_field :city, class: "form-control", placeholder: "" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= ff.label :country, t('companies.form.country')+"*", class: "control-label col-xs-3" %>
+        <div class="col-xs-9">
+          <%= ff.select :country, Location::COUNTRIES, {}, {class: "form-control"}%>
+        </div>
+      </div>
+      <div class="form-group m-b-large">
+        <div class="col-xs-9 col-xs-offset-3"></div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,13 @@
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-share-alt"></i><%=link_to t('services.services'), services_path() %></li>
+  <li><%= t('services.add_new_service') %></li>
+</ol>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@service, url: services_path, validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f}  %>
+    <% end %>
+  </div>
+</div>

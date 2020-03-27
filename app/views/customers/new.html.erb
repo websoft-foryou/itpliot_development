@@ -1,0 +1,18 @@
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <% if @reseller %>
+    <li><i class="fa fa-users"></i><%= link_to t('partners.partners'), company_resellers_path(current_company.id) %></li>
+    <li><i class="fa fa-building"></i><%= link_to @reseller.name, company_reseller_path(current_company, @reseller) %></li>
+  <% else %>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+  <% end %>
+  <li><%= t('customers.add_new_customer') %></li>
+</ol>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@customer, url: customers_path(reseller_id: params[:reseller_id]), validate: true, html: {class: "form-horizontal"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f}  %>
+    <% end %>
+  </div>
+</div>

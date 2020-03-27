@@ -1,0 +1,22 @@
+<h1 class="text-success m-t-40 m-b-40"><%= t('users.error') %></h1>
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+    <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <%= link_to new_widgets_v1_registration_path(:role => params[:user][:role_type], :belong => params[:invitation_parent_company_id], :token => params[:token]) do %>
+          <button role="button" class="btn btn-default btn-info"><%= t("widgets.v1.back_btn") %></button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+<% end %>

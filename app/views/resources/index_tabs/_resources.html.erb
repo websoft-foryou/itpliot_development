@@ -1,0 +1,109 @@
+<section>
+  <div class="row">
+    <div class="col-md-4">
+      <%= link_to "#", class: 'btn btn-default m-t-small m-b-small', id: "view_chart_btn" do %>
+        <%= t('commons.view_chart') %>
+      <% end %>
+    </div>
+    <div class="col-md-8 text-right">
+      <% if !@customer.is_customer? || @customer.premium? %>
+        <%= link_to customer_evaluation_resources_path(current_customer, @evaluation, format: :pdf, type: :resources), class: 'btn btn-default m-t-small', target: '_blank' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+      <% else %>
+        <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+          <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+        <% end %>
+        <p class="help-block">
+          <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+        </p>
+      <% end %>
+    </div>
+  </div>
+  <div class="table-responsive" style="max-height: calc(100vh - 288px);">
+    <table id="resources_tbl132" class="table table-simple wauto">
+      <thead>
+      <tr class="captbl">
+        <td colspan="2"><%= t('full_report.service') %></td><!--number/name/cost-->
+        <td></td><!--cloud-->
+        <td colspan="2"><%= t('resources.aggregated.support_time') %></td><!--hours extern/intern-->
+
+        <% @ordered_employee_evaluations.each_with_index do |ee, employee_index| %>
+          <td colspan="12" class="<%= 'active' if (employee_index.even? == 0) %>">
+            <%= ee.employee_first_name %> <%= ee.employee_last_name %>
+            <% if @evaluation.is_draft? %>
+              <%= link_to "#", class: "pull-right btn btn-xs btn-default resource_edit_employee", data: {employee_id: ee.employee_id} do %>
+                <span class='open_txt'>&nbsp; <i class="fa fa-angle-double-right"></i> &nbsp;</span>
+                <span class="close_txt">&nbsp; <i class="fa fa-angle-double-left"></i> &nbsp;</span>
+              <% end %>
+            <% end %>
+          </td>
+        <% end %>
+
+      </tr>
+      <tr class="captbl">
+        <td style="width: 50px;">ID</td><!--number/name/cost-->
+        <td class="minimal-name-column"><%= t('full_report.name') %></td>
+        <td><%= t('full_report.cloud_service') %></td><!--cloud-->
+        <td><%= t('full_report.internal') %></td><!--hours extern/intern-->
+        <td><%= t('full_report.external') %></td>
+        <% @ordered_employee_evaluations.each_with_index do |ee, employee_index| %>
+          <td style="min-width:40px;" colspan="6" class="<%= 'active' if (employee_index.even? == 0) %>"><%= "#{ee.employee_monthly_hours} #{t('resources.abbr_hours')}" if ee.was_internal? %></td>
+          <td style="min-width:40px;" colspan="6" class="<%= 'active' if (employee_index.even? == 0) %>"><%= "#{ee.employee_monthly_hours} #{t('resources.abbr_hours')}" if ee.was_external? %></td>
+        <% end %>
+      </tr>
+
+      <tr>
+        <td></td><td></td><td></td><td></td><td></td>
+        <% @ordered_employee_evaluations.each_with_index do |ee, employee_index| %>
+          <% EmployeeEvaluationResult::ACTIVITY_TYPES.keys.each do |a|%>
+            <td style="min-width:38px; display:none" class="<%= 'active' if (employee_index.even? == 0) %> full-view employee_<%= ee.employee_id%>"><%= a.upcase %></td>
+          <% end %>
+          <td class="small-view employee_<%= ee.employee_id%>" colspan="12">
+            &nbsp;
+          </td>
+        <% end %>
+      </tr>
+
+      <%= render partial: "/resources/resource", collection: @evaluation.active_evaluation_results.includes(:service).order(:id), as: :evaluation_result %>
+      </thead>
+      <tbody>
+      <tr>
+        <td colspan="5" style="vertical-align:middle;">
+          <table class="tbl_small_centered">
+            <% Domain.order(:id).each do |d| %>
+              <tr>
+                <td class="text-center"><%= d.code %></td>
+                <td><%= t("employees.domains.#{d.code.downcase}", default: d.name) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+        <td style="display:none;"></td>
+        <td style="display:none;"></td>
+        <td style="display:none;"></td>
+        <td style="display:none;"></td>
+        <% @ordered_employee_evaluations.each_with_index do |ee, employee_index| %>
+          <td colspan="12" style="padding:0;" class="<%= 'active' if (employee_index.even? == 0) %>">
+            <div id="service_graph_employee_<%= ee.employee_id%>">
+              <%= render partial: "/resources/employee_graph", object: @evaluation, as: :evaluation, locals: {employee_id: ee.employee_id} %>
+            </div>
+          </td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+          <td style="display:none;"></td>
+        <% end %>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+</section>

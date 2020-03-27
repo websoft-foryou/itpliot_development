@@ -1,0 +1,20 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-md-4">
+      <% if @evaluation.is_published? %>
+        <%= evaluation_process.work_process.name %>
+      <% else %>
+        <%= link_to edit_customer_evaluation_evaluation_process_path(@evaluation.customer, @evaluation, evaluation_process), class: 'ablock' do %>
+          <%= evaluation_process.work_process.name %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-md-8">
+      <% evaluation_process.evaluation_process_results.includes(:evaluation_result).each do |result| %>
+        <div class="code_service_label <%= 'ignored' if result.evaluation_result.is_ignored? %> <%= 'deactivated' if result.evaluation_result.is_deactivated? %>" >
+          <%= result.evaluation_result.service.code %> <%= result.evaluation_result.service.name %> 
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

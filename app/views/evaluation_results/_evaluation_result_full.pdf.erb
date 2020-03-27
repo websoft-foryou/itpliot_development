@@ -1,0 +1,42 @@
+<tr class="page-break1">
+  <td><%= evaluation_result.service.code%></td>
+  <td class="left">
+    <%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name%>
+    <%= service_not_active_label(evaluation_result) %>
+  </td>
+  <td>
+    <%= evaluation_result.service.themes.map(&:name).join(", ")%>
+  </td>
+  <td><%= yes_no_value evaluation_result.cloud_service %></td>
+  <td><%= evaluation_result.supplier %></td>
+  <td><%= evaluation_result.distributor %></td>
+
+  <!--server--><!--appliances--><!--users--><!--gb reserved--><!--gb used-->
+  <td><%= evaluation_result.servers_count %></td>
+  <td><%= evaluation_result.appliances_count %></td>
+  <td><%= evaluation_result.users_count %></td>
+  <td><%= evaluation_result.gb_reserved %></td>
+  <td><%= evaluation_result.gb_used %></td>
+
+  <!--depenant/depending-->
+  <td><%= evaluation_result.result_dependant_services.size %></td>
+  <td><%= evaluation_result.result_depending_services.size %></td>
+  <!--capex/opex-->
+  <td class="nowrap"><%= format_num(evaluation_result.capex,'€') %></td>
+  <td class="nowrap"><%= format_num(evaluation_result.opex,'€') %></td>
+
+  <!--hours extern/intern-->
+  <td><%= format_num evaluation_result.hours_intern %></td>
+  <td><%= format_num evaluation_result.hours_extern %></td>
+  <!--service up hours-->
+  <td><%= evaluation_result.recovery_time %></td>
+  <td><%= evaluation_result.guaranteed_recovery_time %></td>
+  <!--direct impact-->
+  <td><%= t("evaluation_results.impact_types.type_#{evaluation_result.impact_name}") %></td>
+  <td class="nowrap"><%= format_num(evaluation_result.failure_impact_per_day,'€') %></td>
+
+  <!--enhancements-->
+  <td><%= evaluation_result.enhancements %></td>
+  <!--strategy-->
+  <td><%= evaluation_result.future_strategy %></td>
+</tr>

@@ -1,0 +1,43 @@
+<% disabled_link_class = @evaluation.is_draft? ? '' : 'disabled-link'%>
+<%
+  show_disabled ||= false
+  disabled_link_class = 'disabled-link' if show_disabled
+%>
+
+<% if evaluation_service.status_name == :ignored %>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :deactivated, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-close" aria-hidden="true"></i>
+  <% end %>
+  <button type="button" class="btn btn-sm btn-info" disabled >
+    <i class="fa fa-minus" aria-hidden="true"></i>
+  </button>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :active, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-check" aria-hidden="true"></i>
+    <%= t("commons.activate") %>
+  <% end %>
+
+<% elsif evaluation_service.status_name == :deactivated %>
+  <button type="button" class="btn btn-sm btn-danger" disabled>
+    <i class="fa fa-close" aria-hidden="true"></i>
+  </button>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :ignored, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-minus" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :active, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-check" aria-hidden="true"></i>
+    <%= t("commons.activate") %>
+  <% end %>
+
+<% elsif evaluation_service.status_name == :draft %>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :deactivated, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-close" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :ignored, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-minus" aria-hidden="true"></i>
+  <% end %>
+  <%= link_to( change_mass_customer_evaluation_path(current_customer.id, @evaluation.id, selected_service_ids: evaluation_service.id, status: :active, attribute: "evaluation_services"), :method => :post, class: "btn btn-sm btn-default #{disabled_link_class}") do %>
+    <i class="fa fa-check" aria-hidden="true"></i>
+    <%= t("commons.activate") %>
+  <% end %>
+
+<% end %>

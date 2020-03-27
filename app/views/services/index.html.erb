@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group pull-right m-b-small">
+            <%= link_to new_service_path(), class: "btn btn-info" do %>
+                <i class="fa fa-plus"></i> <%= t('services.add_new_service') %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <li><i class="fa fa-share-alt"></i><%= t('services.services') %></li>
+</ol>
+
+<%= form_tag services_path, remote: true, method: :get, id: "search_form", class: "form-horizontal" do %>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-7 m-b-sm">
+      <select id="order_service" name="order" class="single_select2 submit_on_select width_100">
+        <option value="name" <%= "selected='selected'" if @filters[:order] == "name" %>><%= t("commons.name")%></option>
+        <option value="code" <%= "selected='selected'" if @filters[:code] == "code" %>>ID</option>
+        <option value="position" <%= "selected='selected'" if @filters[:order] == "position" %>><%= t("services.position")%></option>
+      </select>
+    </div>
+    <div class="col-md-3 text-right m-b-sm">
+      <div class="pos-rlt">
+          <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_services", class: "observe form-control", placeholder: "#{t("commons.search")}..."  %>
+          <div class="search_input_icon"><i class="fa fa-search"></i></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="list-group">
+    <div class="list-group-item">
+      <div class="row">
+        <div class="col-md-1"><%= t('services.position') %></div>
+        <div class="col-md-1">ID</div>
+        <div class="col-md-1"><%= t('services.owner') %></div>
+        <div class="col-md-3"><%= t('commons.name') %></div>
+        <div class="col-md-4"><%= t('services.purpose') %></div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="portlet list-group" id="sortable_list" data-update-sort-url="<%= sort_all_services_path()%>">
+    <%= render partial: "/services/service", collection: @services %>  
+  </div>
+</div>
+<br />
+

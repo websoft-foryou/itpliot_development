@@ -1,0 +1,15 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-xs-6">
+      <%= link_to static_page.title, edit_static_page_path(static_page.uid, locale: static_page.locale), class: "btn-block" %>
+    </div>
+    <div class="col-xs-3">
+      <%= locales.map(&:upcase).join(", ")%>
+    </div>
+    <div class="col-xs-3 text-right">
+      <%= link_to dynamic_page_path(static_page.uid), target: :_blank do %>
+        <i class="fa fa-paperclip"></i>
+      <% end %>
+    </div>
+  </div>
+</div>

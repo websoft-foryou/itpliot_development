@@ -1,0 +1,40 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
+  <tr>
+    <td valign="top" class="bodyContent" mc:edit="body_content">
+    <br/>
+    <h2><%= t('devise.invitations.hello') %> <%= @resource.first_name %> <%= @resource.last_name %>,</h2><br/>
+    <% if @resource.invited_by.present? %>
+      <p>
+        <%= t('devise.invitations.you_have_an_invitation_html') %>
+        <%= t('devise.invitations.from') %> <strong><%= @resource.invited_by.name %></strong>
+        <strong><%= ', ' + @resource.invited_by.current_company.name if @resource.invited_by.companies.any? %></strong>
+      </p>
+    <% end %>
+    <p><%= t('devise.invitations.click_to_confirm') %></p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="bodyContent" mc:edit="body_content01" align="center">
+      <table border="0" cellpadding="0" cellspacing="0" width="260" class="emailButton">
+        <tr>
+            <td align="center" valign="middle" class="buttonContent">
+              <%= link_to accept_invitation_url(@resource, :invitation_token => @token), id: 'button_content_link' do %>
+                <span style="color:#FFFFFD !important;text-decoration:none !important;"><%= t('devise.invitations.confirm_account') %></span>
+              <% end %>
+            </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="bodyContent" mc:edit="body_content02">
+      <p><%= t('devise.invitations.not_inteded_info') %></p>
+      <p><%= t('devise.invitations.thank_you') %></p>
+      <% if @resource.invited_by.present? && !@resource.invited_by.is_admin? %>
+        <%= t('devise.invitations.best_regards_html', company_name: @resource.invited_by.current_company.name).html_safe %>
+      <% else %>
+        <%= t('devise.invitations.best_regards_html1', company_name: 'itpilot Team').html_safe %>
+      <% end %>
+    </td>
+  </tr>
+</table>

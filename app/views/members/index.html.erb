@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-12 text-right m-b-small">
+        <div class="btn-group">
+            <% if current_company && current_company.is_customer? %>
+                <%= link_to new_member_path(customer_id: current_company, addto: 1), class: "btn btn-info" do %>
+                    <i class="fa fa-plus"></i> <%= t('users.add_user') %>
+                <% end %>
+            <% elsif current_company && current_company.is_partner? %>
+                <%= link_to new_member_path(reseller_id: current_company, addto: 1), class: "btn btn-info" do %>
+                    <i class="fa fa-plus"></i> <%= t('users.add_user') %>
+                <% end %>
+            <% elsif current_user.is_admin? || (current_company && current_company.is_jvp?) %>
+                <%= link_to new_member_path, class: "btn btn-info" do %>
+                    <i class="fa fa-plus"></i> <%= t('users.add_user') %>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<%= breadcrumb(links: [{key: 'users', name: t('users.users')}]) %>
+<div class="row">
+    <div class="col-md-3 col-md-offset-9 text-right m-b-sm">
+        <%= form_tag members_path, remote: true, method: :get, id: "search_form", class: "form-horizontal" do%>
+            <div class="pos-rlt">
+                <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_customers", class: "observe form-control", placeholder: "#{t("commons.search")}..."  %>
+                <div class="search_input_icon"><i class="fa fa-search"></i></div>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+
+
+<div class="panel panel-default">
+    <div class="list-group">
+        <div class="list-group-item">
+             <div class="row header-list-group">
+                <div class="col-md-5"><%= t('users.user') %></div>
+                <div class="col-md-5"><%= t('users.profile') %></div>
+                <div class="col-md-2 text-right"></div>
+            </div>
+        </div> 
+    </div>
+    <div class="list-group" id="company_users_list">
+      <%= render partial: "/members/user", collection: @users, as: :user %>
+    </div>
+    <div id="pagination"><%= will_paginate @users %></div>
+</div>

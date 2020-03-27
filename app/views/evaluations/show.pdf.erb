@@ -1,0 +1,50 @@
+<div class="row m-b">
+  <div class="col-xs-1">itpilot</div>
+  <div class="col-xs-10 text-center"><h3><%= @evaluation.name %> - <%= t('traffic_report.traffic_report') %></h3></div>
+  <div class="col-xs-1"><%= l(Date.today, format: :long) %></div>
+</div>
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table table-simple">
+      <tbody>
+        <tr class="captbl">
+          <td>ID</td>
+          <td><%= t('traffic_report.it_service') %></td>
+          <td><%= t('traffic_report.cloud_service') %></td>
+          <td><%= t('traffic_report.producer') %></td>
+          <td><%= t('traffic_report.distributor') %></td>
+          <td><%= t('traffic_report.service_usage') %></td>
+          <td><%= t('traffic_report.recovery_time_needed') %></td>
+          <td><%= t('traffic_report.guaranteed_recovery_time') %></td>
+          <td><%= t('traffic_report.direct_impact_relationship') %></td>
+          <td><%= t('traffic_report.direct_impact_revenue') %></td>
+          <td><%= t('traffic_report.assessment') %></td>
+          <td><%= t('traffic_report.recommended_measures') %></td>
+        </tr>
+        <% @evaluation_results.each do |evaluation_result| %>
+          <tr>
+            <td><%= evaluation_result.service.code%></td>
+            <td class="left">
+              <%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name %>
+              <%= service_not_active_label(evaluation_result) %>
+            </td>
+            <td><%= yes_no_value evaluation_result.cloud_service %></td>
+            <td><%= evaluation_result.supplier %></td>
+            <td></td>
+            <td><%= evaluation_result.overview %></td>
+            <td><%= evaluation_result.recovery_time %></td>
+            <td><%= evaluation_result.guaranteed_recovery_time %></td>
+            <td><%= t("evaluation_results.impact_types.type_#{evaluation_result.impact_name}") %></td>
+            <td><%= format_num(evaluation_result.failure_impact_per_day) %></td>
+            <td>
+              <%= wicked_pdf_image_tag result_status_pdf_image(evaluation_result) , style: 'width:10px;height:10px;'%>
+            </td>
+            <td><%= evaluation_result.recommended_measures %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+

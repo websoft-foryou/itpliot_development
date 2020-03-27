@@ -1,0 +1,53 @@
+<%#= javascript_include_tag 'lib/jquery.dataTables.min.js' %>
+<div class="table-responsive">
+  <table class="table table-simple" id="full_assessment_report_eval">
+    <thead>
+      <tr class="captbl sort">
+        <td colspan="3"><%= t('full_report.service') %></td><!--number/name/cost-->
+        <td rowspan="2"><%= t('full_report.expenditure_capex') %></td><!--opex-->
+        <td><%= t('full_report.cost_per_month') %></td><!--opex-->
+        <td colspan="2"><%= t('full_report.support_mountly_hours') %></td><!--hours extern/intern-->
+        <td colspan="2"><%= t('full_report.recovery_time_in_hours_max') %></td>
+        <td rowspan="2"><%= t('full_report.significance_sla') %></td>
+      </tr>
+      <tr class="captbl sort">
+        <td>ID</td>
+        <td style="min-width:250px;"><%= t('full_report.name') %></td>
+        <td style="min-width:250px;"><%= t('full_report.theme') %></td>
+        <td>Opex</td>
+        <td><%= t('full_report.internal') %></td>
+        <td><%= t('full_report.external') %></td>
+        <td><%= t('full_report.needed') %></td>
+        <td><%= t('full_report.guaranteed') %></td>
+      </tr>
+    </thead>
+    <tbody>
+      <% evaluation.active_evaluation_results.includes(:service).order('services.code,evaluation_results.cloned_index').each do |evaluation_result| %>
+          <tr>
+            <td><%= evaluation_result.service.code%></td>
+            <td><%= evaluation_result.cloned_index[1..-1] %> <%= evaluation_result.service.name%> <span class="text-emph"><%= '[ignored]' if evaluation_result.is_ignored? %></span> </td>
+            <td><%= evaluation_result.service.themes.map(&:name).join(", ")%></td>
+            <td class="text-center nowrap"><%= format_num(evaluation_result.capex, '€') %></td>
+            <td class="text-center nowrap"><%= format_num(evaluation_result.opex, '€') %></td>
+            <td class="text-center"><%= format_num evaluation_result.hours_intern %></td>
+            <td class="text-center"><%= format_num evaluation_result.hours_extern %></td>
+            <td class="text-center"><%= evaluation_result.recovery_time %></td>
+            <td class="text-center"><%= evaluation_result.guaranteed_recovery_time %></td>
+            <td class="text-center"><%= evaluation_result.sla %></td>
+          </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2" class="text-center"><%= t('full_report.sum') %></td>
+        <td class="text-center nowrap"><%= format_num(evaluation.active_evaluation_results.map(&:capex).compact.sum, '€') %></td>
+        <td class="text-center nowrap"><%= format_num(evaluation.active_evaluation_results.map(&:opex).compact.sum, '€') %></td>
+        <td class="text-center"><%= format_num(evaluation.active_evaluation_results.map(&:hours_intern).compact.sum) %></td>
+        <td class="text-center"><%= format_num(evaluation.active_evaluation_results.map(&:hours_extern).compact.sum) %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

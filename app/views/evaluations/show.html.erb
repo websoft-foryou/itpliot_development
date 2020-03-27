@@ -1,0 +1,203 @@
+<%= render partial: "/evaluations/shared/service_set_selector" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render partial: "/evaluations/shared/status_menu", object: @evaluation, as: :evaluation %>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="panel">
+      <div class="panel-body">
+        <ul id="eliteregister" class="d-flex justify-center">
+          <li class="active" style="width:16%">
+            <%= t("progress_bar.evaluation.step1_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.evaluation.step1_description")%>" data-toggle="tooltip"></i>
+          </li>
+          <li class="<%= "active" if @progress_bar_step > 1%>" style="width:16%">
+            <%= t("progress_bar.evaluation.step2_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.evaluation.step2_description")%>" data-toggle="tooltip"></i>
+          </li>
+          <li class="<%= "active" if @progress_bar_step > 2%>" style="width:16%">
+            <% if current_customer.premium? %>
+              <%= t("progress_bar.evaluation.step3_title_premium")%>
+            <% else %>
+              <%= t("progress_bar.evaluation.step3_title")%>
+            <% end %>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.evaluation.step3_description")%>" data-toggle="tooltip"></i>
+          </li>
+          <li class="<%= "active" if @progress_bar_step > 3%>" style="width:16%">
+            <%= t("progress_bar.evaluation.step4_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.evaluation.step4_description")%>" data-toggle="tooltip"></i>
+          </li>
+          <li class="<%= "active" if @progress_bar_step > 4%>" style="width:16%">
+            <%= t("progress_bar.evaluation.step5_title")%>
+            <i class="fa fa-info-circle" title="<%= t("progress_bar.evaluation.step5_description")%>" data-toggle="tooltip"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="panel panel-default">
+      <%= form_tag customer_evaluation_path(current_customer, @evaluation), remote: true, method: :get, id: "search_form_services", class: "form-horizontal" do %>
+        <div class="panel-heading">
+          <div class="media">
+            <div class="pull-right status_row text-right m-t-small">
+              <%= link_to '#', data: {toggle: "button"}, aria_pressed: "false", id: "toggle_deactivated", class: "toggle_status text-center btn btn-default #{'active' if @left_filters[:status] && @left_filters[:status] == 'deactivated'}" do %>
+                <span class="count"><%= @evaluation.evaluation_services.deactivated.count %></span><br/>
+                <%= t('commons.deactivated') %>
+              <% end %>
+            </div>
+            <div class="media-body">
+              <h2 style="font-size: 18px;"><%= t('evaluations.tab_it_services.count_to_choose', count: @evaluation.evaluation_services.draft.size) %></h2>
+              <p class="help-block" style="line-height:1em;"><%= t('evaluations.tab_it_services.choose_which_services') %></p>
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="row">
+            <%= hidden_field_tag :status, "draft", id: 'services_status'%>
+            <%= hidden_field_tag :attribute, "evaluation_services"%>
+            <div class="col-md-4 m-b-small">
+              <div class="pos-rlt">
+                <%= search_field_tag :search, @left_filters[:search], autocomplete: "off", id: "search_services", class: "observe input-sm form-control", placeholder: "#{t("evaluation_services.search_placeholder")}..."  %>
+              </div>
+            </div>
+            <div class="col-md-5 m-b-small">
+              <%= select_tag :theme, options_for_select(Theme.all.map{|s, i| [s.name, s.id]}, @left_filters[:theme]), prompt: t('evaluations.tab_it_services.all_it_services'), class: "single_select2 submit_on_select width_100"  %>
+            </div>
+            <div class="col-md-3 m-b-small">
+              <select id="order_service" name="left_order" class="single_select2 submit_on_select width_100">
+                <option value="name" <%= "selected='selected'" if @left_filters[:order] == "name" %>><%= t("commons.name")%></option>
+                <option value="code" <%= "selected='selected'" if @left_filters[:order] == "code" %>>ID</option>
+                <option value="theme" <%= "selected='selected'" if @left_filters[:order] == "theme" %>><%= t("services.filters.theme")%></option>
+              </select>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="list-group">
+        <div class="list-group-item head-list">
+          <%= form_tag change_mass_customer_evaluation_path(current_customer, @evaluation) do %>
+            <%= hidden_field_tag :attribute, "evaluation_services"%>
+          <div class="row">
+            <div class="col-md-1 m-b-small">
+              <% unless @evaluation.is_published?%>
+                <%= check_box_tag "selected_evaluation", "all", false, id: "check_all_evaluation_services" %>
+                <%= hidden_field_tag "selected_service_ids", '', id: "selected_service_ids" %>
+              <% end %>
+            </div>
+            <div class="col-md-4"><%= t('evaluations.service') %></div>
+            <div class="col-md-2"><%= t('themes.theme') %></div>
+            <div class="col-md-5">
+              <% unless @evaluation.is_published?%>
+              <div class="btn-group" id="change_mass_status_container_evaluation_services">
+                <%= render partial: "/evaluation_services/change_mass_statuses"%>
+              </div>
+              <% end %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="list-group" id="sortable_list">
+        <% if @not_selected_evaluation_services.any? %>
+          <%= render partial: "/evaluation_services/evaluation_service_small", collection: @not_selected_evaluation_services, as: :evaluation_service %>
+        <% else %>
+          <div class="list-group-item"><h4 class="text-center"><%= t("evaluation_services.no_services_to_choose") %></h4></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-6">
+    <div class="panel panel-default">
+      <%= form_tag customer_evaluation_path(current_customer, @evaluation), remote: true, method: :get, id: "search_form", class: "form-horizontal" do %>
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-7">
+              <h2 style="font-size: 18px;"><%= t('evaluations.tab_it_services.your_service_set') %></h2>
+              <p class="help-block" style="line-height:1em;"><%= t('evaluations.tab_it_services.only_services_to_use') %></p>
+            </div>
+            <div class="col-xs-5">
+              <%= render partial: "/evaluation_results/service_status_settings", object: @evaluation, as: :evaluation %>
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="row">
+            <%= hidden_field_tag :status, "active", id: "results_status"%>
+            <%= hidden_field_tag :attribute, "evaluation_results"%>
+            <div class="col-md-4 m-b-small">
+              <div class="pos-rlt">
+                <%= search_field_tag :search, @right_filters[:search], autocomplete: "off", id: "search_services", class: "observe input-sm form-control", placeholder: "#{t("evaluation_services.search_placeholder")}..."  %>
+              </div>
+            </div>
+            <div class="col-md-5 m-b-small">
+              <%= select_tag :theme, options_for_select(Theme.all.map{|s, i| [s.name, s.id]}, @right_filters[:theme]), prompt: t('evaluations.tab_it_services.all_it_services'), class: "single_select2 submit_on_select width_100"  %>
+            </div>
+            <div class="col-md-3 m-b-small">
+              <select id="order_service" name="right_order" class="single_select2 submit_on_select width_100">
+                <option value="name" <%= "selected='selected'" if @right_filters[:order] == "name" %>><%= t("commons.name")%></option>
+                <option value="code" <%= "selected='selected'" if @right_filters[:order] == "code" %>>ID</option>
+                <option value="theme" <%= "selected='selected'" if @right_filters[:order] == "theme" %>><%= t("services.filters.theme")%></option>
+              </select>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="list-group">
+        <div class="list-group-item head-list">
+          <%= form_tag change_mass_customer_evaluation_path(current_customer, @evaluation) do %>
+            <%= hidden_field_tag :attribute, "evaluation_results"%>
+          <div class="row">
+            <div class="col-md-1 m-b-small">
+              <% unless @evaluation.is_published?%>
+                <%= check_box_tag "selected_evaluation", "all", false, id: "check_all_evaluation_results" %>
+                <%= hidden_field_tag "selected_result_ids", '', id: "selected_results_ids" %>
+              <% end %>
+            </div>
+            <div class="col-md-5"><%= t('evaluations.service') %></div>
+            <div class="col-md-2"><%= t('themes.theme') %></div>
+            <div class="col-md-4">
+              <% unless @evaluation.is_published?%>
+              <div class="btn-group" id="change_mass_status_container_evaluation_results">
+                <%= render partial: "/evaluation_services/change_mass_statuses"%>
+              </div>
+              <% end %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+
+      </div>
+      <div class="list-group" id="it_services_list">
+        <% if @evaluation_results.any? %>
+          <%= render partial: "/evaluation_results/evaluation_result_small", collection: @evaluation_results, as: :evaluation_result %>
+        <% else %>
+          <div class="list-group-item"><h4 class="text-center"><%= t("evaluation_services.no_services_to_choose") %></h4></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%# next_button = link_to t('commons.next'), '#', class: "btn btn-info", id: "next-service-select", data: {customer: current_customer.id, evaluation: @evaluation.id, service: ''} %>
+<!-- <div class="modal fade" id="services_selection_modal" tabindex="-1" role="dialog" aria-labelledby="services_selection_title" aria-hidden="true"> -->
+    <%#= render partial: "/evaluations/select_services_form",
+      layout: "/layouts/modal",
+      locals: { title: t('industry_fields.choose_new_it_service'), size_class: 'modal-wide-lg',object: @evaluation, custom_buttons: next_button }%>
+<!-- </div> -->
+
+

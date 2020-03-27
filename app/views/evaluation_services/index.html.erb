@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-pencil"></i><%= t('evaluations.service_set') %> <%= @evaluation.name%> - <%= t('commons.change_settings') %></h3></div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <% unless current_company.is_customer? %>
+    <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company) %></li>
+  <% end %>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><i class="fa fa-table"></i><%=link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><%= t('commons.change_settings') %></li>
+</ol>
+
+<div class="panel panel-default" id="status_overview_container">
+  <%= render partial: "/evaluation_services/status_overview"%>
+</div>
+
+<%= form_tag customer_evaluation_evaluation_services_path(current_customer,@evaluation), remote: true, method: :get, id: "search_form", class: "form-horizontal" do %>
+  <div class="row">
+    <div class="col-md-6 text-right m-b-sm">
+      <div class="pos-rlt">
+          <%= search_field_tag :search, @filters[:search], autocomplete: "off", id: "search_services", class: "observe input-sm form-control", placeholder: "#{t("evaluation_services.search_placeholder")}..."  %>
+          <div class="search_input_icon" style="top:4px;"><i class="fa fa-search"></i></div>
+      </div>
+    </div>
+
+    <div class="col-md-4 m-b-sm">
+      <%= select_tag :filter, grouped_options_for_select(evaluation_services_filters, @filters[:filter]), prompt: t('evaluations.all_it_services',default: 'All IT Services'), class: "single_select2 submit_on_select width_100"  %>
+    </div>
+
+    <div class="col-md-2 m-b-sm">
+      <select id="order_service" name="order" class="single_select2 submit_on_select width_100">
+        <option value="name" <%= "selected='selected'" if @filters[:order] == "name" %>><%= t("commons.name")%></option>
+        <option value="code" <%= "selected='selected'" if @filters[:code] == "code" %>>ID</option>
+        <option value="position" <%= "selected='selected'" if @filters[:order] == "position" %>><%= t("services.position")%></option>
+      </select>
+    </div>
+  </div>
+
+  <h4><%= t('commons.change_settings') %></h4>
+  <div class="panel panel-default">
+    <div class="list-group" id="services_list">
+      <div class="list-group-item">
+        <div class="row">
+          <div class="col-md-1"><%= t('services.position') %></div>
+          <div class="col-md-1">ID</div>
+          <div class="col-md-2"><%= t('commons.name') %></div>
+          <div class="col-md-2"><%= t('commons.themes') %></div>
+          <div class="col-md-2"><%= t('services.purpose') %></div>
+          <div class="col-md-4 text-center">
+            <div class="btn-group" id="change_mass_status_container">
+              <%= render partial: "/evaluation_services/change_mass_statuses"%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group" id="sortable_list">
+      <%= render partial: 'evaluation_service', collection: @evaluation_services, as: :evaluation_service %>
+    </div>
+  </div>
+<% end %>
+
+
+
+
+

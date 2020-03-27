@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>itpilot</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= yield :header_scripts %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <%= render partial: "/layouts/components/top_nav"%>
+
+  <% if user_signed_in? %>
+    <%= render partial: "/layouts/components/left_menu"%>
+  <% end %>
+
+  <div id="loading-overlay"></div>
+  <section id="main-content">
+    <section class="wrapper">
+     <%= flash_messages %>
+      <%= yield %>
+    </section>
+    <% if user_signed_in? %>
+      <section id="footer">
+        <%= render partial: "/layouts/components/footer"%>
+      </section>
+    <% end %>
+  </section>
+
+  <%= yield :scripts %>
+</body>
+</html>

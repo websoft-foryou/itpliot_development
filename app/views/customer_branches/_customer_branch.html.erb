@@ -1,0 +1,13 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-md-4">
+      <strong><%= link_to customer_branch.name, edit_customer_customer_branch_path(customer_branch.company.id, customer_branch), title: t('branches.edit_branch') %></strong>
+      <br/><%= customer_branch.description %>
+    </div>
+    <div class="col-md-5"><%= customer_branch.location.address %></div>
+    <div class="col-md-1"><%= customer_branch.location.city %></div>
+    <div class="col-md-1"><%= customer_branch.location.country %></div>
+    <div class="col-md-1"><%= customer_branch.location.zip %></div>
+  </div>
+</div>
+

@@ -1,0 +1,51 @@
+/*** custom form ***/
+.form-horizontal{
+  .panel-heading{
+    font-size:16px;
+    color: #444;
+  }
+  h5{
+    color: #688a7e;
+    font-size: 14px;
+    font-weight: 500 !important;
+  }
+  &.form-group{
+    border-bottom:0;
+  }
+  &.viewstyle{
+    .form-group{
+      border-bottom:0;
+    }
+  }
+}
+
+.control-input{padding-top:6px;}
+
+#addresspicker_map{background-image: url('/assets/icons/ic_search.png');background-position:right center;background-repeat:no-repeat;padding-right:32px;}
+
+.select2-results .select2-highlighted{background-color:#999999;}
+.search_input_icon{position: absolute; top: 7px;right: 7px;}
+
+/*select2*/
+.width_100{ width: 100% !important; }
+
+span.error{
+  label{ color:#cb0f01; }
+  label.message{ color:#cb0f01; line-height:2; }
+  & > input, & > select, & > textarea{ border:1px solid #cb0f01; }
+  .select2-container{
+    a.select2-choice{ border-color: #cb0f01;}
+  }
+}
+
+.image-upload {
+  & > input{ display: none; }
+  img{ cursor: pointer; }
+}
+
+.input_note{
+  font-size: 13px;
+  font-weight: 100;
+  margin-bottom: 25px;
+  position: relative;
+}

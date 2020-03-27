@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-12 text-right m-b-small">
+    <%= link_to new_business_path(), class: "btn btn-info" do %>
+      <i class="fa fa-plus"></i> <%= t('businesses.add_company_industry') %>
+    <% end %>
+  </div>
+</div>
+
+<%= breadcrumb(links: [{key: 'businesses', name: t('businesses.company_industries')}]) %>
+
+<div class="panel panel-default">
+  <div class="list-group">
+    <div class="list-group-item">
+      <div class="row header-list-group">
+        <div class="col-md-10"><%= t('businesses.company_name') %></div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="list-group" id="business_list">
+    <%= render partial: "/businesses/business", collection: @businesses %>  
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="list-group-item">
+  <div class="row">
+    <div class="col-md-6">
+      <%= link_to customer_evaluation_path(@customer, evaluation) do %>
+        <%= evaluation.name%>
+        <% if evaluation.is_sample? %>
+          <span class="label label-info">sample</span>
+        <% elsif evaluation.is_sandbox? %>
+          <span class="label label-warning">sandbox</span>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-md-2">
+      <span class="label label-<%= evaluation.is_published? ? 'danger' : 'default'%>"><%= t('evaluations.status_names.'+ evaluation.status_name, default: evaluation.status_name) %></span>
+    </div>
+    <div class="col-md-2"><%= evaluation.user.name if evaluation.user %></div>
+    <div class="col-md-2"><%= format_datetime_to_local(evaluation.created_at) %></div>
+  </div>
+</div>

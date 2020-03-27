@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-12"><h3 class="page-header"><i class="fa fa-plus"></i> <%= t('licenses.add_new_license') %></h3></div>
+</div>
+
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('licenses.title'), licenses_path %></li>
+  <li><i class="fa fa-building-o"></i> <%= t('licenses.add_new_license') %></li>
+</ol>
+
+<div class="panel">
+  <div class="panel-body">
+    <%= form_for(@license, url: licenses_path, validate: true, html: {class: "form-horizontal submit_with_loading"}) do |f| %>
+      <%= render partial: 'form', locals: {f: f}  %>
+    <% end %>
+  </div>
+</div>
+
+
+
+

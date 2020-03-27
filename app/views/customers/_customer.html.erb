@@ -1,0 +1,52 @@
+<div class="list-group-item">
+    <div class="row">
+        <div class="col-md-4">
+            <%
+                edit_customer_link = customer_path(customer)
+                edit_customer_link = company_reseller_customer_path(current_company, @reseller.id, customer.id) if current_company && @reseller
+            %>
+            <%= link_to edit_customer_link , class: "pull-left" do %>
+                <%= image_tag customer.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", class: "img-thumbnail mini"%>
+            <% end %>
+            <p>
+                <% if @filters && @filters[:search] %>
+                    <%= link_to edit_customer_link do %>
+                        <strong><%= highlight(customer.full_name, @filters[:search]) %></strong>
+                    <% end %>
+                <% else %>
+                    <strong><%= link_to customer.full_name, edit_customer_link %></strong>
+                <% end %>
+                <%= label_danger(t('commons.blocked')) if customer.is_blocked? %><br/>
+                <%= customer.generic_address %>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <%= customer.membership_name %>
+            <%= customer.membership_period %>
+        </div>
+        <div class="col-md-2">
+            <% if current_user.is_admin? || current_company.is_jvp? %>
+                <% if customer.parent_id && current_company && customer.parent_id == current_company.id%>
+                    <span><%= customer.parent.name%></span> <%= label_danger(t('commons.blocked')) if customer.parent.is_blocked? %>
+                <% elsif customer.parent_id && customer.parent && customer.parent.company_type_name == :partner && customer.parent.parent.present? %>
+                    <%= customer.parent.parent.name%> &raquo;
+                    <%= link_to company_reseller_path(customer.parent.parent, customer.parent) do %>
+                        <%= customer.parent.name%>
+                    <% end %>
+                    <%= label_danger(t('commons.blocked')) if customer.parent.is_blocked? %>
+                <% elsif customer.parent_id && customer.parent %>
+                    <%= customer.parent.name%> <%= label_danger(t('commons.blocked')) if customer.parent.is_blocked? %>
+                <% end %>
+            <% end %>
+        </div>
+        <div class="col-md-2">
+            <%= dataset_info(customer) %>
+        </div>
+        <div class="col-md-1">
+                <%= customer.company_branches.size%>
+        </div>
+        <div class="col-md-1">
+            <%= customer.users.size%>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+
+  <div class="modal-dialog <%= size_class %>">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="services_selection_title">
+          <%= title %>&nbsp;
+        </h4>
+      </div>
+      <div class="modal-body"> <%= yield %> </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-sm-9 text-left">
+            <div id="ss_final_option" service_id="" style="font-size:16px;font-weight:bold;color:#428bca;"></div>
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-default" data-dismiss="modal" type="button"><%= t('commons.cancel') %></button>
+            <%= custom_buttons.html_safe %>
+          </div>
+        </div>
+
+      </div>
+      
+    </div>
+  </div>

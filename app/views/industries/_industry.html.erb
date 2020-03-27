@@ -1,0 +1,21 @@
+<div class="list-group-item" id="industry_id_<%=industry.id%>">
+  <div class="row actions_on_hover">
+    <div class="col-md-4">
+      <%=link_to (I18n.locale == :en ? industry.name : industry.name_de), edit_industry_path(industry) %>
+    </div>
+     <div class="col-md-3 m-b-small">
+      <%= (I18n.locale == :en ? industry.short_name_en : industry.short_name_de) %>
+    </div>
+    <div class="col-md-3">
+      <%= industry.services.map(&:code).join(' ,')%>
+    </div>
+    <div class="col-md-2 text-right actions">
+      <%= link_to edit_industry_path(industry), class: 'btn btn-default btn-xs' do %>
+        <i class="fa fa-pencil"></i> <%= t('commons.edit') %>
+      <% end %>
+      <%= link_to industry_path(industry), method: :delete, remote: true, class: 'btn btn-default btn-xs', data: { confirm: t('commons.are_you_sure') } do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<%
+  ignored = @evaluation.evaluation_services.ignored.pluck(:service_id)
+  deactivated = @evaluation.evaluation_services.deactivated.pluck(:service_id)
+  service_options_grouped = service_options_grouped(@evaluation)
+%>
+
+<div id="mark_ignored" style="display:none;"><%=ignored%></div>
+<div id="mark_deactivated" style="display:none;"><%=deactivated%></div>
+
+<%
+  list_industries = Industry.where(id: Industry.joins(:industry_services).select("industries.id").group("industries.id").pluck(:id))
+  if current_user.locale == 'en'
+    list_industries = list_industries.order(:short_name_en).map{|a| ["#{a.name}",a.id]}
+  else
+    list_industries = list_industries.order(:short_name_de).map{|a| ["#{a.name_de}",a.id]}
+  end
+  industry_options = []
+
+  list_themes = Theme.where(id: Theme.joins(:theme_services).select("themes.id").group("themes.id").pluck(:id)).order(:name).map{|a| ["#{a.name}",a.id]}
+  themes_options = []
+%>
+
+
+<div class="row">
+  <div class="col-md-4">
+    <p><strong><%= t('industry_fields.suggested_list') %></strong></p>
+    <%= select_tag :service_id, grouped_options_for_select(service_options_grouped), {class: "single_select2 width_100", id: "ss_suggested_opt"}%>
+  </div>
+  <div class="col-md-4">
+    <p><strong><%= t('industry_fields.industry_list') %></strong></p>
+    <%= select_tag :theme_id, options_for_select(list_themes), {class: "single_select2 width_100 m-b-small", id: "ss_theme", data:{'available'=>"#{t('themes.available_services')}",'ignored'=>"#{t('themes.ignored_services')}"}}%>
+    <%= select_tag :service_id, options_for_select(themes_options), {class: "single_select2 width_100", id: "ss_theme_opt"}%>
+  </div>
+  <div class="col-md-4">
+    <p><strong><%= t('industry_fields.themes_list') %></strong></p>
+    <%= select_tag :industry_id, options_for_select(list_industries), {class: "single_select2 width_100 m-b-small", id: "ss_industry", data:{'available'=>"#{t('industry_fields.available_services')}",'ignored'=>"#{t('industry_fields.ignored_services')}"}}%>
+    <%= select_tag :service_id, options_for_select(industry_options), {class: "single_select2 width_100", id: "ss_industry_opt"}%>
+  </div>
+</div>

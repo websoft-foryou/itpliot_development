@@ -1,0 +1,68 @@
+<h3 class="page-header"><i class="fa fa-file"></i> <%= t('commons.it_service_request') %></h3>
+<div class="panel">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1">
+            <%= form_for(@service_request, url: new_service_requests_path, validate: true, html: {class: "form-horizontal"}) do |f| %>
+                <h1 style="text-align:center"><%= t('it_service_request.new_it_service_form') %></h1>
+                <div class="form-group col-12" style="background-color:#5B9BD5;height:45px; color:white;padding:10px 10px;font-size:18px"><%= t('it_service_request.request_it_service') %></div>
+                <div class="form-group">
+                    <%= f.label :service_name, t('it_service_request.it_service_name')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-4">
+                        <%= f.text_field :service_name, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :description, t('it_service_request.description')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-10">
+                        <%= f.text_field :description, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :prod_example, t('it_service_request.product_examples')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-10">
+                        <%= f.text_field :prod_example, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group col-12" style="background-color:#5B9BD5;height:45px; color:white;padding:10px 10px;font-size:18px"><%= t('it_service_request.contact_information') %></div>
+                <div class="form-group">
+                    <%= f.label :company_name, t('it_service_request.company_name')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-4">
+                        <%= f.text_field :company_name, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :contact, t('it_service_request.contact')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-4">
+                        <%= f.text_field :contact, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :email, t('it_service_request.email')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-4">
+                        <%= f.text_field :email, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :telephone, t('it_service_request.telephone')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-4">
+                        <%= f.text_field :telephone, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= f.label :reason, t('it_service_request.reason_remarks')+' *', class: "control-label col-sm-2" %>
+                    <div class="col-sm-10">
+                        <%= f.text_field :reason, class: "form-control", autocomplete: 'off' %>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10 col-md-offset-2">
+                        <%= f.submit t('it_service_request.send'), class: "btn btn-primary" %>
+                    </div>
+                </div>
+
+            <% end %>
+
+        </div>
+    </div>
+</div>

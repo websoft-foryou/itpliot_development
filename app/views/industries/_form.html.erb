@@ -1,0 +1,62 @@
+<% if @industry.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@industry.errors.count, "error") %> prohibited this service from being saved:</h2>
+
+    <ul>
+      <% @industry.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <%= f.label :name, t('industry_fields.form.field_name') + ' ' + t('locales.en'), class: "control-label col-sm-3 col-xs-12" %>
+  <div class="col-sm-7 col-xs-12">
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :name_de, t('industry_fields.form.field_name') + ' ' + t('locales.de'), class: "control-label col-sm-3 col-xs-12" %>
+  <div class="col-sm-7 col-xs-12">
+    <%= f.text_field :name_de, class: "form-control" %>
+  </div>
+</div>
+<hr/>
+<div class="form-group">
+  <%= f.label :short_name_en, t('industry_fields.form.short_name') + ' ' + t('locales.en'), class: "control-label col-sm-3 col-xs-12" %>
+  <div class="col-sm-7 col-xs-12">
+    <%= f.text_field :short_name_en, class: "form-control" %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :short_name_de, t('industry_fields.form.short_name') + ' ' + t('locales.de'), class: "control-label col-sm-3 col-xs-12" %>
+  <div class="col-sm-7 col-xs-12">
+    <%= f.text_field :short_name_de, class: "form-control" %>
+  </div>
+</div>
+
+<% if @industry.persisted?%>
+  <hr/>
+  <div class="form-group">
+    <%= f.label :services, t('services.services'), class: "control-label col-sm-3 col-xs-12" %>
+    <div class="col-sm-7 col-xs-12">
+      <%= f.select :industry_services, options_for_select(Service.all.map{|s| ["#{s.code} (#{s.name})",s.id] }, f.object.industry_services.includes(:service).map{|a| a.service.id} ), {}, {multiple: true, class: "single_select2 width_100", style: "width:100%"} %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <div class="col-sm-3 col-xs-12"></div>
+  <div class="col-sm-2 col-xs-3">
+    <% if @industry.persisted? %>
+      <%= link_to industry_path(@industry), method: :delete, remote: false, class: 'btn btn-default', data: { confirm: t('commons.are_you_sure') } do %>
+        <i class="fa fa-trash"></i> <%= t('commons.delete') %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-sm-5 col-xs-9 text-right">
+    <%= link_to t('commons.cancel'), industries_path, class: "btn btn-default"%>
+    <%= f.submit t('commons.save'), class: "btn btn-primary" %>
+  </div>
+</div>

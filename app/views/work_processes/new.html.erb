@@ -1,0 +1,11 @@
+<%= breadcrumb(links: [{key: 'processes', name: t('processes.processes'), url: work_processes_path}, {key: '', name: t('processes.add_new_process')}]) %>
+
+<div class="panel">
+  <div class="panel-body">
+      <div class="col-md-10 col-md-offset-2 m-t m-b">
+      <%= form_for(@work_process, validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+      <% end %>
+    </div>
+  </div>
+</div>

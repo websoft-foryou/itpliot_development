@@ -1,0 +1,57 @@
+<tr>
+  <td>
+    <%= link_to evaluation_result.service.code, edit_customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result) %>
+  </td>
+  <td>
+    <%= link_to evaluation_result.cloned_index[1..-1], edit_customer_evaluation_evaluation_result_path(current_customer, evaluation_result.evaluation, evaluation_result) %>
+    <%= evaluation_result.service.name%>
+    <%= service_not_active_label(evaluation_result) %>
+  </td>
+  <td>
+    <%= evaluation_result.service.themes.map(&:name).join(", ")%>
+  </td>
+  <td class="ncol_3"><span><%= yes_no_value evaluation_result.cloud_service %></span></td>
+  <td class="ncol_3"><span><%= yes_no_value evaluation_result.planned_cloud_service %></span></td>
+  <td class="ncol_4"><span><%= evaluation_result.supplier %></span></td>
+  <td class="ncol_4"><span><%= evaluation_result.planned_supplier %></span></td>
+  <td class="ncol_44"><span><%= evaluation_result.distributor %></span></td>
+  <td class="ncol_44"><span><%= evaluation_result.planned_distributor %></span></td>
+
+  <!--server--><!--appliances--><!--users--><!--gb reserved--><!--gb used-->
+  <td class="ncol_5"><span><%= evaluation_result.servers_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.planned_servers_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.appliances_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.planned_appliances_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.users_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.planned_users_count %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.gb_reserved %></span></td>
+  <td class="ncol_5"><span><%= evaluation_result.gb_used %></span></td>
+
+  <!--depenant/depending-->
+  <td class="ncol_6"><span><%= evaluation_result.result_dependant_services.size %></span></td>
+  <td class="ncol_6"><span><%= evaluation_result.result_depending_services.size %></span></td>
+
+  <!--capex/opex-->
+  <td class="ncol_7 nowrap"><span><%= format_num(evaluation_result.capex, '€') %></span></td>
+  <td class="ncol_7 nowrap"><span><%= format_num(evaluation_result.planned_capex, '€') %></span></td>
+  <td class="ncol_7 nowrap"><span><%= format_num(evaluation_result.opex, '€') %></span></td>
+  <td class="ncol_7 nowrap"><span><%= format_num(evaluation_result.planned_opex, '€') %></span></td>
+
+  <!--hours extern/intern-->
+  <td class="ncol_8"><span><%= format_num evaluation_result.hours_intern %></span></td>
+  <td class="ncol_8"><span><%= format_num evaluation_result.planned_hours_intern %></span></td>
+  <td class="ncol_8"><span><%= format_num evaluation_result.hours_extern %></span></td>
+  <td class="ncol_8"><span><%= format_num evaluation_result.planned_hours_extern %></span></td>
+
+  <!--service up hours-->
+  <td class="ncol_9"><span><%= evaluation_result.recovery_time %></span></td>
+  <td class="ncol_9"><span><%= evaluation_result.guaranteed_recovery_time %></span></td>
+  <!--direct impact-->
+  <td class="ncol_10"><span><%= t("evaluation_results.impact_types.type_#{evaluation_result.impact_name}") %></span></td>
+  <td class="ncol_11 nowrap"><span><%= format_num(evaluation_result.failure_impact_per_day, '€') %></span></td>
+
+  <!--enhancements-->
+  <td class="ncol_12"><span><%= evaluation_result.enhancements %></span></td>
+  <!--strategy-->
+  <td class="ncol_13"><span><%= evaluation_result.future_strategy %></span></td>
+</tr>

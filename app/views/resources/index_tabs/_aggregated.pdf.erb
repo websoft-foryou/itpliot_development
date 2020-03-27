@@ -1,0 +1,53 @@
+<div class="row m-b">
+  <div class="col-xs-1">itpilot</div>
+  <div class="col-xs-10 text-center"><h3><%= @evaluation.customer.name %> - <%= @evaluation.name %> - <%= t('resources.tabs.aggregated') %></h3></div>
+  <div class="col-xs-1"><%= l(Date.today, format: :long) %></div>
+</div>
+
+<section>
+  <div class="table-responsive">
+    <table class="table table-simple wauto" style="border-top:1px solid #DDDDDD;">
+      <tbody>
+      <tr class="captbl">
+        <td colspan="2"></td>
+        <% @ordered_employee_evaluations.each do |ee| %>
+          <td style="padding:0;">
+            <%= ee.employee_first_name %> <%= ee.employee_last_name %><br/>
+            <span class="text-muted">
+                  <small><%= t("full_report.#{ee.employee_work_type_name}") %></small><br/>
+                  <small><%= ee.employee_monthly_hours %></small> <%= t('employees.hours') %>
+                </span>
+            <table class="table-inside">
+              <tr>
+                <td class="text-center" style="width:50%;border-left:0;border-right:0;border-bottom:0;"><%= t('resources.aggregated.current') %></td>
+                <td class="text-center" style="width:50%;border-left:0;border-right:0;border-bottom:0;"><%= t('resources.aggregated.planned') %></td>
+              </tr>
+            </table>
+          </td>
+        <% end %>
+      </tr>
+
+      <% Domain.order(:id).each do |d| %>
+        <tr>
+          <td class="text-center" style="width: 50px;"><%= d.code %></td>
+          <td class="minimal-name-column"><%= t("employees.domains.#{d.code.downcase}", default: d.name) %></td>
+          <% @ordered_employee_evaluations.each do |ee| %>
+            <td style="padding:0;">
+              <table class="table-inside">
+                <tr>
+                  <td class="text-center" style="width:50%;border:0;" id="acrt_employee_<%=ee.employee_id%>_domain_<%=d.id%>">
+                    <%= employee_activity(@evaluation,ee.employee_id)[d.code.downcase] ? 'Y' : 'N' %>
+                  </td>
+                  <td class="text-center" style="width:50%;border:0;">
+                    <%= ee.employee.employee_domains.map(&:domain_id).include?(d.id) ? 'Y' : 'N' %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

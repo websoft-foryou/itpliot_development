@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+
+@data.each do |item|
+  wb.add_worksheet(:name => item[0]) do |sheet|
+    sheet.add_row item[1]
+    item[2].each do |row|
+        sheet.add_row row
+    end
+  end
+end

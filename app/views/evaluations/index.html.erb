@@ -1,0 +1,52 @@
+<h3><i class="fa fa-list-ul"></i> <%= t('evaluations.service_sets') %></h3>
+
+<% unless current_company.is_customer? %>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+    <% if @reseller %>
+      <li><i class="fa fa-users"></i><%= link_to t('partners.partners'), company_resellers_path(current_company.id) %></li>
+      <li><i class="fa fa-building"></i><%= link_to @reseller.name, company_reseller_path(current_company, @reseller) %></li>
+      <li><i class="fa fa-building-o"></i><%= link_to @customer.name, company_reseller_customer_path(current_company, @reseller, @customer) %> </li>
+    <% else %>
+      <li><i class="fa fa-building"></i><%= link_to t('customers.customers'), company_customers_path(current_company.id) %></li>
+      <li><i class="fa fa-building-o"></i><%= link_to @customer.name, customer_path(@customer) %> </li>
+    <% end %>
+  </ol>
+<% end %>
+
+<% if @evaluations.any? %>
+  <div class="row">
+    <div class="col-md-12 text-right m-b-small">
+      <% if !@customer.has_current_evaluation?%>
+        <%= link_to t('evaluations.new_service_set'), new_customer_evaluation_path(@customer), class: "btn btn-info", title: t('evaluations.add_service_set') %>
+      <% end %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="list-group">
+      <div class="list-group-item">
+        <div class="row">
+          <div class="col-md-6"><%= t('commons.name') %></div>
+          <div class="col-md-2"><%= t('commons.status') %></div>
+          <div class="col-md-2"><%= t('commons.created_by') %></div>
+          <div class="col-md-2"><%= t('commons.created_at') %></div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group">
+      <%= render partial: "evaluation", collection: @evaluations %>
+    </div>
+  </div>
+<% else %>
+  <div class="m-t-large">
+    <%= render partial: '/evaluations/shared/no_evaluation' %>
+  </div>
+<% end %>
+
+
+
+
+
+
+
+

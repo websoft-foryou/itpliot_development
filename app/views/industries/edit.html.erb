@@ -1,0 +1,18 @@
+<%= breadcrumb(links: [
+                    {key: 'industries', name: t('industries.industries'), url: industries_path},
+                    {key: '', name: (I18n.locale == "en" ? @industry.name : @industry.name_de), url: industry_path(@industry)},
+                    {key: '', name: t('commons.editing')}
+                    ]) %>
+
+<div class="panel">
+    <div class="panel-body">
+      <div class="col-md-2">
+
+    </div>
+      <div class="col-md-10 m-t m-b">
+      <%= form_for(@industry, validate: true, html: {class: "form-horizontal"}) do |f| %>
+        <%= render partial: 'form', locals: {f: f} %>
+      <% end %>
+    </div>
+  </div>
+</div>

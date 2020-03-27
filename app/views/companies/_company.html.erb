@@ -1,0 +1,17 @@
+<div class="list-group-item">
+    <div class="row">
+        <div class="col-md-4">
+            <%= link_to company_path(company), class: "ablock pull-left" do %> 
+            	<%= image_tag company.avatar.url(:thumb) + "?timestamp=#{Time.now.to_i}", class: "img-thumbnail mini"%>
+            <% end %>
+            <div class="pull-left">
+                <%= link_to company.full_name, company_path(company), class: "m-t-small"%><br/>
+                <%= company.generic_address %>                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <%= t('partners.count_partners', count: company.children.partner.size ) %><br/>
+            <%= t('customers.count_customers', count: Company.customer.where(parent_id: [company.id] + company.children.partner.pluck(:id)).size ) %>
+        </div>
+    </div>
+</div>

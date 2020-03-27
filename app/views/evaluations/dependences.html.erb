@@ -1,0 +1,98 @@
+<%#= javascript_include_tag 'lib/jquery.dataTables.min.js' %>
+<ol class="breadcrumb">
+  <li><i class="fa fa-dashboard"></i><%= link_to t('commons.dashboard'), '/' %></li>
+  <li><i class="fa fa-building-o"></i><%= link_to current_customer.name, customer_path(current_customer) %></li>
+  <li><i class="fa fa-file-o"></i><%= link_to t('evaluations.status_menu.dashboard'), dashboard_customer_evaluation_path(current_customer, @evaluation) %></li>
+  <li><i class="fa fa-table"></i><%= link_to @evaluation.name, customer_evaluation_path(current_customer, @evaluation) %> </li>
+</ol>
+
+<div class="row">
+  <div class="col-md-4"><h3><%= t('reports.dependencies_between_it_services') %></h3></div>
+  <div class="col-md-4 text-center">
+    <%= link_to "#", class: 'btn btn-default m-t-small', id: "view_chart_btn" do %>
+      <%= t('commons.view_chart') %>
+    <% end %>
+  </div>
+  <div class="col-md-4 text-right">
+    <% if !@customer.is_customer? || @customer.premium? %>
+      <%= link_to dependences_customer_evaluation_path(current_customer, @evaluation, format: :pdf, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small', target: '_blank' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to dependences_customer_evaluation_path(current_customer, @evaluation, format: :csv, order_by: params[:order_by], ord: params[:ord]), class: 'btn btn-default m-t-small' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+    <% else %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_pdf') %> &nbsp; &nbsp; <i class="fa fa-file-pdf-o"></i>
+      <% end %>
+      <%= link_to "#", class: 'btn btn-default m-t-small disabled' do %>
+        <%= t('full_report.export_csv') %> &nbsp; &nbsp; <i class="fa fa-file-excel-o"></i>
+      <% end %>
+      <p class="help-block">
+         <small class="text-muted"><%= t("upgrade.feature_unavailable")%> <%= link_to t("top_nav.upgrade_btn"), upgrade_customer_path(@customer)%></small>
+      </p>
+    <% end %>
+  </div>
+</div>
+
+<section class="panel">
+
+<div class="table-responsive">
+  <table class="table table-simple" id="full_assessment_report_eval">
+    <thead>
+      <tr class="captbl">
+        <td colspan="3"><%= t('full_report.service') %></td><!--number/name/cost-->
+        <td colspan="2"><%= t('full_report.supporting_services') %></td><!--depenant/depending-->
+      </tr>
+      <tr class="captbl sort">
+        <td>ID
+          <%= dependence_report_actions(current_customer.id, @evaluation.id, 'id')%>
+        </td>
+        <td style="min-width:250px;"><%= t('full_report.name') %></td>
+        <td style="min-width:250px;"><%= t('full_report.theme') %>
+          <%= dependence_report_actions(current_customer.id, @evaluation.id, 'theme')%>
+        </td>
+        <td><%= t('full_report.dependant') %></td>
+        <td><%= t('full_report.depending') %></td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @evaluation_results.each do |evaluation_result| %>
+          <tr>
+            <td><%= evaluation_result.service.code%></td>
+            <td>
+              <%= evaluation_result.cloned_index[1..-1]%> <%= evaluation_result.service.name%> <span class="text-emph"><%= '[ignored]' if evaluation_result.is_ignored? %></span>
+            </td>
+            <td><%= evaluation_result.service.themes.map(&:name).join(", ")%></td>
+            <td>
+              <%= render(partial: "/shared/service_label", collection: evaluation_result.result_dependant_services, as: :service) || "" %>
+            </td>
+            <td>
+              <%= render(partial: "/shared/service_label", collection: evaluation_result.result_depending_services, as: :service) || "" %>
+            </td>
+          </tr>
+      <% end %>
+      
+    </tbody>
+  </table>
+</div>
+
+
+
+  <br/><br/>
+</section>
+
+<div class="row">
+  <div class="col-md-12">
+    <section class="panel">
+      <header class="panel-heading"><%= t('reports.dependencies_between_it_services') %></header>
+      <div class="panel-body">
+        <div class="scroll_canvas">
+          <%= image_tag "/system/eval_graphs/#{@evaluation.id}.png" + "?timestamp=#{Time.now.to_i}" %>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
