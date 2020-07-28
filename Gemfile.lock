@@ -181,7 +181,7 @@ GEM
       railties (>= 3.2.16)
     js_regex (2.2.1)
       regexp_parser (>= 0.4.11, <= 0.5.0)
-    json (2.1.0)
+    json (2.3.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     lazy_priority_queue (0.1.1)
