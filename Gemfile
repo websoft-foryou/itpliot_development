@@ -83,7 +83,7 @@ end
 
 gem 'dotenv-rails', groups: %i[development test]
 
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 4.3'
 
 group :development, :test do
   gem 'awesome_print'
